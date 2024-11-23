@@ -1,11 +1,16 @@
 /@
-/bean.*
+/mesh.*
 
+/.env
 /.idea/
 /.vscode/
 
 target/
 
+*.iml
+
 *~
 ~*
 
+
+**/.claude/settings.local.json

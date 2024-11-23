@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Copyright © 2024 Metreeca srl
+  Copyright © 2025 Metreeca srl
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,16 +24,16 @@
     <parent>
         <groupId>com.metreeca</groupId>
         <artifactId>root</artifactId>
-        <version>1.0.0</version>
+        <version>1.3.3</version>
     </parent>
 
-    <artifactId>bean</artifactId>
+    <artifactId>mesh</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
-    <name>Metreeca/Bean</name>
-    <description>A lightweight JavaBeans serialisation and persistence framework.</description>
-    <url>https://github.com/metreeca/bean</url>
+    <name>Metreeca/Mesh</name>
+    <description>{TBC}}</description>
+    <url>https://github.com/metreeca/mesh</url>
     <inceptionYear>2023</inceptionYear>
 
     <licenses>
@@ -45,26 +45,27 @@
     </licenses>
 
     <properties>
-        <revision>1.0-SNAPSHOT</revision>
+        <revision>4.0-SNAPSHOT</revision>
+        <javadoc.options>-Xdoclint:none</javadoc.options> <!-- !!! -->
     </properties>
 
     <modules>
 
-        <module>bean-core</module>
-        <module>bean-codecs</module>
-        <module>bean-stores</module>
+        <module>mesh-basics</module>
+        <module>mesh-codecs</module>
+        <module>mesh-stores</module>
 
     </modules>
 
     <scm>
-        <connection>scm:git:git@github.com:metreeca/bean.git</connection>
-        <developerConnection>scm:git:git@github.com:metreeca/bean.git</developerConnection>
-        <url>https://github.com/metreeca/bean</url>
+        <connection>scm:git:git@github.com:metreeca/mesh.git</connection>
+        <developerConnection>scm:git:git@github.com:metreeca/mesh.git</developerConnection>
+        <url>https://github.com/metreeca/mesh</url>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/metreeca/bean/issues</url>
+        <url>https://github.com/metreeca/mesh/issues</url>
     </issueManagement>
 
     <dependencyManagement>
@@ -74,15 +75,26 @@
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>bean-core</artifactId>
+                <artifactId>mesh-core</artifactId>
                 <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>bean-core</artifactId>
+                <artifactId>mesh-meta</artifactId>
                 <version>${revision}</version>
-                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>mesh-mint</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>mesh-test</artifactId>
+                <version>${revision}</version>
             </dependency>
 
 
@@ -90,7 +102,7 @@
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>bean-json</artifactId>
+                <artifactId>mesh-json</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -99,18 +111,42 @@
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>bean-rdf4j</artifactId>
+                <artifactId>mesh-rdf4j</artifactId>
                 <version>${revision}</version>
+            </dependency>
+
+
+            <!-- Exports (to other rdf-based packages not depending on rdf4j store) -->
+
+            <dependency> <!-- https://search.maven.org/artifact/org.eclipse.rdf4j/rdf4j-bom -->
+                <groupId>com.metreeca</groupId>
+                <artifactId>shim</artifactId>
+                <version>4.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency> <!-- https://search.maven.org/artifact/org.eclipse.rdf4j/rdf4j-bom -->
+                <groupId>org.eclipse.rdf4j</groupId>
+                <artifactId>rdf4j-bom</artifactId>
+                <version>5.1.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency> <!-- https://search.maven.org/artifact/org.slf4j/slf4j-parent -->
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-parent</artifactId>
+                <version>1.7.36</version> <!-- ;( 2.* not working for default test dependency -->
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
         </dependencies>
     </dependencyManagement>
 
-
     <profiles>
 
         <profile>
-            <id>release</id>
+            <id>publish</id>
         </profile>
 
     </profiles>

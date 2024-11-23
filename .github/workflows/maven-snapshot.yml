@@ -20,21 +20,21 @@ jobs:
       - name: Set up java environment
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: temurin
           cache: maven
-          server-id: ossrh
-          server-username: OSSRH_USR
-          server-password: OSSRH_PWD
+          server-id: central
+          server-username: CENTRAL_USR
+          server-password: CENTRAL_PWD
           gpg-private-key: ${{ secrets.MAVEN_KEY }}
           gpg-passphrase: MAVEN_PWD
 
-      - name: Release snapshot to ossrh
+      - name: Publish snapshot to Central Portal
         env:
-          OSSRH_USR: ${{ secrets.OSSRH_USR }}
-          OSSRH_PWD: ${{ secrets.OSSRH_PWD }}
+          CENTRAL_USR: ${{ secrets.CENTRAL_USR }}
+          CENTRAL_PWD: ${{ secrets.CENTRAL_PWD }}
           MAVEN_PWD: ${{ secrets.MAVEN_PWD }}
         run: mvn --batch-mode
-          --activate-profiles release
+          --activate-profiles publish
           -Drevision="$(echo ${{ github.ref_name }} | sed -r 's:^release/(.*)$:\1-SNAPSHOT:')"
           deploy

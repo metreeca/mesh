@@ -1,37 +1,38 @@
-<!--- Metreeca/Bean --->
+<!--- # Metreeca/Mesh --->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/bean.svg)](https://central.sonatype.com/artifact/com.metreeca/bean/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh.svg)](https://central.sonatype.com/artifact/com.metreeca/mesh/)
 
-Metreeca/Bean is a
-lightweight [JavaBeans](https://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/) serialisation
-and persistence framework.
+Metreeca/Mesh is a lightweight [linked data](https://www.w3.org/2013/data/) processing framework.
 
-Its core model provide intuitive annotation sets for:
+[JavaBeans](https://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/)
+
+Its core provide intuitive annotation sets for:
 
 - mapping JavaBeans classes and properties to the [JSON-LD](https://www.w3.org/TR/json-ld11/) interchange data model;
 - defining validation rules for JavaBeans properties, loosely based on the [SHACL](https://www.w3.org/TR/shacl/) shapes
   constraint language.
 
-Model-driven serialisation codecs and persistence stores leverage JavaBeans annotations and conventions to:
+Model-driven processing engines leverage JavaBeans conventions and annotations to:
 
+* validate JavaBeans objects;
 * convert JavaBean object networks to / from idiomatic serialised representations;
 * persist JavaBeans object networks to storage backends, providing out of the box support for data validation, CRUD
   operations, faceted search and client-driven queries on a par with [GraphQL](https://graphql.org/learn/queries/).
 
 # Modules
 
-|      area | javadocs                                                       | description                                      |
-|----------:|:---------------------------------------------------------------|:-------------------------------------------------|
-| framework | [bean-core](https://javadoc.io/doc/com.metreeca/bean-core)     | JavaBeans processing framework                   |
-|    codecs | [bean-jsonld](https://javadoc.io/doc/com.metreeca/bean-jsonld) | JavaBeans JSON-LD codec                          |
-|    stores | [bean‑rdf4j](https://javadoc.io/doc/com.metreeca/bean-rdf4j)   | JavaBeans [RDF4J](https://rdf4j.org) graph store |
+|      area | javadocs                                                     | description                            |
+|----------:|:-------------------------------------------------------------|:---------------------------------------|
+| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | JSON-LD data model                     |
+|           | [mesh-bean](https://javadoc.io/doc/com.metreeca/mesh-bean)   | JavaBeans mapping                      |
+|    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON codec                             |
+|    stores | [edge‑rdf4j](https://javadoc.io/doc/com.metreeca/mesh-rdf4j) | [RDF4J](https://rdf4j.org) graph store |
 
 # Getting Started
 
 1. Add the framework BOM and the relevant serialisation/persistence modules to your Maven dependencies, for instance:
 
 ```xml 
-
 <project>
 
     <dependencyManagement>
@@ -40,7 +41,7 @@ Model-driven serialisation codecs and persistence stores leverage JavaBeans anno
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>bean</artifactId>
+                <artifactId>mesh</artifactId>
                 <version>{{meta.version}}</version>
             </dependency>
 
@@ -52,12 +53,12 @@ Model-driven serialisation codecs and persistence stores leverage JavaBeans anno
 
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>bean-jsonld</artifactId>
+            <artifactId>mesh-jsonld</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>bean-rdf4j</artifactId>
+            <artifactId>mesh-rdf4j</artifactId>
         </dependency>
 
     </dependencies>
@@ -68,10 +69,10 @@ Model-driven serialisation codecs and persistence stores leverage JavaBeans anno
 2. Define a JavaBeans application data model, for instance:
 
 ```java
-import com.metreeca.bean.jsonld.Namespace;
-import com.metreeca.bean.shacl.Optional;
-import com.metreeca.bean.shacl.Pattern;
-import com.metreeca.bean.shacl.Required;
+import jsonld.com.metreeca.mesh.bean.Namespace;
+import shacl.com.metreeca.mesh.bean.Optional;
+import shacl.com.metreeca.mesh.bean.Pattern;
+import shacl.com.metreeca.mesh.bean.Required;
 
 import java.beans.JavaBean;
 
