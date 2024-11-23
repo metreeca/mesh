@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Copyright © 2024 Metreeca srl
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.metreeca</groupId>
+        <artifactId>root</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>bean</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <name>Metreeca/Bean</name>
+    <description>A lightweight JavaBeans serialisation and persistence framework.</description>
+    <url>https://github.com/metreeca/bean</url>
+    <inceptionYear>2023</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <revision>1.0-SNAPSHOT</revision>
+    </properties>
+
+    <modules>
+
+        <module>bean-core</module>
+        <module>bean-codecs</module>
+        <module>bean-stores</module>
+
+    </modules>
+
+    <scm>
+        <connection>scm:git:git@github.com:metreeca/bean.git</connection>
+        <developerConnection>scm:git:git@github.com:metreeca/bean.git</developerConnection>
+        <url>https://github.com/metreeca/bean</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/metreeca/bean/issues</url>
+    </issueManagement>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Framework -->
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>bean-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>bean-core</artifactId>
+                <version>${revision}</version>
+                <type>test-jar</type>
+            </dependency>
+
+
+            <!-- Codecs -->
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>bean-json</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+
+            <!-- Stores -->
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>bean-rdf4j</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <profiles>
+
+        <profile>
+            <id>release</id>
+        </profile>
+
+    </profiles>
+
+</project>
