@@ -2,35 +2,47 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh.svg)](https://central.sonatype.com/artifact/com.metreeca/mesh/)
 
-Metreeca/Mesh is a lightweight [linked data](https://www.w3.org/2013/data/) processing framework.
+Metreeca/Mesh is a lightweight Java framework for rapid development of
+[linked data](https://www.w3.org/2013/data/) services.
 
-[JavaBeans](https://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/)
+**Model-Driven** / Programmatically defined data models drive the automatic generation of complete read/write REST/JSON
+APIs supporting:
 
-Its core provide intuitive annotation sets for:
+- object validation against expected schemas;
+- bidirectional idiomatic JSON serialisation;
+- persistence to storage backends with built-in CRUD operations.
 
-- mapping JavaBeans classes and properties to the [JSON-LD](https://www.w3.org/TR/json-ld11/) interchange data model;
-- defining validation rules for JavaBeans properties, loosely based on the [SHACL](https://www.w3.org/TR/shacl/) shapes
-  constraint language.
+**Faceted Search** / Out-of-the-box support for both list and range facets, enabling powerful data exploration and
+filtering capabilities without additional configuration.
 
-Model-driven processing engines leverage JavaBeans conventions and annotations to:
+**Analytics Queries** / Built-in support for analytical queries with custom data transformation and aggregation
+operations, enabling complex reporting and business intelligence without external tools.
 
-* validate JavaBeans objects;
-* convert JavaBean object networks to / from idiomatic serialised representations;
-* persist JavaBeans object networks to storage backends, providing out of the box support for data validation, CRUD
-  operations, faceted search and client-driven queries on a par with [GraphQL](https://graphql.org/learn/queries/).
+**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single pass by specifying exactly which
+fields and
+nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
+
+**Standards Compliance** / Built on established [JSON-LD](https://json-ld.org/primer/latest/) and linked data standards
+for easy data interoperability.
+
+**Developer Experience**  / An optional high-level layer allows defining JSON-LD models using annotated Java
+interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code
+automatically generated at compile-time.
 
 # Modules
 
-|      area | javadocs                                                     | description                            |
-|----------:|:-------------------------------------------------------------|:---------------------------------------|
-| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | JSON-LD data model                     |
-|           | [mesh-bean](https://javadoc.io/doc/com.metreeca/mesh-bean)   | JavaBeans mapping                      |
-|    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON codec                             |
-|    stores | [edge‑rdf4j](https://javadoc.io/doc/com.metreeca/mesh-rdf4j) | [RDF4J](https://rdf4j.org) graph store |
+|      area | javadocs                                                     | description                                                   |
+|----------:|:-------------------------------------------------------------|:--------------------------------------------------------------|
+| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing engine                 |
+|           | [mesh-meta](https://javadoc.io/doc/com.metreeca/mesh-meta)   | JSON-LD and validation annotations for interface-based models |
+|           | [mesh-mint](https://javadoc.io/doc/com.metreeca/mesh-mint)   | Annotation-based code generator                               |
+|    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON-LD serialisation codec                                   |
+|    stores | [mesh-rdf4j](https://javadoc.io/doc/com.metreeca/mesh-rdf4j) | [RDF4J](https://rdf4j.org) persistence store                  |
 
 # Getting Started
 
-1. Add the framework BOM and the relevant serialisation/persistence modules to your Maven dependencies, for instance:
+1. Add the framework BOM and the relevant serialisation/persistence modules to your Maven dependencies, for instance
+   using high-level annotated interfaces:
 
 ```xml 
 <project>
@@ -53,7 +65,7 @@ Model-driven processing engines leverage JavaBeans conventions and annotations t
 
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>mesh-jsonld</artifactId>
+           <artifactId>mesh-json</artifactId>
         </dependency>
 
         <dependency>
@@ -61,110 +73,122 @@ Model-driven processing engines leverage JavaBeans conventions and annotations t
             <artifactId>mesh-rdf4j</artifactId>
         </dependency>
 
+       <dependency> <!-- include to use high-level interface annotations -->
+          <groupId>com.metreeca</groupId>
+          <artifactId>mesh-meta</artifactId>
+       </dependency>
+
     </dependencies>
+
+   <build> <!-- include to activate annotation-based generation of frame objects -->
+
+      <plugin>
+
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <version>3.14.0</version>
+
+         <configuration>
+
+            <annotationProcessorPaths>
+
+               <path>
+                  <groupId>com.metreeca</groupId>
+                  <artifactId>mesh-mint</artifactId>
+               </path>
+
+            </annotationProcessorPaths>
+
+         </configuration>
+
+      </plugin>
+
+   </build>
 
 </project>
 ```
 
-2. Define a JavaBeans application data model, for instance:
+2. Define a JSON-LD application data model, for instance:
 
 ```java
-import jsonld.com.metreeca.mesh.bean.Namespace;
-import shacl.com.metreeca.mesh.bean.Optional;
-import shacl.com.metreeca.mesh.bean.Pattern;
-import shacl.com.metreeca.mesh.bean.Required;
+import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Id;
+import com.metreeca.mesh.meta.jsonld.Namespace;
+import com.metreeca.mesh.meta.shacl.Required;
 
-import java.beans.JavaBean;
+import java.net.URI;
 
-@JavaBean
+@Frame
 @Namespace("https://schema.org/")
-public final class Person {
+public interface Person {
 
     @Id
-    private URI identifier;
+    URI identifier();
+
+   default String name() {
+      return "%s %s".formatted(givenName(), familyName());
+   }
 
     @Required
-    private String givenName;
+    String givenName();
 
     @Required
-    private String familyName;
+    String familyName();
 
-    // getters and setters…
+   // more properties…
 
 }
 ```
 
-3. Create a JavaBeans codec to convert your data to / from a serialised representation, for instance:
+3. Create a store to persist your data to a storage backend, for instance:
 
 ```java
-public final class Codecs {
+import com.metreeca.mesh.rdf4j.RDF4JStore;
+import com.metreeca.mesh.tools.Store;
 
-    public static void main(final String... args) {
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
-        final Person person=create(Person.class);
+import java.net.URI;
 
-        person.setGivenName("Tino");
-        person.setFamilyName("Faussone");
+public final class Example {
 
-        final JSONCodec codec=new JSONCodec().indent(4);
+   public static void main(final String... args) {
 
-        final String encoded=codec.encode(person);
+      final Store store=RDF4JStore.rdf4j(new SailRepository(new MemoryStore()));
 
-        final Person decoded=codec.decode(
-                """{
-                  "givenName": "Tino",
-                  "familyName": "Faussone"
-                }""",
-                Person.class
-        );
+      final URI id=URI.create("/persons/123");
 
-    }
+      final Person person=new PersonFrame()
+              .identifier(id)
+              .givenName("Tino")
+              .familyName("Faussone");
 
-}
-```
+      store.create(person);
 
-4. Create a JavaBeans store to persist your data to a storage backend, for instance:
+      final Person model=new PersonFrame()
+              .familyName("")
+              .givenName("");
 
-```java
-public final class Stores {
+      final Person retrieved=store.retrieve(model);
 
-    public static void main(final String... args) {
-
-        final Store store=new RDF4JStore();
-
-        final URI id=URI.create("/persons/123");
-
-        final Person person=create(Person.class);
-
-        person.setIdentifier(id);
-        person.setGivenName("Tino");
-        person.setFamilyName("Faussone");
-
-        store.create(person);
-
-        final Person model=create(Person.class);
-
-        model.setIdentifier(id);
-
-        final Person retrieved=store.retrieve(model);
-
-    }
+   }
 
 }
 ```
 
-5. Delve into the [docs](https://metreeca.github.io/bean/) to learn the details about:
+5. Delve into the [docs](https://metreeca.github.io/mesh/) to learn the details about:
 
-    - defining and annotating JavaBeans data models;
+   - defining and annotating data models;
     - converting data to / from serialisation formats;
     - persisting data to storage backends.
 
 # Support
 
-- open an [issue](https://github.com/metreeca/bean/issues) to report a problem or to suggest a new feature
-- start a [discussion](https://github.com/metreeca/bean/discussions) to ask a how-to question or to share an idea
+- open an [issue](https://github.com/metreeca/mesh/issues) to report a problem or to suggest a new feature
+- start a [discussion](https://github.com/metreeca/mesh/discussions) to ask a how-to question or to share an idea
 
 # License
 
 This project is licensed under the Apache 2.0 License –
-see [LICENSE](https://github.com/metreeca/bean/blob/main/LICENSE) file for details.
+see [LICENSE](https://github.com/metreeca/mesh/blob/main/LICENSE) file for details.

@@ -1,9 +1,9 @@
 /@
 /mesh.*
 
-/.env
 /.idea/
 /.vscode/
+/.claude
 
 target/
 
@@ -11,6 +11,3 @@ target/
 
 *~
 ~*
-
-
-**/.claude/settings.local.json
