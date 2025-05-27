@@ -18,16 +18,17 @@ filtering capabilities without additional configuration.
 **Analytics Queries** / Built-in support for analytical queries with custom data transformation and aggregation
 operations, enabling complex reporting and business intelligence without external tools.
 
-**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single pass by specifying exactly which
+**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single request by specifying exactly
+which
 fields and
 nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
 
 **Standards Compliance** / Built on established [JSON-LD](https://json-ld.org/primer/latest/) and linked data standards
 for easy data interoperability.
 
-**Developer Experience**  / An optional high-level layer allows defining JSON-LD models using annotated Java
-interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code
-automatically generated at compile-time.
+**Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
+interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code automatically generated at
+compile-time.
 
 # Modules
 
@@ -45,6 +46,7 @@ automatically generated at compile-time.
    using high-level annotated interfaces:
 
 ```xml 
+
 <project>
 
     <dependencyManagement>
@@ -181,7 +183,8 @@ public final class Example {
 
    - defining and annotating data models;
     - converting data to / from serialisation formats;
-    - persisting data to storage backends.
+   - persisting data to storage backends;
+   - consuming model-driven REST/JSON-LD APIs.
 
 # Support
 
