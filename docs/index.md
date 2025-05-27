@@ -18,7 +18,8 @@ filtering capabilities without additional configuration.
 **Analytics Queries** / Built-in support for analytical queries with custom data transformation and aggregation
 operations, enabling complex reporting and business intelligence without external tools.
 
-**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single pass by specifying exactly which
+**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single request by specifying exactly
+which
 fields and
 nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
 
@@ -181,7 +182,8 @@ public final class Example {
 
    - defining and annotating data models;
     - converting data to / from serialisation formats;
-    - persisting data to storage backends.
+   - persisting data to storage backends;
+   - consuming model-driven REST/JSON-LD APIs.
 
 # Support
 
