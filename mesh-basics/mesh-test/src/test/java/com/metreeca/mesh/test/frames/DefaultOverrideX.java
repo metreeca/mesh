@@ -18,31 +18,9 @@ package com.metreeca.mesh.test.frames;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 @Frame
-public interface Resource extends Reference {
+public interface DefaultOverrideX {
 
-    enum Option { X, Y, Z }
-
-
-    String value();
-
-    Set<String> values();
-
-
-    Option option();
-
-    Set<Option> options();
-
-
-    Resource resource();
-
-    Set<Resource> resources();
-
-
-    Map<Locale, String> texts();
+    default String value() { return ""; }
 
 }
