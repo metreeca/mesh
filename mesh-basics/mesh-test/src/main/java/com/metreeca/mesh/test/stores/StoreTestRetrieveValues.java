@@ -57,7 +57,7 @@ public abstract class StoreTestRetrieveValues {
 
                     field(members, value(query()))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .hasSameSizeAs(Employees)
             );
         }
@@ -73,7 +73,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(label, criterion().like("none"))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .isEmpty()
             );
         }
@@ -90,7 +90,7 @@ public abstract class StoreTestRetrieveValues {
                             entry(seniority, Integer())
                     ))))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .allSatisfy(employee -> {
 
                         final Value expected=Employees.stream()
@@ -126,7 +126,7 @@ public abstract class StoreTestRetrieveValues {
                             ))
                     ))))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
 
                     .allSatisfy(employee -> assertThat(employee.get(supervisor).get(label))
                             .isEqualTo(employee.id()
@@ -162,7 +162,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(seniority, criterion().lt(integer(3)))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(seniority).integral().orElse(0L) < 3)
@@ -188,7 +188,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(seniority, criterion().gt(integer(3)))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(seniority).integral().orElse(0L) > 3)
@@ -214,7 +214,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(seniority, criterion().lte(integer(3)))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(seniority).integral().orElse(0L) <= 3)
@@ -240,7 +240,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(seniority, criterion().gte(integer(3)))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(seniority).integral().orElseThrow() >= 3)
@@ -267,7 +267,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(label, criterion().like("ger bo"))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(label).string().orElseThrow().equals("Gerard Bondur"))
@@ -291,7 +291,7 @@ public abstract class StoreTestRetrieveValues {
                             ))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .map(Value::id)
@@ -322,7 +322,7 @@ public abstract class StoreTestRetrieveValues {
                             ))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(supervisor).id()
@@ -354,7 +354,7 @@ public abstract class StoreTestRetrieveValues {
                             ))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(supervisor).id()
@@ -385,7 +385,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(supervisor, criterion().any(set()))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(supervisor).object()
@@ -413,7 +413,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(supervisor, criterion().any(Nil()))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(supervisor).id().isEmpty())
@@ -442,7 +442,7 @@ public abstract class StoreTestRetrieveValues {
                             ))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> {
@@ -479,7 +479,7 @@ public abstract class StoreTestRetrieveValues {
                             )
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(supervisor).id()
@@ -513,7 +513,7 @@ public abstract class StoreTestRetrieveValues {
                             )
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(birthdate).localDate()
@@ -540,7 +540,7 @@ public abstract class StoreTestRetrieveValues {
 
                     field(members, value(query(object(id(base())))))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .map(Value::id)
@@ -559,7 +559,7 @@ public abstract class StoreTestRetrieveValues {
                             .where("", criterion().order(-1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(Comparator.<Value, String>comparing(employee -> employee.id()
@@ -588,7 +588,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(expression().path(label), criterion().order(1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(comparing(employee -> employee
@@ -618,7 +618,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(expression().path(label), criterion().order(-1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(Comparator.<Value, String>comparing(employee -> employee
@@ -649,7 +649,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(expression().path(supervisor, label), criterion().order(1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(comparing(employee -> employee.get(supervisor).id()
@@ -679,7 +679,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(expression().pipe(YEAR).path(birthdate), criterion().order(1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(comparing(employee -> employee
@@ -711,7 +711,7 @@ public abstract class StoreTestRetrieveValues {
                             .where(label, criterion().order(1))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(members(employees))
+            ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .sorted(Comparator.<Value, Long>comparing(employee -> employee
@@ -740,7 +740,7 @@ public abstract class StoreTestRetrieveValues {
                             .offset(5)
                             .limit(10))))
 
-            )).hasValueSatisfying(employees -> assertThat(members(employees))
+            )).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .skip(5)
@@ -762,7 +762,7 @@ public abstract class StoreTestRetrieveValues {
                             .offset(0)
                             .limit(0))))
 
-            )).hasValueSatisfying(employees -> assertThat(members(employees))
+            )).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .map(Value::id)
@@ -793,7 +793,7 @@ public abstract class StoreTestRetrieveValues {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(array(Employees.stream()
 

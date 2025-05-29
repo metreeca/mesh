@@ -30,7 +30,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -100,7 +99,7 @@ public final class RDF4JStore implements Store {
 
 
     @Override
-    public Optional<Value> retrieve(final Valuable model, final List<Locale> locales) {
+    public Value retrieve(final Valuable model, final List<Locale> locales) {
 
         if ( model == null ) {
             throw new NullPointerException("null model");
@@ -111,9 +110,8 @@ public final class RDF4JStore implements Store {
         }
 
         return txn(connection -> new _StoreReader(new _StoreLoader(this, connection)).retrieve(
-                        requireNonNull(model.toValue(), "null supplied model"), locales
-                ).value()
-        );
+                requireNonNull(model.toValue(), "null supplied model"), locales
+        ));
     }
 
 

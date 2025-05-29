@@ -20,7 +20,10 @@ import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.queries.Query;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -36,7 +39,7 @@ import static com.metreeca.shim.Collections.list;
  */
 public interface Store extends AutoCloseable {
 
-    default Optional<Value> retrieve(final Valuable model, final Locale... locales) {
+    default Value retrieve(final Valuable model, final Locale... locales) {
 
         if ( model == null ) {
             throw new NullPointerException("null model");
@@ -59,7 +62,7 @@ public interface Store extends AutoCloseable {
      * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not
      *                                  {@linkplain Value#validate() valid}
      */
-    Optional<Value> retrieve(Valuable model, List<Locale> locales) throws StoreException;
+    Value retrieve(Valuable model, List<Locale> locales) throws StoreException;
 
 
     /**

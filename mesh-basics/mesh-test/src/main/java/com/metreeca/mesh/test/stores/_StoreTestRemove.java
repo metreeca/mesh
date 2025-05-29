@@ -46,7 +46,7 @@ abstract class _StoreTestRemove {
 
         store.remove(array());
 
-        assertThat(store.retrieve(new OfficeFrame().id(uri("/offices/1")))).isPresent();
+        assertThat(store.retrieve(new OfficeFrame().id(uri("/offices/1"))).isEmpty()).isFalse();
     }
 
     @Test void testRemoveArrays() {
@@ -59,7 +59,7 @@ abstract class _StoreTestRemove {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
                 .seniority(0)
-        )).isEmpty();
+        ).isEmpty()).isTrue();
 
     }
 
@@ -74,7 +74,7 @@ abstract class _StoreTestRemove {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
                 .seniority(0)
-        )).isEmpty();
+        ).isEmpty()).isTrue();
 
     }
 
@@ -87,7 +87,7 @@ abstract class _StoreTestRemove {
 
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
-        )).isEmpty();
+        ).isEmpty()).isTrue();
 
     }
 
@@ -103,7 +103,7 @@ abstract class _StoreTestRemove {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(report)
                 .supervisor(new EmployeeFrame(true).id(uri()))
-        )).map(EmployeeFrame::new).hasValueSatisfying(employee -> {
+        )).extracting(EmployeeFrame::new).satisfies(employee -> {
             assertThat(employee.supervisor()).isNull();
         });
 
@@ -118,8 +118,8 @@ abstract class _StoreTestRemove {
         store.insert(employee);
         store.remove(employee);
 
-        assertThat(store.retrieve(new EmployeeFrame(true).id(employee.id()))).isEmpty();
-        assertThat(store.retrieve(value(query(new EventFrame(true))))).isEmpty();
+        assertThat(store.retrieve(new EmployeeFrame(true).id(employee.id())).isEmpty()).isTrue();
+        assertThat(store.retrieve(value(query(new EventFrame(true)))).isEmpty()).isTrue();
     }
 
 

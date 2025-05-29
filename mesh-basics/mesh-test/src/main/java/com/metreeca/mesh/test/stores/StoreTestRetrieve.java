@@ -52,7 +52,7 @@ abstract class StoreTestRetrieve {
 
                 field(label, string(""))
 
-        ))).isEmpty();
+        ))).satisfies(v -> assertThat(v.isEmpty()).isTrue());
 
     }
 
@@ -67,7 +67,7 @@ abstract class StoreTestRetrieve {
                 field(code, string("")),
                 field(seniority, integer(0))
 
-        ))).hasValueSatisfying(employee -> {
+        ))).satisfies(employee -> {
 
             // specified by model
 
@@ -99,8 +99,8 @@ abstract class StoreTestRetrieve {
 
         )))
 
-                .map(employee -> employee.get(supervisor))
-                .hasValueSatisfying(supervisor -> {
+                .extracting(employee -> employee.get(supervisor))
+                .satisfies(supervisor -> {
 
                     assertThat(supervisor.get(label)).isEqualTo(string("Gerard Bondur"));
                     assertThat(supervisor.get(seniority)).isEqualTo(integer(4));
@@ -122,7 +122,7 @@ abstract class StoreTestRetrieve {
                         object(id(item("/employees/1088")))
                 ))
 
-        ))).hasValueSatisfying(values -> assertThat(values.array().orElseThrow())
+        ))).satisfies(values -> assertThat(values.array().orElseThrow())
                 .map(Value::id)
                 .containsExactlyElementsOf(Employees.stream()
                         .filter(employee -> employee.get(supervisor).id()
@@ -146,7 +146,7 @@ abstract class StoreTestRetrieve {
                         object(id(item("/employees/1088")))
                 ))
 
-        ))).hasValueSatisfying(tuples -> assertThat(tuples)
+        ))).satisfies(tuples -> assertThat(tuples)
                 .isEqualTo(value(new Table(list(
                         new Tuple(list(
                                 entry("count", integer(Employees.stream()
