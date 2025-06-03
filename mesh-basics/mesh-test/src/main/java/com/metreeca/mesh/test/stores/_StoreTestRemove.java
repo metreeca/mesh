@@ -126,8 +126,7 @@ abstract class _StoreTestRemove {
     @Test void testReportInvalidResources() {
         assertThatExceptionOfType(StoreException.class).isThrownBy(() -> store().remove(
 
-                employee(item("/employees/1"))
-                        .code(null) // missing required properties
+                new EmployeeFrame(true) // missing id
 
         ));
     }

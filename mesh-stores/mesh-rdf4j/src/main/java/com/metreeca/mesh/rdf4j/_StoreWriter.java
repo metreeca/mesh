@@ -94,7 +94,7 @@ final class _StoreWriter {
 
     int delete(final Value value) {
 
-        final List<Value> resources=resources(value, true, false);
+        final List<Value> resources=resources(value, true, true);
 
         if ( exist(resources) ) {
 
@@ -117,7 +117,7 @@ final class _StoreWriter {
 
     int remove(final Value value) {
 
-        final List<Value> resources=resources(value, true, false);
+        final List<Value> resources=resources(value, true, true);
 
         loader.execute(() -> delete(resources)).join();
 
@@ -128,7 +128,7 @@ final class _StoreWriter {
 
         final List<Value> insertions=resources(insert, false, false);
 
-        final List<Value> removals=list(resources(remove, true, false).stream()
+        final List<Value> removals=list(resources(remove, true, true).stream()
                 .filter(r -> insertions.stream().noneMatch(i -> id(r).equals(id(i))))
         );
 
@@ -156,7 +156,7 @@ final class _StoreWriter {
     private List<Value> resources(final Value value, final boolean queryable, final boolean delta) {
 
         value.validate(delta).ifPresent(trace -> {
-            throw new StoreException(format("invalid create value <%s>", trace));
+            throw new StoreException(format("invalid resources value <%s>", trace));
         });
 
         return list(value.accept(new Visitor<Stream<Value>>() {
