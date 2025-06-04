@@ -28,7 +28,7 @@ import java.net.URI;
 import java.util.List;
 
 import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.tools.ActorModel.expand;
+import static com.metreeca.mesh.tools.AgentModel.expand;
 import static com.metreeca.shim.Collections.list;
 
 import static java.lang.String.format;

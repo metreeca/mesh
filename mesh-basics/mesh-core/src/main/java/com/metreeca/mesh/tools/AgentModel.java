@@ -41,11 +41,11 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.*;
 
 /**
- * Model transformation utilities for Actor operations.
+ * Model transformation utilities for Agent operations.
  *
  * <p>Provides algorithms for expanding and populating data models used in REST operations.</p>
  */
-final class ActorModel {
+final class AgentModel {
 
     /**
      * Expands a data model by filling in missing information based on shape specifications.
@@ -229,7 +229,7 @@ final class ActorModel {
                 .flatMap(e -> Optional.ofNullable(y.get(e.getKey()))
 
                         .or(() -> shape(y, e.getKey())
-                                .flatMap(ActorModel::model)
+                                .flatMap(AgentModel::model)
                         )
 
                         .map(w -> field(e.getKey(), shape(y, e.getKey())
@@ -463,6 +463,6 @@ final class ActorModel {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private ActorModel() { }
+    private AgentModel() { }
 
 }

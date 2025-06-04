@@ -16,22 +16,15 @@
 
 package com.metreeca.mesh.tools;
 
-import com.metreeca.mesh.Value;
+import java.io.OutputStream;
+import java.util.function.Consumer;
 
-import java.io.InputStream;
-import java.net.URI;
-import java.util.function.Function;
+public interface AgentResponse {
 
-public interface ActorRequest {
+    void status(int code);
 
-    String method();
+    void header(String name, String value);
 
-    URI resource();
-
-    String query();
-
-    String header(String name);
-
-    Value input(Function<InputStream, Value> body);
+    void output(Consumer<OutputStream> body);
 
 }
