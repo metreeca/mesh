@@ -35,6 +35,14 @@
 - Definitely don't generate example usage sections
 - Don't generate javadocs for overridden methods
 
+## Tutorials and Handbooks
+
+- The framework is always referred to as Metreeca/Mesh
+- Use a neutral, professional tone; avoid excessive use of you/yours and any hint of overfamiliarity with the reader
+- Provide ample cross-linking of referred concepts, targeting both other documents and javadocs published
+  for each module on javadoc.io at URLs with the pattern `https://javadoc.io/doc/com.metreeca/{artifact-id}` (for
+  instance, `https://javadoc.io/doc/com.metreeca/mesh-core`)
+
 ## Testing
 
 - Test classes use JUnit 5 Jupiter (`org.junit.jupiter.api.Test`)
@@ -42,3 +50,11 @@
 - Tests follow BDD pattern with arrange-act-assert structure
 - Tests don't cover trivial implementation details, like arguments null checks
 - Follow existing patterns for nested test classes with `@Nested` annotation
+
+# Procedures
+
+## Major Release
+
+- review triggers for `.github/workflows/main-sync.yml`
+
+## Minor Release
