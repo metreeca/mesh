@@ -31,8 +31,8 @@ import static com.metreeca.mesh.queries.Criterion.criterion;
 import static com.metreeca.mesh.queries.Query.query;
 import static com.metreeca.mesh.shapes.Property.property;
 import static com.metreeca.mesh.shapes.Shape.shape;
-import static com.metreeca.mesh.tools.ActorModel.expand;
-import static com.metreeca.mesh.tools.ActorModel.populate;
+import static com.metreeca.mesh.tools.AgentModel.expand;
+import static com.metreeca.mesh.tools.AgentModel.populate;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.Collections.list;
 import static com.metreeca.shim.Locales.ANY;
@@ -42,7 +42,7 @@ import static com.metreeca.shim.URIs.uri;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Nested
-final class ActorModelTest {
+final class AgentModelTest {
 
     @Nested
     final class ExpandTest {
@@ -58,7 +58,7 @@ final class ActorModelTest {
                     object(Value.shape(Shape.shape().property(property("p").forward(true).shape(Shape.shape().datatype(Object())))))
             );
 
-            assertThat(expand(array)).isEqualTo(array(list(array.values().map(ActorModel::expand))));
+            assertThat(expand(array)).isEqualTo(array(list(array.values().map(AgentModel::expand))));
         }
 
 

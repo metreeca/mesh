@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.tools.ActorModel.expand;
-import static com.metreeca.mesh.tools.ActorModel.populate;
+import static com.metreeca.mesh.tools.AgentModel.expand;
+import static com.metreeca.mesh.tools.AgentModel.populate;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.URIs.uri;
 import static com.metreeca.shim.URIs.uuid;
@@ -46,7 +46,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.function.Predicate.not;
 import static java.util.regex.Pattern.compile;
 
-public final class Actor {
+public final class Agent {
 
     private static final String GET="GET";
     private static final String PUT="PUT";
@@ -109,14 +109,14 @@ public final class Actor {
     private final Codec codec;
     private final Store store;
 
-    private final Function<ActorRequest, String> slug;
+    private final Function<AgentRequest, String> slug;
 
 
-    public Actor(final Value model, final Codec codec, final Store store) {
+    public Agent(final Value model, final Codec codec, final Store store) {
         this(model, codec, store, request -> uuid());
     }
 
-    public Actor(final Value model, final Codec codec, final Store store, final Function<ActorRequest, String> slug) {
+    public Agent(final Value model, final Codec codec, final Store store, final Function<AgentRequest, String> slug) {
 
         if ( model == null ) {
             throw new NullPointerException("null model");
@@ -142,7 +142,7 @@ public final class Actor {
     }
 
 
-    public void process(final ActorRequest request, final ActorResponse response) {
+    public void process(final AgentRequest request, final AgentResponse response) {
 
         if ( request == null ) {
             throw new NullPointerException("null request");
@@ -186,7 +186,7 @@ public final class Actor {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void retrieve(final URI resource, final ActorRequest request, final ActorResponse response) {
+    private void retrieve(final URI resource, final AgentRequest request, final AgentResponse response) {
         try {
 
             final boolean jsonld=Optional.ofNullable(request.header(ACCEPT)).stream()
@@ -209,6 +209,8 @@ public final class Actor {
                             (specs.isEmpty() ? model : populate(specs, model)).merge(object(id(resource))),
                             locales
                     )
+
+                    .value()
 
                     .ifPresentOrElse(
 
@@ -242,7 +244,7 @@ public final class Actor {
     }
 
 
-    private void create(final URI resource, final ActorRequest request, final ActorResponse response) {
+    private void create(final URI resource, final AgentRequest request, final AgentResponse response) {
         try {
 
             final Value value=requireNonNull(request.input(this::decode), "null decoded value");
@@ -287,7 +289,7 @@ public final class Actor {
         }
     }
 
-    private void update(final URI resource, final ActorRequest request, final ActorResponse response) {
+    private void update(final URI resource, final AgentRequest request, final AgentResponse response) {
         try {
 
             final Value value=requireNonNull(request.input(this::decode), "null decoded value");
@@ -327,7 +329,7 @@ public final class Actor {
         }
     }
 
-    private void mutate(final URI resource, final ActorRequest request, final ActorResponse response) {
+    private void mutate(final URI resource, final AgentRequest request, final AgentResponse response) {
         try {
 
             final Value value=requireNonNull(request.input(this::decode), "null decoded value");
@@ -367,7 +369,7 @@ public final class Actor {
         }
     }
 
-    private void delete(final URI resource, final ActorRequest request, final ActorResponse response) {
+    private void delete(final URI resource, final AgentRequest request, final AgentResponse response) {
         if ( store.delete(model.merge(object(id(resource)))) > 0 ) {
 
             response.status(NO_CONTENT);

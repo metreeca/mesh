@@ -1,7 +1,5 @@
 ---
 title: "Shape Specification Language"
-trail: "Reference"
-excerpt: "Shape-based data modelling language semantics and components"
 ---
 
 Most framework services are driven by declarative linked data models defined using a [shape](#shapes)-based

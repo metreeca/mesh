@@ -73,7 +73,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -107,7 +107,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(
                             new Tuple(list(field("value", integer(Employees.size()))))
@@ -129,7 +129,7 @@ abstract class StoreTestRetrieveTuples {
 
                     )))
 
-            )).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            )).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -169,7 +169,7 @@ abstract class StoreTestRetrieveTuples {
 
                     )))
 
-            )).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            )).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list())))
 
@@ -189,7 +189,7 @@ abstract class StoreTestRetrieveTuples {
 
                     )))
 
-            )).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            )).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -237,7 +237,7 @@ abstract class StoreTestRetrieveTuples {
                     ))
 
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -268,7 +268,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -299,7 +299,7 @@ abstract class StoreTestRetrieveTuples {
                             ))))
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -335,7 +335,7 @@ abstract class StoreTestRetrieveTuples {
 
                     )))
 
-            )).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            )).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             entry("value", integer(Employees.stream()
@@ -360,7 +360,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             entry("value", decimal(Employees.stream()
@@ -384,7 +384,7 @@ abstract class StoreTestRetrieveTuples {
                             probe("value", expression().pipe(MAX).path(ytd), Decimal())
                     ))))))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             entry("value", decimal(Employees.stream()
@@ -407,7 +407,7 @@ abstract class StoreTestRetrieveTuples {
                             probe("value", expression().pipe(SUM).path(ytd), Decimal())
                     ))))))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             entry("value", decimal(Employees.stream()
@@ -431,7 +431,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             entry("value", decimal(Employees.stream()
@@ -463,7 +463,7 @@ abstract class StoreTestRetrieveTuples {
                             probe("value", expression().pipe(COUNT), Integer())
                     ))))))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -503,7 +503,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -557,7 +557,7 @@ abstract class StoreTestRetrieveTuples {
                                     criterion().gte(integer(3))
                             ))))
 
-            )).hasValueSatisfying(employees -> assertThat(members(employees))
+            )).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
                             .filter(employee -> employee.get(reports).values().count() >= 3)
@@ -580,7 +580,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -621,7 +621,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(array(Employees.stream()
 
@@ -652,7 +652,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -687,7 +687,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -724,7 +724,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
                             field("value", integer(Employees.size()))
@@ -752,7 +752,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(Employees.stream()
 
@@ -819,7 +819,7 @@ abstract class StoreTestRetrieveTuples {
 
                     ))
 
-            ))).hasValueSatisfying(employees -> assertThat(employees.get(members))
+            ))).satisfies(employees -> assertThat(employees.get(members))
 
                     .isEqualTo(value(new Table(list(new Tuple(list(
 

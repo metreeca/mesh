@@ -42,7 +42,34 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.*;
 
 /**
- * Value conversion utilities.
+ * Value conversion utilities for frame code generation.
+ *
+ * <p>This utility class provides runtime support methods for frame classes generated at compile time from
+ * {@code @Frame} interfaces. The methods facilitate bidirectional conversion between Java objects and
+ * {@link Value} instances, enabling seamless data binding for JSON-LD serialization and deserialization.</p>
+ *
+ * <p>The conversion methods are organized into several categories:</p>
+ *
+ * <ul>
+ *     <li><strong>Collection Guards</strong> - Handle efficient conversion of collection types with special
+ *         optimization for {@code Stash} instances</li>
+ *     <li><strong>Object to Value Converters</strong> - Convert Java objects to {@code Value} instances,
+ *         handling null values by returning {@code Nil()}</li>
+ *     <li><strong>Value to Object Converters</strong> - Extract Java objects from {@code Value} instances,
+ *         returning {@code null} for empty values</li>
+ * </ul>
+ *
+ * <p>These methods are typically called by generated frame implementation classes and are not intended
+ * for direct use by application code. The code generation process is driven by annotations from the
+ * {@link com.metreeca.mesh.meta.jsonld} and {@link com.metreeca.mesh.meta.shacl} packages.</p>
+ *
+ * <h2>Type Safety</h2>
+ *
+ * <p>All conversion methods include null-safety checks and type validation. Generic methods use mapper
+ * functions to handle custom object types, ensuring type-safe conversions while maintaining flexibility.</p>
+ *
+ * @see com.metreeca.mesh.Value Value class for data representation
+ * @see com.metreeca.mesh.meta.jsonld.Frame Frame annotation for interface marking
  */
 public final class Values {
 

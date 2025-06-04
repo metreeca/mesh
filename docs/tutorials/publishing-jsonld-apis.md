@@ -2,22 +2,11 @@
 title: "Publishing Model‑Driven REST/JSON-LD APIs"
 ---
 
-[comment]: <> "excerpt:    Hands-on guided tour of model-driven REST/JSON-LD APIs publishing"
-
-This example-driven tutorial introduces the main building blocks of the Metreeca/Java model-driven REST/JSON framework.
-Basic familiarity with [linked data](https://www.w3.org/standards/semanticweb/data) concepts
-and [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs is required.
-
-In the following sections you will learn how to use the framework to publish linked data resources through REST/JSON-LD
+In this tutorial you will learn how to use the framework to publish linked data resources through REST/JSON-LD
 APIs that automatically support CRUD operations, faceted search, data validation and fine‑grained role‑based access
 control.
 
-In the tutorial we will work with a linked data version of the [BIRT](http://www.eclipse.org/birt/phoenix/db/) sample
-dataset, cross-linked to [GeoNames](http://www.geonames.org/) entities for cities and countries.
-
-The BIRT sample is a typical business database, containing tables such as *offices*, *customers*, *products*,
-*orders*, *
-order lines*, … for *Classic Models*, a fictional world-wide retailer of scale toy models: we will walk through the REST
+we will walk through the REST
 API development process focusing on the task of publishing
 the [Product](https://demo.metreeca.com/self/#endpoint=https://demo.metreeca.com/toys/sparql&collection=https://demo.metreeca.com/toys/terms#Product)
 catalog.
@@ -28,7 +17,7 @@ or `wget`.
 
 # Getting Started
 
-To get started, set up a Maven Java 1.8 project, importing the BOM module for Metreeca/Java:
+To get started, set up a Maven project, importing the BOM module for Metreeca/Java:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

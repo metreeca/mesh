@@ -4,7 +4,9 @@ on:
 
   push:
     tags:
-      - v1.*
+      - v4.0.*
+    branches:
+      - release/*
 
 jobs:
 

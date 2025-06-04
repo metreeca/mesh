@@ -24,9 +24,17 @@ import java.time.LocalDate;
 
 @Frame
 @Class
-public interface Event extends Toys {
+public interface Event extends Resource {
 
     enum Action { HIRED, PROMOTED, TERMINATED, RETIRED }
+
+
+    @Override
+    default String label() {
+        return action() != null && date() != null
+                ? "%s %s".formatted(date(), action())
+                : null;
+    }
 
 
     @Required

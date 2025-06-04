@@ -35,7 +35,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   <li>Must not be generic interfaces (no type parameters)</li>
  *   <li>Methods must not have arguments</li>
  *   <li>Methods must have non-void return types</li>
- *   <li>Static methods are ignored/li>
+ *   <li>Static methods are ignored</li>
  * </ul>
  *
  * <p>Frame interfaces represent resources in a linked data context, where methods correspond to

@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * JSON-LD serialization.</p>
  *
  * <p>Methods annotated with {@code @Type} must return a {@link String} value representing the class
- * for the resource. This is usually the simple name of the most pecific class of the resource.</p>
+ * for the resource. This is usually the simple name of the most specific class of the resource.</p>
  */
 @Target(METHOD)
 @Retention(RUNTIME)

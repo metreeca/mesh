@@ -24,8 +24,10 @@ import java.net.URI;
 
 @Frame
 @Class
+@Base("https://data.example.net/")
+@Namespace("https://data.example.net/#")
 @Namespace(prefix="rdfs", value="http://www.w3.org/2000/01/rdf-schema#")
-public interface Resource extends Toys {
+public interface Resource {
 
     @Id
     URI id();

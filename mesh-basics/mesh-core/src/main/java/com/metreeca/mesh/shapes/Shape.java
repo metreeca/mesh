@@ -39,29 +39,30 @@ import static java.util.stream.Collectors.toMap;
 /**
  * Value validation constraints.
  *
- * @param virtual
- * @param id
- * @param type
- * @param datatype
- * @param clazzes
- * @param minExclusive
- * @param maxExclusive
- * @param minInclusive
- * @param maxInclusive
- * @param minLength
- * @param maxLength
- * @param pattern
- * @param in
- * @param languageIn
- * @param uniqueLang
- * @param minCount
- * @param maxCount
- * @param hasValue
- * @param constraints
- * @param properties
+ * <p>Defines a set of constraints for validating values according to the SHACL specification.
+ * Shapes can describe both the structure and validation rules for data values.
  *
- * @see <a href="https://www.w3.org/TR/shacl/#core-components">Shapes Constraint Language (SHACL)
- *         - 4. Core Constraint Components</a>
+ * @param virtual      whether this is a virtual shape that doesn't correspond to stored data
+ * @param id           the property name for object identifiers
+ * @param type         the property name for object types
+ * @param datatype     the expected datatype constraint
+ * @param clazz        the explicit class constraint
+ * @param clazzes      the set of implicit class constraints
+ * @param minExclusive the minimum exclusive value constraint
+ * @param maxExclusive the maximum exclusive value constraint
+ * @param minInclusive the minimum inclusive value constraint
+ * @param maxInclusive the maximum inclusive value constraint
+ * @param minLength    the minimum length constraint for text values
+ * @param maxLength    the maximum length constraint for text values
+ * @param pattern      the regex pattern constraint for text values
+ * @param in           the set of allowed values
+ * @param languageIn   the set of allowed language tags for text values
+ * @param uniqueLang   whether language tags must be unique across values
+ * @param minCount     the minimum cardinality constraint
+ * @param maxCount     the maximum cardinality constraint
+ * @param hasValue     the set of required values
+ * @param constraints  the set of custom validation functions
+ * @param properties   the collection of nested property constraints
  */
 @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
 public final record Shape(
@@ -123,6 +124,11 @@ public final record Shape(
     );
 
 
+    /**
+     * Creates an empty shape with no constraints.
+     *
+     * @return an empty shape instance
+     */
     public static Shape shape() {
         return EMPTY;
     }
@@ -468,6 +474,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Checks if this shape is constrained to the specified datatype.
+     *
+     * @param datatype the datatype to check against
+     *
+     * @return {@code true} if this shape is constrained to the specified datatype
+     *
+     * @throws NullPointerException if {@code datatype} is {@code null}
+     */
     public boolean is(final Value datatype) {
 
         if ( datatype == null ) {
@@ -477,11 +492,25 @@ public final record Shape(
         return datatype().map(datatype::equals).orElse(false);
     }
 
+    /**
+     * Checks if this shape allows multiple values.
+     *
+     * @return {@code true} if this shape allows multiple values (maxCount > 1 or unlimited)
+     */
     public boolean isMultiple() {
         return maxCount().map(limit -> limit > 1).orElse(true);
     }
 
 
+    /**
+     * Retrieves a property by name.
+     *
+     * @param name the name of the property to retrieve
+     *
+     * @return an optional containing the property, if found; an empty optional, otherwise
+     *
+     * @throws NullPointerException if {@code name} is {@code null}
+     */
     public Optional<Property> property(final String name) {
 
         if ( name == null ) {
@@ -496,6 +525,13 @@ public final record Shape(
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Configures this shape's virtual flag.
+     *
+     * @param virtual whether this shape should be virtual
+     *
+     * @return a new shape instance with the specified virtual flag
+     */
     public Shape virtual(final boolean virtual) {
         return new Shape(
 
@@ -527,6 +563,17 @@ public final record Shape(
         );
     }
 
+    /**
+     * Configures this shape with an ID property name.
+     *
+     * <p>Automatically sets the datatype to Object.
+     *
+     * @param id the property name for object identifiers
+     *
+     * @return a new shape instance with the specified ID property
+     *
+     * @throws NullPointerException if {@code id} is {@code null}
+     */
     public Shape id(final String id) {
 
         if ( id == null ) {
@@ -563,6 +610,17 @@ public final record Shape(
         );
     }
 
+    /**
+     * Configures this shape with a type property name.
+     *
+     * <p>Automatically sets the datatype to Object.
+     *
+     * @param type the property name for object types
+     *
+     * @return a new shape instance with the specified type property
+     *
+     * @throws NullPointerException if {@code type} is {@code null}
+     */
     public Shape type(final String type) {
 
         if ( type == null ) {
@@ -600,6 +658,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with a datatype constraint.
+     *
+     * @param datatype the expected datatype for values
+     *
+     * @return a new shape instance with the specified datatype constraint
+     *
+     * @throws NullPointerException if {@code datatype} is {@code null}
+     */
     public Shape datatype(final Value datatype) {
 
         if ( datatype == null ) {
@@ -637,6 +704,16 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with class constraints.
+     *
+     * @param explicit the explicit class constraint
+     * @param implicit additional implicit class constraints
+     *
+     * @return a new shape instance with the specified class constraints
+     *
+     * @throws NullPointerException if either {@code explicit} or {@code implicit} is {@code null}
+     */
     public Shape clazz(final Type explicit, final Type... implicit) {
 
         if ( explicit == null ) {
@@ -650,6 +727,16 @@ public final record Shape(
         return clazz(explicit, asList(implicit));
     }
 
+    /**
+     * Configures this shape with class constraints.
+     *
+     * @param explicit the explicit class constraint
+     * @param implicit the collection of implicit class constraints
+     *
+     * @return a new shape instance with the specified class constraints
+     *
+     * @throws NullPointerException if either {@code explicit} or {@code implicit} is {@code null}
+     */
     public Shape clazz(final Type explicit, final Collection<Type> implicit) {
 
         if ( explicit == null ) {
@@ -690,6 +777,15 @@ public final record Shape(
         );
     }
 
+    /**
+     * Configures this shape with implicit class constraints only.
+     *
+     * @param implicit the implicit class constraints
+     *
+     * @return a new shape instance with the specified implicit class constraints
+     *
+     * @throws NullPointerException if {@code implicit} is {@code null}
+     */
     public Shape clazzes(final Type... implicit) {
 
         if ( implicit == null || Arrays.stream(implicit).anyMatch(Objects::isNull) ) {
@@ -699,6 +795,15 @@ public final record Shape(
         return clazzes(asList(implicit));
     }
 
+    /**
+     * Configures this shape with implicit class constraints only.
+     *
+     * @param implicit the collection of implicit class constraints
+     *
+     * @return a new shape instance with the specified implicit class constraints
+     *
+     * @throws NullPointerException if {@code implicit} is {@code null}
+     */
     public Shape clazzes(final Collection<Type> implicit) {
 
         if ( implicit == null || implicit.stream().anyMatch(Objects::isNull) ) {
@@ -736,6 +841,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with a minimum exclusive value constraint.
+     *
+     * @param limit the minimum exclusive value (values must be greater than this)
+     *
+     * @return a new shape instance with the specified minimum exclusive constraint
+     *
+     * @throws NullPointerException if {@code limit} is {@code null}
+     */
     public Shape minExclusive(final Value limit) {
 
         if ( limit == null ) {
@@ -774,6 +888,15 @@ public final record Shape(
         );
     }
 
+    /**
+     * Configures this shape with a maximum exclusive value constraint.
+     *
+     * @param limit the maximum exclusive value (values must be less than this)
+     *
+     * @return a new shape instance with the specified maximum exclusive constraint
+     *
+     * @throws NullPointerException if {@code limit} is {@code null}
+     */
     public Shape maxExclusive(final Value limit) {
 
         if ( limit == null ) {
@@ -813,6 +936,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with a minimum inclusive value constraint.
+     *
+     * @param limit the minimum inclusive value (values must be greater than or equal to this)
+     *
+     * @return a new shape instance with the specified minimum inclusive constraint
+     *
+     * @throws NullPointerException if {@code limit} is {@code null}
+     */
     public Shape minInclusive(final Value limit) {
 
         if ( limit == null ) {
@@ -850,6 +982,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with a maximum inclusive value constraint.
+     *
+     * @param limit the maximum inclusive value (values must be less than or equal to this)
+     *
+     * @return a new shape instance with the specified maximum inclusive constraint
+     *
+     * @throws NullPointerException if {@code limit} is {@code null}
+     */
     public Shape maxInclusive(final Value limit) {
 
         if ( limit == null ) {
@@ -888,6 +1029,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with a minimum length constraint for text values.
+     *
+     * @param limit the minimum length (must be non-negative)
+     *
+     * @return a new shape instance with the specified minimum length constraint
+     *
+     * @throws IllegalArgumentException if {@code limit} is negative
+     */
     public Shape minLength(final int limit) {
 
         if ( limit < 0 ) {
@@ -924,6 +1074,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with a maximum length constraint for text values.
+     *
+     * @param limit the maximum length (must be non-negative)
+     *
+     * @return a new shape instance with the specified maximum length constraint
+     *
+     * @throws IllegalArgumentException if {@code limit} is negative
+     */
     public Shape maxLength(final int limit) {
 
         if ( limit < 0 ) {
@@ -961,6 +1120,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with a regex pattern constraint for text values.
+     *
+     * @param pattern the regex pattern that text values must match
+     *
+     * @return a new shape instance with the specified pattern constraint
+     *
+     * @throws NullPointerException if {@code pattern} is {@code null}
+     */
     public Shape pattern(final String pattern) {
 
         if ( pattern == null ) {
@@ -997,6 +1165,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with an enumeration constraint.
+     *
+     * @param values the allowed values
+     *
+     * @return a new shape instance with the specified enumeration constraint
+     *
+     * @throws NullPointerException if {@code values} is {@code null}
+     */
     public Shape in(final Value... values) {
 
         if ( values == null || Arrays.stream(values).anyMatch(Objects::isNull) ) {
@@ -1006,6 +1183,16 @@ public final record Shape(
         return in(set(values));
     }
 
+    /**
+     * Configures this shape with an enumeration constraint.
+     *
+     * @param values the collection of allowed values
+     *
+     * @return a new shape instance with the specified enumeration constraint
+     *
+     * @throws NullPointerException     if {@code values} is {@code null}
+     * @throws IllegalArgumentException if any value is an array
+     */
     public Shape in(final Collection<Value> values) {
 
         if ( values == null || values.stream().anyMatch(Objects::isNull) ) {
@@ -1046,6 +1233,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with allowed language tags for text values.
+     *
+     * @param locales the allowed language tag strings
+     *
+     * @return a new shape instance with the specified language constraints
+     *
+     * @throws NullPointerException if {@code locales} is {@code null}
+     */
     public Shape languageIn(final String... locales) { // support auto-generated records
 
         if ( locales == null || Arrays.stream(locales).anyMatch(Objects::isNull) ) {
@@ -1055,6 +1251,15 @@ public final record Shape(
         return languageIn(set(Arrays.stream(locales).map(Locales::locale)));
     }
 
+    /**
+     * Configures this shape with allowed language tags for text values.
+     *
+     * @param locales the allowed locales
+     *
+     * @return a new shape instance with the specified language constraints
+     *
+     * @throws NullPointerException if {@code locales} is {@code null}
+     */
     public Shape languageIn(final Locale... locales) {
 
         if ( locales == null || Arrays.stream(locales).anyMatch(Objects::isNull) ) {
@@ -1064,6 +1269,15 @@ public final record Shape(
         return languageIn(set(locales));
     }
 
+    /**
+     * Configures this shape with allowed language tags for text values.
+     *
+     * @param locales the collection of allowed locales
+     *
+     * @return a new shape instance with the specified language constraints
+     *
+     * @throws NullPointerException if {@code locales} is {@code null}
+     */
     public Shape languageIn(final Collection<Locale> locales) {
 
         if ( locales == null || locales.stream().anyMatch(Objects::isNull) ) {
@@ -1102,6 +1316,13 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape's unique language constraint.
+     *
+     * @param uniqueLang whether language tags must be unique across values
+     *
+     * @return a new shape instance with the specified unique language constraint
+     */
     public Shape uniqueLang(final boolean uniqueLang) {
         return new Shape(
 
@@ -1132,6 +1353,15 @@ public final record Shape(
         );
     }
 
+    /**
+     * Configures this shape with a minimum cardinality constraint.
+     *
+     * @param limit the minimum number of values (must be non-negative)
+     *
+     * @return a new shape instance with the specified minimum cardinality constraint
+     *
+     * @throws IllegalArgumentException if {@code limit} is negative
+     */
     public Shape minCount(final int limit) {
 
         if ( limit < 0 ) {
@@ -1167,6 +1397,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with a maximum cardinality constraint.
+     *
+     * @param limit the maximum number of values (must be non-negative)
+     *
+     * @return a new shape instance with the specified maximum cardinality constraint
+     *
+     * @throws IllegalArgumentException if {@code limit} is negative
+     */
     public Shape maxCount(final int limit) {
 
         if ( limit < 0 ) {
@@ -1203,23 +1442,52 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape to allow multiple values (no cardinality limit).
+     *
+     * @return this shape instance unchanged
+     */
     public Shape multiple() {
         return this;
     }
 
+    /**
+     * Configures this shape to require at least one value.
+     *
+     * @return a new shape instance with minimum cardinality of 1
+     */
     public Shape repeatable() {
         return minCount(1);
     }
 
+    /**
+     * Configures this shape to allow at most one value.
+     *
+     * @return a new shape instance with maximum cardinality of 1
+     */
     public Shape optional() {
         return maxCount(1);
     }
 
+    /**
+     * Configures this shape to require exactly one value.
+     *
+     * @return a new shape instance with cardinality of exactly 1
+     */
     public Shape required() {
         return exactly(1);
     }
 
 
+    /**
+     * Configures this shape to require exactly the specified number of values.
+     *
+     * @param limit the exact number of values required (must be non-negative)
+     *
+     * @return a new shape instance with the specified exact cardinality
+     *
+     * @throws IllegalArgumentException if {@code limit} is negative
+     */
     public Shape exactly(final int limit) {
 
         if ( limit < 0 ) {
@@ -1230,6 +1498,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with required values.
+     *
+     * @param values the values that must be present
+     *
+     * @return a new shape instance with the specified required values
+     *
+     * @throws NullPointerException if {@code values} is {@code null}
+     */
     public Shape hasValue(final Value... values) {
 
         if ( values == null || Arrays.stream(values).anyMatch(Objects::isNull) ) {
@@ -1239,6 +1516,16 @@ public final record Shape(
         return hasValue(set(values));
     }
 
+    /**
+     * Configures this shape with required values.
+     *
+     * @param values the collection of values that must be present
+     *
+     * @return a new shape instance with the specified required values
+     *
+     * @throws NullPointerException     if {@code values} is {@code null}
+     * @throws IllegalArgumentException if any value is an array
+     */
     public Shape hasValue(final Collection<Value> values) {
 
         if ( values == null || values.stream().anyMatch(Objects::isNull) ) {
@@ -1281,6 +1568,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with custom validation constraints.
+     *
+     * @param constraints the custom validation functions
+     *
+     * @return a new shape instance with the specified custom constraints
+     *
+     * @throws NullPointerException if {@code constraints} is {@code null}
+     */
     @SafeVarargs
     public final Shape constraints(final Function<Value, Value>... constraints) {
 
@@ -1291,6 +1587,15 @@ public final record Shape(
         return constraints(set(constraints));
     }
 
+    /**
+     * Configures this shape with custom validation constraints.
+     *
+     * @param constraints the collection of custom validation functions
+     *
+     * @return a new shape instance with the specified custom constraints
+     *
+     * @throws NullPointerException if {@code constraints} is {@code null}
+     */
     public Shape constraints(final Collection<Function<Value, Value>> constraints) {
 
         if ( constraints == null || constraints.stream().anyMatch(Objects::isNull) ) {
@@ -1326,6 +1631,15 @@ public final record Shape(
     }
 
 
+    /**
+     * Configures this shape with an additional property.
+     *
+     * @param property the property to add
+     *
+     * @return a new shape instance with the additional property
+     *
+     * @throws NullPointerException if {@code property} is {@code null}
+     */
     public Shape property(final Property property) {
 
         if ( property == null ) {
@@ -1335,6 +1649,15 @@ public final record Shape(
         return properties(Stream.concat(properties.stream(), Stream.of(property)).toList());
     }
 
+    /**
+     * Configures this shape with the specified properties.
+     *
+     * @param properties the properties to set
+     *
+     * @return a new shape instance with the specified properties
+     *
+     * @throws NullPointerException if {@code properties} is {@code null}
+     */
     public Shape properties(final Property... properties) {
 
         if ( properties == null || Arrays.stream(properties).anyMatch(Objects::isNull) ) {
@@ -1345,6 +1668,15 @@ public final record Shape(
 
     }
 
+    /**
+     * Configures this shape with the specified properties.
+     *
+     * @param properties the collection of properties to set
+     *
+     * @return a new shape instance with the specified properties
+     *
+     * @throws NullPointerException if {@code properties} is {@code null}
+     */
     public Shape properties(final Collection<Property> properties) {
 
         if ( properties == null || properties.stream().anyMatch(Objects::isNull) ) {
@@ -1385,6 +1717,18 @@ public final record Shape(
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Extends this shape with constraints from another shape.
+     *
+     * <p>Properties are merged by name, with shapes being extended.
+     * The explicit class is not merged from the other shape.
+     *
+     * @param shape the shape to extend with
+     *
+     * @return a new shape instance with constraints from both shapes
+     *
+     * @throws NullPointerException if {@code shape} is {@code null}
+     */
     public Shape extend(final Shape shape) {
 
         if ( shape == null ) {
@@ -1422,6 +1766,18 @@ public final record Shape(
 
     }
 
+    /**
+     * Merges this shape with constraints from another shape.
+     *
+     * <p>Unlike extend(), this merges explicit classes and all other constraints.
+     * Properties are merged by name, with shapes being extended.
+     *
+     * @param shape the shape to merge with
+     *
+     * @return a new shape instance with constraints from both shapes
+     *
+     * @throws NullPointerException if {@code shape} is {@code null}
+     */
     public Shape merge(final Shape shape) {
 
         if ( shape == null ) {

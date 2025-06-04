@@ -48,7 +48,7 @@ abstract class _StoreTestInsert {
 
         store().insert(array());
 
-        assertThat(store().retrieve(new OfficeFrame().id(uri("/offices/1")))).isEmpty();
+        assertThat(store().retrieve(new OfficeFrame().id(uri("/offices/1"))).isEmpty()).isTrue();
     }
 
     @Test void testInsertArrays() {
@@ -61,7 +61,7 @@ abstract class _StoreTestInsert {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
                 .seniority(0)
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted -> {
+        )).extracting(EmployeeFrame::new).satisfies(inserted -> {
             assertThat(inserted.seniority()).isEqualTo(1);
         });
 
@@ -78,7 +78,7 @@ abstract class _StoreTestInsert {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
                 .seniority(0)
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted -> {
+        )).extracting(EmployeeFrame::new).satisfies(inserted -> {
             assertThat(inserted.seniority()).isEqualTo(1);
         });
 
@@ -96,7 +96,7 @@ abstract class _StoreTestInsert {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(id)
                 .seniority(5)
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted -> {
+        )).extracting(EmployeeFrame::new).satisfies(inserted -> {
             assertThat(inserted.seniority()).isEqualTo(5);
         });
 
@@ -117,7 +117,7 @@ abstract class _StoreTestInsert {
         assertThat(store.retrieve(new EmployeeFrame()
                 .id(supervisor)
                 .reports(stash(query(new EmployeeFrame(true).id(uri()))))
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted -> {
+        )).extracting(EmployeeFrame::new).satisfies(inserted -> {
             assertThat(inserted.reports()).anyMatch(employee -> BASE.resolve(employee.id()).equals(report));
         });
 
@@ -138,7 +138,7 @@ abstract class _StoreTestInsert {
                         .action(HIRED)
                         .date(LocalDate.EPOCH)
                 )))
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted ->
+        )).extracting(EmployeeFrame::new).satisfies(inserted ->
                 assertThat(inserted.career())
                         .hasSize(2)
                         .anyMatch(e -> e.action() == HIRED && e.date().equals(LocalDate.parse("2001-03-15")))
@@ -162,16 +162,16 @@ abstract class _StoreTestInsert {
                         .action(HIRED)
                         .date(LocalDate.EPOCH)
                 )))
-        )).map(EmployeeFrame::new).hasValueSatisfying(inserted ->
+        )).extracting(EmployeeFrame::new).satisfies(inserted ->
                 assertThat(inserted.career())
                         .hasSize(1)
                         .anyMatch(e -> e.action() == RETIRED && e.date().equals(LocalDate.parse("2025-10-21")))
         );
 
         assertThat(store.retrieve(value(query(new EventFrame(true)))))
-                .flatMap(v -> v.array())
+                .extracting(v -> v.array().orElseThrow())
                 .as("previous embedded values are removed")
-                .hasValueSatisfying(v -> assertThat(v).hasSize(1));
+                .satisfies(v -> assertThat(v).hasSize(1));
 
     }
 

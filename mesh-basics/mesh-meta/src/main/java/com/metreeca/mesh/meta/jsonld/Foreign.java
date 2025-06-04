@@ -25,9 +25,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Marks a frame property as managed by the linked resource.
  *
- * <p>Embedded properties are not modified during resource update or mutation operations.</p>
+ * <p>Foreign properties are not modified during resource update or mutation operations.</p>
  *
- * <p>{@code @Foreign} and {@linkplain Embedded @Embedded} annotations are mutually icompatible.</p>
+ * <p>{@code @Foreign} and {@linkplain Embedded @Embedded} annotations are mutually incompatible.</p>
  */
 @Target(METHOD)
 @Retention(RUNTIME)

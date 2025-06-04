@@ -18,22 +18,23 @@ filtering capabilities without additional configuration.
 **Analytics Queries** / Built-in support for analytical queries with custom data transformation and aggregation
 operations, enabling complex reporting and business intelligence without external tools.
 
-**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single pass by specifying exactly which
+**Data Envelopes** / Custom client-defined data envelopes may be retrieved in a single request by specifying exactly
+which
 fields and
 nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
 
 **Standards Compliance** / Built on established [JSON-LD](https://json-ld.org/primer/latest/) and linked data standards
 for easy data interoperability.
 
-**Developer Experience**  / An optional high-level layer allows defining JSON-LD models using annotated Java
-interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code
-automatically generated at compile-time.
+**Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
+interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code automatically generated at
+compile-time.
 
 # Modules
 
 |      area | javadocs                                                     | description                                                   |
 |----------:|:-------------------------------------------------------------|:--------------------------------------------------------------|
-| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing engine                 |
+| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing tools                  |
 |           | [mesh-meta](https://javadoc.io/doc/com.metreeca/mesh-meta)   | JSON-LD and validation annotations for interface-based models |
 |           | [mesh-mint](https://javadoc.io/doc/com.metreeca/mesh-mint)   | Annotation-based code generator                               |
 |    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON-LD serialisation codec                                   |
@@ -45,6 +46,7 @@ automatically generated at compile-time.
    using high-level annotated interfaces:
 
 ```xml 
+
 <project>
 
     <dependencyManagement>
@@ -65,7 +67,7 @@ automatically generated at compile-time.
 
         <dependency>
             <groupId>com.metreeca</groupId>
-           <artifactId>mesh-json</artifactId>
+            <artifactId>mesh-json</artifactId>
         </dependency>
 
         <dependency>
@@ -73,37 +75,37 @@ automatically generated at compile-time.
             <artifactId>mesh-rdf4j</artifactId>
         </dependency>
 
-       <dependency> <!-- include to use high-level interface annotations -->
-          <groupId>com.metreeca</groupId>
-          <artifactId>mesh-meta</artifactId>
-       </dependency>
+        <dependency> <!-- include to use high-level interface annotations -->
+            <groupId>com.metreeca</groupId>
+            <artifactId>mesh-meta</artifactId>
+        </dependency>
 
     </dependencies>
 
-   <build> <!-- include to activate annotation-based generation of frame objects -->
+    <build> <!-- include to activate annotation-based generation of frame objects -->
 
-      <plugin>
+        <plugin>
 
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-compiler-plugin</artifactId>
-         <version>3.14.0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.14.0</version>
 
-         <configuration>
+            <configuration>
 
-            <annotationProcessorPaths>
+                <annotationProcessorPaths>
 
-               <path>
-                  <groupId>com.metreeca</groupId>
-                  <artifactId>mesh-mint</artifactId>
-               </path>
+                    <path>
+                        <groupId>com.metreeca</groupId>
+                        <artifactId>mesh-mint</artifactId>
+                    </path>
 
-            </annotationProcessorPaths>
+                </annotationProcessorPaths>
 
-         </configuration>
+            </configuration>
 
-      </plugin>
+        </plugin>
 
-   </build>
+    </build>
 
 </project>
 ```
@@ -153,35 +155,37 @@ import java.net.URI;
 
 public final class Example {
 
-   public static void main(final String... args) {
+    public static void main(final String... args) {
 
-      final Store store=RDF4JStore.rdf4j(new SailRepository(new MemoryStore()));
+        final Store store=RDF4JStore.rdf4j(new SailRepository(new MemoryStore()));
 
-      final URI id=URI.create("/persons/123");
+        final URI id=URI.create("/persons/123");
 
-      final Person person=new PersonFrame()
-              .identifier(id)
-              .givenName("Tino")
-              .familyName("Faussone");
+        final Person person=new PersonFrame()
+                .identifier(id)
+                .givenName("Tino")
+                .familyName("Faussone");
 
-      store.create(person);
+        store.create(person);
 
-      final Person model=new PersonFrame()
-              .familyName("")
-              .givenName("");
+        final Person model=new PersonFrame()
+                .familyName("")
+                .givenName("");
 
-      final Person retrieved=store.retrieve(model);
+        final Person retrieved=store.retrieve(model);
 
-   }
+    }
 
 }
 ```
 
-5. Delve into the [docs](https://metreeca.github.io/mesh/) to learn the details about:
+5. Delve into the [tutorials](https://metreeca.github.io/mesh/tutorials/) to learn how to:
 
-   - defining and annotating data models;
-    - converting data to / from serialisation formats;
-    - persisting data to storage backends.
+   - define and annotate data models;
+   - convert data to / from serialisation formats;
+   - persist data to storage backends;
+   - publish model-driven REST/JSON-LD APIs;
+   - consume model-driven REST/JSON-LD APIs.
 
 # Support
 
