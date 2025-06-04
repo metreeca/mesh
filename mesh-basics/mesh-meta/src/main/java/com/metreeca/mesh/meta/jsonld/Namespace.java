@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * This annotation corresponds to the {@code @context} section in JSON-LD where namespaces are defined.</p>
  *
  * <p>When applied to a {@link Frame} interface, it allows the use of prefixed property names and
- * class identifiers in other annotations like @link Class}, {@link Forward} and {@link Reverse}. Multiple
+ * class identifiers in other annotations like {@link Class}, {@link Forward} and {@link Reverse}. Multiple
  * {@code @Namespace} annotations can be applied to a single frame to define multiple prefix mappings.</p>
  *
  * @see Namespaces

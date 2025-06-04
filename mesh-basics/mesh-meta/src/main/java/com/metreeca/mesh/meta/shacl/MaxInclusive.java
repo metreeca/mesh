@@ -28,7 +28,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>Method-level annotation that specifies an upper bound (inclusive) for property values.
  * Maps to the SHACL {@code sh:maxInclusive} constraint.</p>
  *
- * <p>The string value is converted to  the appropriate type based on the method's return type. The value string
+ * <p>The string value is converted to the appropriate type based on the method's return type. The value string
  * must be decodable by the property's datatype.</p>
  *
  * <p>This constraint specifies that values must be less than or equal to the provided maximum value

@@ -27,7 +27,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * <p>Embedded properties are updated in cascade during resource update or mutation operations.</p>
  *
- * <p>{@code @Embedded} and {@linkplain Foreign @Foreign} annotations are mutually icompatible.</p>
+ * <p>{@code @Embedded} and {@linkplain Foreign @Foreign} annotations are mutually incompatible.</p>
  */
 @Target(METHOD)
 @Retention(RUNTIME)

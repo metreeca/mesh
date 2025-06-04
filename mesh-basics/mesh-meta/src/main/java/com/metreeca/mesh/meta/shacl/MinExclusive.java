@@ -28,7 +28,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>Method-level annotation that specifies a lower bound (exclusive) for property values.
  * Maps to the SHACL {@code sh:minExclusive} constraint.</p>
  *
- * <p>The string value is converted to  the appropriate type based on the method's return type. The value string
+ * <p>The string value is converted to the appropriate type based on the method's return type. The value string
  * must be decodable by the property's datatype.</p>
  *
  * <p>This constraint specifies that values must be strictly greater than the provided minimum value (it excludes
