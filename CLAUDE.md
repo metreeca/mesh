@@ -39,6 +39,7 @@
 
 - The framework is always referred to as Metreeca/Mesh
 - Use a neutral, professional tone; avoid excessive use of you/yours and any hint of overfamiliarity with the reader
+- Use H1 headings (#) for major sections and H2 headings (##) for subsections; don't use other heading levels
 - Provide ample cross-linking of referred concepts, targeting both other documents and javadocs published
   for each module on javadoc.io at URLs with the pattern `https://javadoc.io/doc/com.metreeca/{artifact-id}` (for
   instance, `https://javadoc.io/doc/com.metreeca/mesh-core`)

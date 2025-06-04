@@ -1,5 +1,5 @@
 ---
-title: Standard Datatypes
+title: "Standard Datatypes"
 ---
 
 To improve modelling robustness and interoperability, values are usually restricted to a controlled set of

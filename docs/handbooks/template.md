@@ -1,5 +1,5 @@
 ---
-title: Data Model and Query Language
+title: "Data Model and Query Language"
 ---
 
 The Mesh query language provides a comprehensive model for filtering, sorting, and analyzing data through JSON-based
