@@ -23,8 +23,8 @@ which
 fields and
 nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
 
-**Standards Compliance** / Built on established [JSON-LD](https://json-ld.org/primer/latest/) and linked data standards
-for easy data interoperability.
+**Standards Compliance** / Built on established [JSON-LD](https://www.w3.org/TR/json-ld11/)
+and [SHACL](https://www.w3.org/TR/shacl/) W3C standards for easy data interoperability.
 
 **Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
 interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code automatically generated at
@@ -127,9 +127,9 @@ public interface Person {
     @Id
     URI identifier();
 
-   default String name() {
-      return "%s %s".formatted(givenName(), familyName());
-   }
+    default String name() {
+        return "%s %s".formatted(givenName(), familyName());
+    }
 
     @Required
     String givenName();
@@ -137,7 +137,7 @@ public interface Person {
     @Required
     String familyName();
 
-   // more properties…
+    // more properties…
 
 }
 ```
@@ -195,4 +195,4 @@ public final class Example {
 # License
 
 This project is licensed under the Apache 2.0 License –
-see [LICENSE](https://github.com/metreeca/mesh/blob/main/LICENSE) file for details.
+see [LICENSE](https://github.com/metreeca/mesh?tab=Apache-2.0-1-ov-file) file for details.
