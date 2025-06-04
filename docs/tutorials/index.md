@@ -2,14 +2,14 @@
 title: "Tutorials"
 ---
 
-This series of example-driven tutorials introduces the main building blocks of the Metreeca/Mesh model-driven linked
+This series of hands-on tutorials introduces the main building blocks of the Metreeca/Mesh model-driven linked
 data framework. Basic familiarity with [linked data](https://www.w3.org/standards/semanticweb/data)
 concepts, [JSON](https://www.json.org/) and [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) APIs
 is required.
 
-In these tutorials we will work with a linked data subset of the [BIRT](http://www.eclipse.org/birt/phoenix/db/) sample
-dataset. BIRT is a typical business database containing tables such as *offices*, *customers*, *products*, *orders*,
-*order lines*, … for *Classic Models*, a fictional world-wide retailer of scale toy models.
+These tutorials use a subset of the [BIRT](http://www.eclipse.org/birt/phoenix/db/) sample dataset converted to linked
+data format. The dataset contains typical business database tables like _Offices_, _Employees_, and _Products_, all set
+within the context of _Classic Models_, a fictional worldwide retailer of scale toy models.
 
 - [Defining JSON-LD Data Models](defining-data-models.md)
 

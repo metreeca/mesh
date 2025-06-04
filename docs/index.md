@@ -179,7 +179,7 @@ public final class Example {
 }
 ```
 
-5. Delve into the [docs](https://metreeca.github.io/mesh/tutorials/) to learn how to:
+5. Delve into the [tutorials](https://metreeca.github.io/mesh/tutorials/) to learn how to:
 
    - define and annotate data models;
    - convert data to / from serialisation formats;

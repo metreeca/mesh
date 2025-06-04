@@ -2,7 +2,7 @@
 title: Standard Datatypes
 ---
 
-To improve modelling robustness and interoperability, values are limited to a controlled set of
+To improve modelling robustness and interoperability, values are usually restricted to a controlled set of
 standard datatypes, mainly derived from [XML Schema (XSD) 2 Datatypes](https://www.w3.org/TR/xmlschema-2/). This
 datatype set is properly supported by most database management systems and easily mapped to native datatypes in most
 programming languages.
@@ -16,7 +16,7 @@ programming languages.
 |                     | Integer        | `BigInteger`                                                                            | `number`                                                                                                     | [xsd:integer](https://www.w3.org/TR/xmlschema-2/#integer)              |
 |                     | Decimal        | `BigDecimal`                                                                            | `number`                                                                                                     | [xsd:decimal](https://www.w3.org/TR/xmlschema-2/#decimal)              |
 |                     | String         | `String`                                                                                | `"string"`                                                                                                   | [xsd:string](https://www.w3.org/TR/xmlschema-2/#string)                |
-| extended literals   | URI            | `URI`                                                                                   | `"http://example.net/path”`<br />`"/path"`                                                                   | [IRI](https://www.w3.org/TR/rdf11-concepts/#section-IRIs)              |
+| extended literals   | URI            | `URI`                                                                                   | `"http://example.net/path”`<br />`"/path"`                                                                   | [xsd:anyURI](https://www.w3.org/TR/xmlschema-2/#anyURI)                |
 |                     | Year           | `Year`                                                                                  | `"yyyy”`                                                                                                     | [xsd:gYear](https://www.w3.org/TR/xmlschema-2/#gYear)                  |
 |                     | YearMonth      | `YearMonth`                                                                             | `“yyyy-MM”`                                                                                                  | [xsd:gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth)        |
 |                     | LocalDate      | `LocalDate`                                                                             | `"yyyy-MM-dd"`                                                                                               | [xsd:date](https://www.w3.org/TR/xmlschema-2/#date)                    |
@@ -28,15 +28,15 @@ programming languages.
 |                     | Instant        | `Instant`                                                                               | `"yyyy-MM-ddThh:mm:s.sssZ"`                                                                                  | [xsd:dateTime](https://www.w3.org/TR/xmlschema-2/#dateTime)            |
 |                     | Period         | `Period`                                                                                | `"PyYMMdD"`                                                                                                  | [xsd:duration](https://www.w3.org/TR/xmlschema-2/#duration)            |
 |                     | Duration       | `Duration`                                                                              | `"PdDThHmMs.sssS"`                                                                                           | [xsd:duration](https://www.w3.org/TR/xmlschema-2/#duration)            |
-| structured literals | Text           | `Map.Entry< Locale, String>`<br />`Map<Locale, String>`<br />`Map<Locale, Set<String>>` | `{ “@value”: “text”, “@language”: “locale” }`<br />`{ "locale": "text" }`<br />`{ "locale": ["text", … ]}`   | [rdf:langString](https://www.w3.org/TR/rdf-schema/#ch_langstring)      |
+| structured literals | Text           | `Map.Entry< Locale, String>`<br />`Map<Locale, String>`<br />`Map<Locale, Set<String>>` | `{ “@value”: “text”, “@language”: “locale” }`<br />`{ "locale": "text" }`<br />`{ "locale": ["text", … ]}`   | [rdf:langString](https://www.w3.org/TR/rdf-schema/#ch_langstring)      |
 |                     | Data           | `Map.Entry<URI, String>`<br />`Map<URI, String>`<br />`Map<URI, Set<String>>`           | `{ “@value”: “text”, “@type”: “datatype” }`<br />`{ "datatype": "text" }`<br />`{ "datatype": ["text", … ]}` | [Literal](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal) |
-| object              | Object         | `Map<String, Value>`                                                                    | `{ "name": <value>, … }`                                                                                     |                                                                        |
+| object              | Object         | `Map<String, Value>`                                                                    | `{ "name": <value>, … }`                                                                                     | [IRI](https://www.w3.org/TR/rdf11-concepts/#section-IRIs)              |
 | array               | Array          | `List<Value>`                                                                           | `[<value>, … ]`                                                                                              |                                                                        |
 
 > [!WARNING]
 >
-> To improve interoperability with third-party calendrical function libraries:
+> To improve interoperability with third-party calendrical function libraries, the following temporal datatypes are
+> preferred:
 >
-> * `xsd:dateTime` is the preferred temporal > datatype;
-> * `xsd:duration` date-based (`PyYMMdD`) and > time-based (`PThHmMs.sssS`) representations are preferred.
-
+> * `xsd:dateTime`
+> * `xsd:duration` date-based (`PyYMMdD`) and daytime-based (`PdDThHmMs.sssS`)
