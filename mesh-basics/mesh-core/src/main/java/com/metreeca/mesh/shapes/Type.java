@@ -23,6 +23,16 @@ import java.net.URI;
 import static com.metreeca.mesh.Value.isReserved;
 import static com.metreeca.shim.URIs.term;
 
+/**
+ * A type definition with name, description and URI.
+ *
+ * <p>Represents a semantic type that can be used in data validation and schema definitions.
+ * Types provide both a human-readable name and a globally unique URI identifier.
+ *
+ * @param name        the human-readable name of the type
+ * @param description the descriptive text for the type
+ * @param uri         the globally unique URI identifier for the type
+ */
 public final record Type(
 
         String name,
@@ -32,6 +42,15 @@ public final record Type(
 
 ) {
 
+    /**
+     * Creates a type with the specified name and a generated URI.
+     *
+     * @param name the name of the type
+     *
+     * @return a new type instance
+     *
+     * @throws NullPointerException if {@code name} is {@code null}
+     */
     public static Type type(final String name) {
 
         if ( name == null ) {
@@ -45,6 +64,15 @@ public final record Type(
         );
     }
 
+    /**
+     * Creates a type from the specified URI with extracted name.
+     *
+     * @param uri the URI of the type
+     *
+     * @return a new type instance
+     *
+     * @throws NullPointerException if {@code uri} is {@code null}
+     */
     public static Type type(final URI uri) {
 
         if ( uri == null ) {
@@ -58,6 +86,16 @@ public final record Type(
         );
     }
 
+    /**
+     * Creates a type with the specified name and URI.
+     *
+     * @param name the name of the type
+     * @param uri  the URI of the type
+     *
+     * @return a new type instance
+     *
+     * @throws NullPointerException if either {@code name} or {@code uri} is {@code null}
+     */
     public static Type type(final String name, final URI uri) {
 
         if ( name == null ) {
@@ -107,6 +145,15 @@ public final record Type(
     }
 
 
+    /**
+     * Configures this type with a new name.
+     *
+     * @param name the new name for the type
+     *
+     * @return a new type instance with the specified name
+     *
+     * @throws NullPointerException if {@code name} is {@code null}
+     */
     public Type name(final String name) {
 
         if ( name == null ) {
@@ -120,9 +167,18 @@ public final record Type(
         );
     }
 
+    /**
+     * Configures this type with a new description.
+     *
+     * @param description the new description for the type
+     *
+     * @return a new type instance with the specified description
+     *
+     * @throws NullPointerException if {@code description} is {@code null}
+     */
     public Type description(final String description) {
 
-        if ( name == null ) {
+        if ( description == null ) {
             throw new NullPointerException("null description");
         }
 
@@ -133,6 +189,15 @@ public final record Type(
         );
     }
 
+    /**
+     * Configures this type with a new URI.
+     *
+     * @param uri the new URI for the type
+     *
+     * @return a new type instance with the specified URI
+     *
+     * @throws NullPointerException if {@code uri} is {@code null}
+     */
     public Type uri(final URI uri) {
 
         if ( uri == null ) {
