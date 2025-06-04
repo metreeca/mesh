@@ -34,7 +34,7 @@ compile-time.
 
 |      area | javadocs                                                     | description                                                   |
 |----------:|:-------------------------------------------------------------|:--------------------------------------------------------------|
-| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing engine                 |
+| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing tools                  |
 |           | [mesh-meta](https://javadoc.io/doc/com.metreeca/mesh-meta)   | JSON-LD and validation annotations for interface-based models |
 |           | [mesh-mint](https://javadoc.io/doc/com.metreeca/mesh-mint)   | Annotation-based code generator                               |
 |    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON-LD serialisation codec                                   |
@@ -67,7 +67,7 @@ compile-time.
 
         <dependency>
             <groupId>com.metreeca</groupId>
-           <artifactId>mesh-json</artifactId>
+            <artifactId>mesh-json</artifactId>
         </dependency>
 
         <dependency>
@@ -75,37 +75,37 @@ compile-time.
             <artifactId>mesh-rdf4j</artifactId>
         </dependency>
 
-       <dependency> <!-- include to use high-level interface annotations -->
-          <groupId>com.metreeca</groupId>
-          <artifactId>mesh-meta</artifactId>
-       </dependency>
+        <dependency> <!-- include to use high-level interface annotations -->
+            <groupId>com.metreeca</groupId>
+            <artifactId>mesh-meta</artifactId>
+        </dependency>
 
     </dependencies>
 
-   <build> <!-- include to activate annotation-based generation of frame objects -->
+    <build> <!-- include to activate annotation-based generation of frame objects -->
 
-      <plugin>
+        <plugin>
 
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-compiler-plugin</artifactId>
-         <version>3.14.0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.14.0</version>
 
-         <configuration>
+            <configuration>
 
-            <annotationProcessorPaths>
+                <annotationProcessorPaths>
 
-               <path>
-                  <groupId>com.metreeca</groupId>
-                  <artifactId>mesh-mint</artifactId>
-               </path>
+                    <path>
+                        <groupId>com.metreeca</groupId>
+                        <artifactId>mesh-mint</artifactId>
+                    </path>
 
-            </annotationProcessorPaths>
+                </annotationProcessorPaths>
 
-         </configuration>
+            </configuration>
 
-      </plugin>
+        </plugin>
 
-   </build>
+    </build>
 
 </project>
 ```
@@ -155,36 +155,37 @@ import java.net.URI;
 
 public final class Example {
 
-   public static void main(final String... args) {
+    public static void main(final String... args) {
 
-      final Store store=RDF4JStore.rdf4j(new SailRepository(new MemoryStore()));
+        final Store store=RDF4JStore.rdf4j(new SailRepository(new MemoryStore()));
 
-      final URI id=URI.create("/persons/123");
+        final URI id=URI.create("/persons/123");
 
-      final Person person=new PersonFrame()
-              .identifier(id)
-              .givenName("Tino")
-              .familyName("Faussone");
+        final Person person=new PersonFrame()
+                .identifier(id)
+                .givenName("Tino")
+                .familyName("Faussone");
 
-      store.create(person);
+        store.create(person);
 
-      final Person model=new PersonFrame()
-              .familyName("")
-              .givenName("");
+        final Person model=new PersonFrame()
+                .familyName("")
+                .givenName("");
 
-      final Person retrieved=store.retrieve(model);
+        final Person retrieved=store.retrieve(model);
 
-   }
+    }
 
 }
 ```
 
-5. Delve into the [docs](https://metreeca.github.io/mesh/) to learn the details about:
+5. Delve into the [docs](https://metreeca.github.io/mesh/tutorials/) to learn how to:
 
-   - defining and annotating data models;
-    - converting data to / from serialisation formats;
-   - persisting data to storage backends;
-   - consuming model-driven REST/JSON-LD APIs.
+   - define and annotate data models;
+   - convert data to / from serialisation formats;
+   - persist data to storage backends;
+   - publish model-driven REST/JSON-LD APIs;
+   - consume model-driven REST/JSON-LD APIs.
 
 # Support
 

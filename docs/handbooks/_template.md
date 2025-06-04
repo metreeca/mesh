@@ -3,8 +3,6 @@ title: Lorem Ipsum
 excerpt: Lorem ipsum sit amet.
 ---
 
-count:mao.pio
-
 ```typescript
 type Literal=boolean | string | number
 
