@@ -34,6 +34,9 @@ public final record Property(
         boolean embedded,
 
         String name,
+
+        String description,
+
         Optional<URI> forward,
         Optional<URI> reverse,
 
@@ -57,6 +60,8 @@ public final record Property(
                 false,
 
                 name,
+                "",
+
                 Optional.empty(),
                 Optional.empty(),
 
@@ -75,6 +80,8 @@ public final record Property(
             final boolean embedded,
 
             final String name,
+            String description,
+
             final Optional<URI> forward,
             final Optional<URI> reverse,
 
@@ -96,6 +103,10 @@ public final record Property(
 
         if ( isReserved(name) ) {
             throw new IllegalArgumentException("reserved property name <%s>".formatted(name));
+        }
+
+        if ( description == null ) {
+            throw new NullPointerException("null description");
         }
 
         if ( forward == null ) {
@@ -124,6 +135,8 @@ public final record Property(
         this.embedded=embedded;
 
         this.name=name;
+        this.description=description;
+
         this.forward=forward;
         this.reverse=reverse;
 
@@ -151,6 +164,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 forward,
                 reverse,
 
@@ -167,6 +182,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 forward,
                 reverse,
 
@@ -183,6 +200,55 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
+                forward,
+                reverse,
+
+                generator
+
+        );
+    }
+
+
+    public Property name(final String name) {
+
+        if ( name == null ) {
+            throw new NullPointerException("null name");
+        }
+
+        return new Property(
+
+                hidden,
+                foreign,
+                embedded,
+
+                name,
+                description,
+
+                forward,
+                reverse,
+
+                generator
+
+        );
+    }
+
+    public Property description(final String description) {
+
+        if ( description == null ) {
+            throw new NullPointerException("null description");
+        }
+
+        return new Property(
+
+                hidden,
+                foreign,
+                embedded,
+
+                name,
+                description,
+
                 forward,
                 reverse,
 
@@ -209,6 +275,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 Optional.of(forward),
                 reverse,
 
@@ -235,6 +303,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 forward,
                 Optional.of(reverse),
 
@@ -257,6 +327,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 forward,
                 reverse,
 
@@ -278,6 +350,8 @@ public final record Property(
                 embedded,
 
                 name,
+                description,
+
                 forward,
                 reverse,
 

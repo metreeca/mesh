@@ -26,6 +26,8 @@ import static com.metreeca.shim.URIs.term;
 public final record Type(
 
         String name,
+        String description,
+
         URI uri
 
 ) {
@@ -38,6 +40,7 @@ public final record Type(
 
         return new Type(
                 name,
+                "",
                 term(name)
         );
     }
@@ -50,6 +53,7 @@ public final record Type(
 
         return new Type(
                 URIs.name(uri),
+                "",
                 uri
         );
     }
@@ -66,6 +70,7 @@ public final record Type(
 
         return new Type(
                 name,
+                "",
                 uri
         );
     }
@@ -87,6 +92,10 @@ public final record Type(
             throw new IllegalArgumentException("reserved property name <%s>".formatted(name));
         }
 
+        if ( description == null ) {
+            throw new NullPointerException("null description");
+        }
+
         if ( uri == null ) {
             throw new NullPointerException("null URI");
         }
@@ -106,6 +115,20 @@ public final record Type(
 
         return new Type(
                 name,
+                description,
+                uri
+        );
+    }
+
+    public Type description(final String description) {
+
+        if ( name == null ) {
+            throw new NullPointerException("null description");
+        }
+
+        return new Type(
+                name,
+                description,
                 uri
         );
     }
@@ -118,12 +141,14 @@ public final record Type(
 
         return new Type(
                 name,
+                description,
                 uri
         );
     }
 
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "%s=<%s>".formatted(name, uri);
     }
 
