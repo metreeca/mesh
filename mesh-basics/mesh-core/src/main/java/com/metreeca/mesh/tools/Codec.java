@@ -35,10 +35,27 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.joining;
 
+/**
+ * Data serialization and deserialization interface.
+ *
+ * <p>Provides methods for encoding and decoding values to and from various
+ * data formats with shape-based validation and transformation support.</p>
+ */
 public interface Codec {
 
     URI MEMBERS=URIs.uri("http://www.w3.org/2000/01/rdf-schema#member");
 
+    /**
+     * Creates a query value from a query string and shape.
+     *
+     * @param query the query string to parse
+     * @param shape the shape providing context for the query
+     *
+     * @return a structured query value
+     *
+     * @throws NullPointerException if either parameter is {@code null}
+     * @throws CodecException       if the query cannot be parsed or no collection property is found
+     */
     static Value query(final String query, final Shape shape) {
 
         if ( query == null ) {
@@ -95,6 +112,15 @@ public interface Codec {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Encodes a value to a string representation.
+     *
+     * @param value the value to encode
+     *
+     * @return the string representation of the value
+     *
+     * @throws CodecException if encoding fails
+     */
     public default String encode(final Valuable value) throws CodecException {
         try ( final StringWriter writer=new StringWriter() ) {
 
@@ -105,6 +131,17 @@ public interface Codec {
         }
     }
 
+    /**
+     * Decodes a string to a value using the provided shape for validation.
+     *
+     * @param source the string to decode
+     * @param shape  the shape for validation and transformation
+     *
+     * @return the decoded value
+     *
+     * @throws NullPointerException if either parameter is {@code null}
+     * @throws CodecException       if decoding fails
+     */
     public default Value decode(final String source, final Shape shape) throws CodecException {
 
         if ( source == null ) {
@@ -124,6 +161,16 @@ public interface Codec {
         }
     }
 
+    /**
+     * Decodes a string to a value without shape validation.
+     *
+     * @param source the string to decode
+     *
+     * @return the decoded value
+     *
+     * @throws NullPointerException if {@code source} is {@code null}
+     * @throws CodecException       if decoding fails
+     */
     public default Value decode(final String source) throws CodecException {
 
         if ( source == null ) {

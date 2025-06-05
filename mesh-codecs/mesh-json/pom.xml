@@ -30,7 +30,7 @@
     <artifactId>mesh-json</artifactId>
 
     <name>Metreeca/Mesh JSON-LD Codec</name>
-    <description>JSON-LD linked data codec.</description>
+    <description>JSON-LD codec for linked data.</description>
 
     <dependencies>
 

@@ -37,6 +37,23 @@ import static java.util.Comparator.comparing;
 import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.*;
 
+/**
+ * JSON-LD encoder for converting Value objects to JSON.
+ *
+ * <p>Serializes {@linkplain Value} objects to JSON format following JSON-LD semantics and conventions.
+ * Handles the complete range of Value types including primitives, collections, objects, and specialized constructs
+ * like localized text and tabular data. The encoder supports shape-guided serialization with property filtering
+ * and format optimization.</p>
+ *
+ * <p>Key features:</p>
+ * <ul>
+ *   <li><strong>Shape-guided serialization</strong> - Uses SHACL shapes for property filtering and optimization</li>
+ *   <li><strong>Localized text handling</strong> - Groups language-tagged strings by locale</li>
+ *   <li><strong>Tabular data support</strong> - Serializes Table structures as JSON arrays</li>
+ *   <li><strong>URI relativization</strong> - Converts absolute URIs to relative forms based on base URI</li>
+ *   <li><strong>Content pruning</strong> - Optionally excludes empty values for compact output</li>
+ * </ul>
+ */
 final class JSONEncoder {
 
     private final boolean prune;

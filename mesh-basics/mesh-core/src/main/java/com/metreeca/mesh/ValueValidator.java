@@ -44,13 +44,55 @@ import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * SHACL-based value validation utilities.
+ *
+ * <p>Provides comprehensive validation of {@linkplain Value} instances against {@linkplain Shape} constraints
+ * using SHACL (Shapes Constraint Language) semantics. Supports validation of datatypes, cardinality, value constraints,
+ * property shapes, and custom constraints.</p>
+ */
 @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
 final class ValueValidator {
 
     private static Optional<Value> optional(final Value value) { return optional(Optional.of(value)); }
 
     private static Optional<Value> optional(final Optional<Value> value) {
-        return value.filter(not(Value::isEmpty));
+        return value.map(ValueValidator::prune).filter(not(Value::isEmpty));
+    }
+
+
+    private static Value prune(final Value value) {
+        return value.accept(new Visitor<>() {
+
+            @Override public Value visit(final Value host, final String string) {
+                return string.isBlank() ? Nil() : host;
+            }
+
+            @Override public Value visit(final Value host, final Map<String, Value> fields) {
+
+                final Value object=object(fields.entrySet().stream()
+                        .map(e -> entry(e.getKey(), e.getValue().accept(this)))
+                        .filter(not(e -> e.getValue().isEmpty()))
+                );
+
+                return object.isEmpty() ? Nil() : object;
+            }
+
+            @Override public Value visit(final Value host, final List<Value> values) {
+
+                final Value array=array(values.stream()
+                        .map(v -> v.accept(this))
+                        .filter(not(Value::isEmpty))
+                );
+
+                return array.isEmpty() ? Nil() : array;
+            }
+
+            @Override public Value visit(final Value host, final Object object) {
+                return host;
+            }
+
+        });
     }
 
 
@@ -77,12 +119,30 @@ final class ValueValidator {
     private final boolean delta;
 
 
+    /**
+     * Creates a new value validator.
+     *
+     * @param shape the shape to validate against
+     * @param delta {@code true} if validation is for delta updates; {@code false} otherwise
+     *
+     * @throws NullPointerException if {@code shape} is {@code null}
+     */
     ValueValidator(final Shape shape, final boolean delta) {
         this.shape=shape;
         this.delta=delta;
     }
 
 
+    /**
+     * Validates a value against this validator's shape.
+     *
+     * @param value      the value to validate
+     * @param properties {@code true} if property validation should be performed; {@code false} otherwise
+     *
+     * @return validation errors if any; empty otherwise
+     *
+     * @throws NullPointerException if {@code value} is {@code null}
+     */
     Optional<Value> validate(final Value value, final boolean properties) {
         return optional(array(Stream
 

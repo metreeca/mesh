@@ -17,7 +17,11 @@
 package com.metreeca.mesh.json;
 
 /**
- * JSON streaming events.
+ * JSON streaming events for low-level JSON parsing.
+ *
+ * <p>Represents the different types of tokens encountered during
+ * JSON parsing, including structural elements, literals, and
+ * end-of-input markers.</p>
  */
 enum JSONEvent {
 
@@ -48,6 +52,11 @@ enum JSONEvent {
     }
 
 
+    /**
+     * Retrieves the human-readable description of this event.
+     *
+     * @return a descriptive string for this JSON event type
+     */
     public String description() {
         return description;
     }

@@ -39,13 +39,33 @@ import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 /**
- * RDF4J graph store.
+ * RDF4J-based graph store implementation.
+ *
+ * <p>Provides a comprehensive {@linkplain Store} implementation that bridges
+ * Metreeca/Mesh {@linkplain Value} objects with Eclipse RDF4J repositories,
+ * enabling persistent storage and SPARQL querying of semantic graph data.</p>
+ *
+ * <p>The store supports transaction management, named graph contexts, and
+ * efficient bulk operations with connection pooling and resource cleanup.
+ * All operations are logged with timing information for performance monitoring.</p>
+ *
+ * @see <a href="https://rdf4j.org">Eclipse RDF4J</a>
+ * @see com.metreeca.mesh.tools.Store Store interface specification
  */
 public final class RDF4JStore implements Store {
 
     private static final ThreadLocal<RepositoryConnection> shared=new ThreadLocal<>();
 
 
+    /**
+     * Creates an RDF4J store with the specified repository.
+     *
+     * @param repository the RDF4J repository for data storage
+     *
+     * @return a new store instance configured with the repository
+     *
+     * @throws NullPointerException if {@code repository} is {@code null}
+     */
     public static RDF4JStore rdf4j(final Repository repository) {
         return new RDF4JStore(
                 repository,
@@ -81,15 +101,34 @@ public final class RDF4JStore implements Store {
     }
 
 
+    /**
+     * Retrieves the underlying RDF4J repository.
+     *
+     * @return the repository used for data storage
+     */
     public Repository repository() {
         return repository;
     }
 
 
+    /**
+     * Retrieves the current named graph context.
+     *
+     * @return the context URI for named graph operations; {@code null} for default graph
+     */
     public URI context() {
         return context;
     }
 
+    /**
+     * Configures the named graph context for operations.
+     *
+     * @param context the context URI for named graph operations; {@code null} for default graph
+     *
+     * @return a new store instance with the specified context
+     *
+     * @throws IllegalArgumentException if {@code context} is not absolute
+     */
     public RDF4JStore context(final URI context) {
         return new RDF4JStore(
                 repository,

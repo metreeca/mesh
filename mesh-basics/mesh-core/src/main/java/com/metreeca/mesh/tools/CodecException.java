@@ -21,7 +21,10 @@ import java.io.Serial;
 import static java.lang.String.format;
 
 /**
- * Serialization exception.
+ * Exception thrown during codec operations.
+ *
+ * <p>Represents errors that occur during value encoding or decoding operations,
+ * with optional position information for syntactic errors.</p>
  */
 public final class CodecException extends RuntimeException {
 
@@ -30,9 +33,14 @@ public final class CodecException extends RuntimeException {
 
     private final int line;
     private final int column;
-    private boolean syntactic=true;
+    private boolean syntactic=true; // !!! remove
 
 
+    /**
+     * Creates a codec exception with a message.
+     *
+     * @param message the error message
+     */
     public CodecException(final String message) {
 
         super(message);
@@ -41,6 +49,16 @@ public final class CodecException extends RuntimeException {
         this.column=0;
     }
 
+    /**
+     * Creates a codec exception with position information.
+     *
+     * @param message   the error message
+     * @param syntactic {@code true} if this is a syntactic error; {@code false} for semantic errors
+     * @param line      the line number where the error occurred (1-based)
+     * @param column    the column number where the error occurred (1-based)
+     *
+     * @throws IllegalArgumentException if line or column is less than 1
+     */
     public CodecException(final String message, final boolean syntactic, final int line, final int column) {
 
         super(format("(%d,%d) %s", line, column, message));
@@ -60,15 +78,30 @@ public final class CodecException extends RuntimeException {
     }
 
 
+    /**
+     * Checks if this is a syntactic error.
+     *
+     * @return {@code true} for syntactic errors; {@code false} for semantic errors
+     */
     public boolean isSyntactic() {
         return syntactic;
     }
 
 
+    /**
+     * Retrieves the line number where the error occurred.
+     *
+     * @return the line number (1-based), or 0 if not available
+     */
     public int getLine() {
         return line;
     }
 
+    /**
+     * Retrieves the column number where the error occurred.
+     *
+     * @return the column number (1-based), or 0 if not available
+     */
     public int getColumn() {
         return column;
     }

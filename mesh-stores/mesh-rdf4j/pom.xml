@@ -29,7 +29,7 @@
     <artifactId>mesh-rdf4j</artifactId>
 
     <name>Metreeca/Mesh RDF4J Store</name>
-    <description>RDF4J linked data store.</description>
+    <description>RDF4J store for linked data.</description>
 
     <dependencies>
 

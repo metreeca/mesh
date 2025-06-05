@@ -16,9 +16,17 @@
 
 package com.metreeca.mesh;
 
+/**
+ * Convertible to JSON-LD value.
+ */
 @FunctionalInterface
 public interface Valuable {
 
+    /**
+     * Retrieves the JSON-LD value representation of this object.
+     *
+     * @return the JSON-LD value representation of this object
+     */
     Value toValue();
 
 }

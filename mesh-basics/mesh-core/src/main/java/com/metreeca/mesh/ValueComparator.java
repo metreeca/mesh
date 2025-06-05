@@ -26,8 +26,23 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
+/**
+ * Value comparison utilities.
+ *
+ * <p>Provides methods to check comparability and perform comparisons between {@linkplain Value} instances.
+ * Supports comparison of scalar types including numbers, strings, URIs, temporal values, and temporal amounts.</p>
+ */
 final class ValueComparator {
 
+    /**
+     * Checks if a value supports comparison operations.
+     *
+     * @param value the value to check
+     *
+     * @return {@code true} if the value is comparable; {@code false} otherwise
+     *
+     * @throws NullPointerException if {@code value} is {@code null}
+     */
     static Boolean comparable(final Value value) {
         return value.accept(new Value.Visitor<>() {
 
@@ -50,10 +65,32 @@ final class ValueComparator {
         });
     }
 
+    /**
+     * Checks if two values are comparable to each other.
+     *
+     * @param x the first value
+     * @param y the second value
+     *
+     * @return {@code true} if the values are comparable; {@code false} otherwise
+     *
+     * @throws NullPointerException if either {@code x} or {@code y} is {@code null}
+     */
     static boolean comparable(final Value x, final Value y) {
         return cmp(x, y).isPresent();
     }
 
+    /**
+     * Compares two values.
+     *
+     * @param x the first value
+     * @param y the second value
+     *
+     * @return a negative integer if {@code x} is less than {@code y}, zero if they are equal, or a positive integer
+     *         if {@code x} is greater than {@code y}
+     *
+     * @throws NullPointerException     if either {@code x} or {@code y} is {@code null}
+     * @throws IllegalArgumentException if the values are not comparable
+     */
     static int compare(final Value x, final Value y) {
         return cmp(x, y).orElseThrow(() -> new IllegalArgumentException(format(
                 "incomparable values <%s> / <%s>", x, y

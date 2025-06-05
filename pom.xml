@@ -32,7 +32,7 @@
     <packaging>pom</packaging>
 
     <name>Metreeca/Mesh</name>
-    <description>{TBC}}</description>
+    <description>Linked data processing framework.</description>
     <url>https://github.com/metreeca/mesh</url>
     <inceptionYear>2023</inceptionYear>
 
@@ -94,6 +94,12 @@
             <dependency>
                 <groupId>com.metreeca</groupId>
                 <artifactId>mesh-test</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>mesh-toys</artifactId>
                 <version>${revision}</version>
             </dependency>
 

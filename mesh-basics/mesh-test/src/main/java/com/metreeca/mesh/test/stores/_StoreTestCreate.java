@@ -18,8 +18,20 @@ package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.tools.Store;
 
+/**
+ * Test framework for store create operations.
+ *
+ * <p>Validates data creation capabilities for new resources with proper
+ * validation and constraint checking. Tests ensure exclusive creation behavior and error handling for the
+ * {@linkplain Store} implementation.</p>
+ */
 abstract class _StoreTestCreate {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

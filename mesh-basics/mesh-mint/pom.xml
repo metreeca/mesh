@@ -30,7 +30,7 @@
     <artifactId>mesh-mint</artifactId>
 
     <name>Metreeca/Mesh Record Generator</name>
-    <description>{TBC}</description>
+    <description>Annotation processor for linked data frame generation.</description>
 
     <properties>
         <auto-service.version>1.1.1</auto-service.version>

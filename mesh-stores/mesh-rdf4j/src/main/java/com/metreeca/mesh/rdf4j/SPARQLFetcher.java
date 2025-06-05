@@ -54,6 +54,13 @@ import static java.util.stream.Collectors.*;
 import static org.eclipse.rdf4j.model.util.Values.getValueFactory;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * Asynchronous property value fetcher with batching optimization.
+ *
+ * <p>Provides efficient lazy loading of graph data by batching property access
+ * requests and generating optimized SPARQL queries. Supports both forward and reverse property navigation with
+ * {@linkplain CompletableFuture} based asynchronous execution.</p>
+ */
 final class SPARQLFetcher extends _StoreLoader.Worker {
 
     private static final Logger LOGGER=Logger.getLogger(SPARQLFetcher.class.getName());

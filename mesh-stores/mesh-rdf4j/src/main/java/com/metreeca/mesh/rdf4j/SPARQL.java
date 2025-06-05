@@ -34,6 +34,16 @@ import static java.util.Arrays.asList;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * SPARQL query builder providing fluent API for query construction.
+ *
+ * <p>Utility class offering static factory methods for constructing SPARQL queries
+ * using internal code generation utilities. Supports comprehensive SPARQL 1.1 syntax including SELECT, CONSTRUCT, WHERE
+ * clauses, filters, aggregates, and value conversion utilities.</p>
+ *
+ * <p>The builder generates formatted SPARQL queries with proper syntax, escaping,
+ * and whitespace management for execution against RDF4J repositories.</p>
+ */
 final class SPARQL {
 
     private static final ThreadLocal<DecimalFormat> DecimalFormat=ThreadLocal.withInitial(() ->

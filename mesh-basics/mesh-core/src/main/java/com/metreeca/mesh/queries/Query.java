@@ -89,6 +89,15 @@ public final record Query(
         return EMPTY;
     }
 
+    /**
+     * Creates a query with the specified model.
+     *
+     * @param model the value to be used as query model
+     *
+     * @return a new query with the specified model
+     *
+     * @throws NullPointerException if {@code model} is {@code null}
+     */
     public static Query query(final Valuable model) {
 
         if ( model == null ) {
@@ -98,6 +107,17 @@ public final record Query(
         return query().model(model);
     }
 
+    /**
+     * Creates a query with tabular specifications.
+     *
+     * @param shape  the shape defining the data structure
+     * @param probes the computed value definitions for the query
+     *
+     * @return a new query with the specified shape and probes
+     *
+     * @throws NullPointerException if {@code shape} or {@code probes} is {@code null} or contains {@code null}
+     *                              elements
+     */
     public static Query query(final Shape shape, final Probe... probes) {
 
         if ( shape == null ) {

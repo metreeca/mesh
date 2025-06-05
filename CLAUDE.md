@@ -7,55 +7,198 @@
 - `mvn test -Dtest=TestClassName` - Run a specific test class
 - `mvn test -Dtest=TestClassName#testMethodName` - Run a specific test method
 
-# Coding Guidelines
+## Major Release
+
+- review triggers for `.github/workflows/main-sync.yml`
+
+## Minor Release
+
+# Coding Standards
 
 ## Conventions
 
 - Java code follows standard Java conventions
-- Follow existing patterns for property naming in bean interfaces
-- Imports: static imports for factory methods and constants
-- Error handling: use checked exceptions with functional interfaces
 - Naming: PascalCase for classes, camelCase for methods and variables
-- Documentation: use Javadoc for public APIs
+- Imports: static imports for factory methods and constants
 - Use final liberally for immutability
-
-## Javadocs
-
-- Place Javadoc immediately before the documented element
-- Use Javadoc only for public APIs unless required to do otherwise
-- Introduce the class with a concise definition and a brief description of its purpose; keep the definition as short as
-  possible
-- Introduce boolean methods with "Checks if"
-- Introduce read accessors with "Retrieves"
-- Introduce write accessors with "Configures"
-- Report unexpected null values as "@throws NullPointerException if <param> is {@code null}"; if two parameters are
-  to be reported use "if either <param1> or <param2> is {@code null}"; if multiple parameters are to be reported use
-  "if any of <param1>, <param2>, ..., <paramN> is {@code null}"
-- Document record parameters with @param tags in the class description
-- Definitely don't generate example usage sections
-- Don't generate javadocs for overridden methods
-
-## Tutorials and Handbooks
-
-- The framework is always referred to as Metreeca/Mesh
-- Use a neutral, professional tone; avoid excessive use of you/yours and any hint of overfamiliarity with the reader
-- Use H1 headings (#) for major sections and H2 headings (##) for subsections; don't use other heading levels
-- Provide ample cross-linking of referred concepts, targeting both other documents and javadocs published
-  for each module on javadoc.io at URLs with the pattern `https://javadoc.io/doc/com.metreeca/{artifact-id}` (for
-  instance, `https://javadoc.io/doc/com.metreeca/mesh-core`)
+- Follow existing patterns for property naming in bean interfaces
+- Error handling: use checked exceptions with functional interfaces
+- Documentation: use Javadoc for public APIs
 
 ## Testing
 
 - Test classes use JUnit 5 Jupiter (`org.junit.jupiter.api.Test`)
 - Use AssertJ for test assertions (`assertThat()`)
 - Tests follow BDD pattern with arrange-act-assert structure
-- Tests don't cover trivial implementation details, like arguments null checks
 - Follow existing patterns for nested test classes with `@Nested` annotation
+- Tests are preferably written in a functional, fluent style
+- Tests don't cover trivial implementation details, like arguments null checks
 
-# Procedures
+# Javadocs Guidelines
 
-## Major Release
+- Place Javadoc immediately before the documented element
+- Use Javadoc only for public or protected APIs unless required to do otherwise
+- Keep package, class and method definitions concise, ideally not exceeding 40 chars
+- Cross-link noteworthy mentions of other public or protected packages, classes and methods; use {@linkplain} where
+  sensible in the context
+- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods
+- Make sure <p> tags are always closed with </p>
+- Always add empty lines before and after every element. Never write consecutive elements without blank line separation
+- Definitely don't generate example usage sections
+- Use British spelling
 
-- review triggers for `.github/workflows/main-sync.yml`
+## package.info
 
-## Minor Release
+- Provide a package overview in package.info, focusing on overall structure and responsibilities; describe individual
+  classes only when critical in the context and keep notes as short as possible
+- Don't generate @see links for subpackages
+
+## Class Javadocs
+
+- Introduce the class with a concise definition and a brief description of its role and responsibilities
+- Document record parameters with @param tags in the class description
+- Don't generate javadocs for test classes
+
+## Method Javadocs
+
+- Introduce boolean methods with "Checks if"
+- Introduce read accessors with "Retrieves"
+- Introduce write accessors with "Configures"
+- Report unexpected null values as "@throws NullPointerException if <param> is {@code null}"; if two parameters are
+  to be reported use "if either <param1> or <param2> is {@code null}"; if multiple parameters are to be reported use
+  "if any of <param1>, <param2>, ..., <paramN> is {@code null}"
+- Always wrap param names, null and true/false in {@code} tags
+- Don't generate javadocs for overridden methods
+
+# Tech Writing Guidelines
+
+## Tone and Voice
+
+- **Professional and neutral**: Use a professional, technical tone without excessive familiarity
+- **Framework naming**: Always refer to the framework as "Metreeca/Mesh"
+- **Avoid overuse of "you/yours"**: Minimize direct address to maintain professional distance
+- **Concise and direct**: Provide clear, actionable information without unnecessary elaboration
+- Use consistent naming conventions
+- Use British spelling
+
+## Document Structure
+
+### Front Matter
+
+Use YAML front matter with title:
+
+```yaml
+---
+title: "Tutorial Topic Name"
+---
+```
+
+### Opening Section
+
+- Start with a brief introduction stating what the tutorial covers
+- Include learning objectives in 1-2 sentences
+- Reference related concepts and cross-link to handbooks and other tutorials
+
+### Heading Hierarchy
+
+- Use H1 (`#`) for major sections
+- Use H2 (`##`) and H3 (`###`) for subsections
+- Never use H4 or deeper - keep hierarchy shallow
+- Top-level headings must be H1
+- Ensure proper nesting (start with H1, then H2, then H3); make sure H3 don't follow H1
+- Keep headings short, ideally under 20 chars
+
+## Content Organization
+
+### Progressive Examples
+
+- Build concepts step by step with working code examples
+- Start with simple cases and add complexity gradually
+- Each code block should be complete and runnable
+- Use Java code blocks with proper syntax highlighting
+
+### Code Examples
+
+```java
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.*;
+
+final Shape exampleShape=shape()
+        .datatype(String())
+        .required();
+```
+
+### Cross-References
+
+- Link to relevant handbooks: `[standard datatypes](../handbooks/datatypes.md)`
+- Link to Javadocs: Use pattern `https://javadoc.io/doc/com.metreeca/{artifact-id}`
+- Cross-link related tutorials and concepts within the documentation
+
+## Technical Conventions
+
+### Code Style
+
+- Follow Java naming conventions (PascalCase for classes, camelCase for methods)
+- Show complete import statements in examples
+- Use static imports for factory methods and constants
+- Include proper error handling patterns
+
+### Terminology
+
+- Use consistent technical terms throughout
+- Define specialized terms when first introduced
+- Maintain consistency with existing framework documentation
+
+## Content Guidelines
+
+### What to Include
+
+- Clear problem statements and use cases
+- Step-by-step implementation examples
+- Brief explanations of concepts as they're introduced
+- Cross-references to related documentation
+- Real-world examples using consistent sample data (like BIRT dataset)
+
+### What to Avoid
+
+- Overly detailed explanations of basic concepts
+- Example usage sections in code documentation
+- Excessive use of notes or warnings
+- Redundant explanations already covered in handbooks
+
+## Formatting Standards
+
+### Code Blocks
+
+- Use fenced code blocks with language specification
+- Include complete, working examples
+- Keep examples focused and minimal while being functional
+
+### Links and References
+
+- Use descriptive link text
+- Prefer relative links for internal documentation
+- Include external links to specifications and standards where relevant
+
+# Reference Documentation Guidelines
+
+## Structure
+
+- Focus on semantics: Use purpose-based section names instead of implementation details
+- Integrate constructors: Move factory methods into relevant sections rather than separate constructor sections
+- Brief section intros: One-line description of each section's purpose
+- Group by function: Organize by what constructs do, not how they work
+
+## Tables
+
+- Two columns: Item and Description
+- Remove redundancy: Link method names directly, no separate link columns
+- Consistent format: Same structure across all sections
+
+## Descriptions
+
+- Extended length: 80-100 characters for comprehensive context
+- Explain effects: What the construct does, not just configuration actions
+- Assume no prior knowledge: Understandable without deep framework familiarity
+- Be specific: Use precise terminology and concrete examples
+- Reference standards: Mention underlying technologies when relevant

@@ -39,6 +39,7 @@
         <module>mesh-meta</module>
         <module>mesh-mint</module>
         <module>mesh-test</module>
+        <module>mesh-toys</module>
 
     </modules>
 

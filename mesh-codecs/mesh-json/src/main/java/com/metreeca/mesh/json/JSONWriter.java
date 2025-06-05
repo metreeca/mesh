@@ -27,7 +27,11 @@ import static com.metreeca.shim.Collections.list;
 import static java.lang.String.format;
 
 /**
- * JSON streaming writer.
+ * JSON streaming writer for low-level JSON output generation.
+ *
+ * <p>Provides push-based JSON writing with support for pretty-printing
+ * and circular reference detection. Maintains proper indentation and
+ * structural validation during output generation.</p>
  */
 final class JSONWriter {
 
@@ -45,6 +49,15 @@ final class JSONWriter {
     }
 
 
+    /**
+     * Checks if the given object has been visited to detect cycles.
+     *
+     * @param value the object to check
+     *
+     * @return {@code true} if this is the first visit to the object
+     *
+     * @throws NullPointerException if {@code value} is {@code null}
+     */
     boolean visit(final Object value) {
 
         if ( value == null ) {
@@ -55,6 +68,15 @@ final class JSONWriter {
     }
 
 
+    /**
+     * Writes object opening or closing brace.
+     *
+     * @param open if {@code true}, write opening brace; if {@code false}, write closing brace
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter object(final boolean open) throws IOException {
 
         if ( open ) { open('{'); } else { close('}'); }
@@ -62,6 +84,15 @@ final class JSONWriter {
         return this;
     }
 
+    /**
+     * Writes array opening or closing bracket.
+     *
+     * @param open if {@code true}, write opening bracket; if {@code false}, write closing bracket
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter array(final boolean open) throws IOException {
 
         if ( open ) { open('['); } else { close(']'); }
@@ -70,6 +101,13 @@ final class JSONWriter {
     }
 
 
+    /**
+     * Writes a colon separator with appropriate spacing.
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter colon() throws IOException {
 
         if ( indent > 0 ) {
@@ -85,6 +123,13 @@ final class JSONWriter {
         return this;
     }
 
+    /**
+     * Writes a comma separator with proper indentation.
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter comma() throws IOException {
 
         if ( stack.getFirst() ) {
@@ -96,6 +141,15 @@ final class JSONWriter {
     }
 
 
+    /**
+     * Writes a literal value without quotes.
+     *
+     * @param literal the literal value to write
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter literal(final String literal) throws IOException {
 
         if ( !stack.set(0, true) ) { indent(); }
@@ -106,6 +160,15 @@ final class JSONWriter {
 
     }
 
+    /**
+     * Writes a quoted string with proper escaping.
+     *
+     * @param string the string value to write
+     *
+     * @return this writer instance for method chaining
+     *
+     * @throws IOException if an I/O error occurs during writing
+     */
     JSONWriter string(final String string) throws IOException {
 
         if ( !stack.set(0, true) ) { indent(); }

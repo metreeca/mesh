@@ -28,7 +28,11 @@ import static java.lang.Math.max;
 import static java.lang.String.format;
 
 /**
- * JSON streaming reader.
+ * JSON streaming reader for low-level token parsing.
+ *
+ * <p>Provides pull-based JSON parsing with support for streaming
+ * large documents. Maintains position tracking for error reporting
+ * and supports both syntactic and semantic error handling.</p>
  */
 final class JSONReader {
 
@@ -56,6 +60,13 @@ final class JSONReader {
     }
 
 
+    /**
+     * Retrieves the current event type.
+     *
+     * @return the current JSON event
+     *
+     * @throws IOException if an I/O error occurs while reading
+     */
     JSONEvent event() throws IOException {
         if ( event != null ) {
 
@@ -167,6 +178,11 @@ final class JSONReader {
     }
 
 
+    /**
+     * Retrieves the current token value and advances to the next event.
+     *
+     * @return the string representation of the current token
+     */
     String token() {
 
         final String value=token.toString();
@@ -179,6 +195,16 @@ final class JSONReader {
         return value;
     }
 
+    /**
+     * Retrieves the current token if it matches the expected event type.
+     *
+     * @param expected the expected event type
+     *
+     * @return the string representation of the current token
+     *
+     * @throws IOException          if an I/O error occurs while reading
+     * @throws NullPointerException if {@code expected} is {@code null}
+     */
     String token(final JSONEvent expected) throws IOException {
 
         if ( expected == null ) {
@@ -203,6 +229,14 @@ final class JSONReader {
 
     }
 
+    /**
+     * Consumes the current token and returns the provided value.
+     *
+     * @param <T> the type of the value
+     * @param value the value to return
+     *
+     * @return the provided value unchanged
+     */
     <T> T token(final T value) {
 
         token();
@@ -211,6 +245,17 @@ final class JSONReader {
     }
 
 
+    /**
+     * Reports a semantic error with the specified message.
+     *
+     * @param <T> the return type (method always throws)
+     * @param format the error message format string
+     * @param args the format arguments
+     *
+     * @return never returns (always throws)
+     *
+     * @throws NullPointerException if either {@code format} or {@code args} is {@code null}
+     */
     <T> T semantics(final String format, final Object... args) {
 
         if ( format == null ) {

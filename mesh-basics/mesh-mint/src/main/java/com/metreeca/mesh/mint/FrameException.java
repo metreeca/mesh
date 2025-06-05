@@ -21,11 +21,23 @@ import java.io.Serial;
 import static java.lang.String.format;
 
 
+/**
+ * Frame processing exception.
+ *
+ * <p>Runtime exception thrown during frame interface processing and code generation.
+ * Indicates errors in frame interface definition, annotation configuration, or code generation failures that prevent
+ * successful frame implementation creation.</p>
+ */
 public final class FrameException extends RuntimeException {
 
     @Serial private static final long serialVersionUID=8117561751027073199L;
 
 
+    /**
+     * Creates a frame exception with the specified message.
+     *
+     * @param message the error message describing the frame processing failure
+     */
     public FrameException(final String message) {
         super(format(message));
     }

@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Forward {
 
+    /**
+     * Retrieves the forward property IRI.
+     *
+     * @return the IRI of the RDF property this method represents; defaults to empty string
+     */
     String value() default "";
 
 }

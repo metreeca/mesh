@@ -16,11 +16,11 @@
 
 package com.metreeca.mesh.test.stores;
 
-import com.metreeca.mesh.test.EmployeeFrame;
-import com.metreeca.mesh.test.EventFrame;
-import com.metreeca.mesh.test.OfficeFrame;
 import com.metreeca.mesh.tools.Store;
 import com.metreeca.mesh.tools.StoreException;
+import com.metreeca.mesh.toys.EmployeeFrame;
+import com.metreeca.mesh.toys.EventFrame;
+import com.metreeca.mesh.toys.OfficeFrame;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +29,9 @@ import java.time.LocalDate;
 
 import static com.metreeca.mesh.Value.*;
 import static com.metreeca.mesh.queries.Query.query;
-import static com.metreeca.mesh.test.Event.Action.*;
-import static com.metreeca.mesh.test.Resources.EMPLOYEES;
 import static com.metreeca.mesh.test.stores.StoreTest.*;
+import static com.metreeca.mesh.toys.Event.Action.*;
+import static com.metreeca.mesh.toys.Resources.EMPLOYEES;
 import static com.metreeca.shim.Collections.stash;
 import static com.metreeca.shim.URIs.uri;
 
@@ -39,8 +39,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.util.Sets.set;
 
+/**
+ * Test framework for store insert operations.
+ *
+ * <p>Validates data insertion capabilities including new resource creation,
+ * existing resource updates, embedded frame handling, and validation error reporting. Tests ensure proper upsert
+ * behavior and constraint checking for the {@linkplain Store} implementation.</p>
+ */
 abstract class _StoreTestInsert {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

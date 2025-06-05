@@ -531,7 +531,7 @@ public final class Generator {
                         )""", Map.of(
 
                         "constraints", constraints.stream()
-                                .map(constraint -> "v -> new %s().apply(%s(v))".formatted(constraint, clazz()))
+                                .map(constraint -> "v -> new %s().apply(new %s(v))".formatted(constraint, frame()))
                                 .collect(joining(",\n"))
 
                 )))

@@ -16,11 +16,11 @@
 
 package com.metreeca.mesh.test.stores;
 
-import com.metreeca.mesh.test.EmployeeFrame;
-import com.metreeca.mesh.test.EventFrame;
-import com.metreeca.mesh.test.OfficeFrame;
 import com.metreeca.mesh.tools.Store;
 import com.metreeca.mesh.tools.StoreException;
+import com.metreeca.mesh.toys.EmployeeFrame;
+import com.metreeca.mesh.toys.EventFrame;
+import com.metreeca.mesh.toys.OfficeFrame;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,15 +28,27 @@ import java.net.URI;
 
 import static com.metreeca.mesh.Value.*;
 import static com.metreeca.mesh.queries.Query.query;
-import static com.metreeca.mesh.test.Resources.EMPLOYEES;
 import static com.metreeca.mesh.test.stores.StoreTest.*;
+import static com.metreeca.mesh.toys.Resources.EMPLOYEES;
 import static com.metreeca.shim.URIs.uri;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+/**
+ * Test framework for store remove operations.
+ *
+ * <p>Validates data removal capabilities including existing resource deletion,
+ * foreign property handling, embedded frame removal, and validation error reporting. Tests ensure proper cascading
+ * behavior and constraint checking for the {@linkplain Store} implementation.</p>
+ */
 abstract class _StoreTestRemove {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

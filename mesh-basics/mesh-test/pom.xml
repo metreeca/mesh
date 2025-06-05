@@ -29,20 +29,14 @@
 
     <artifactId>mesh-test</artifactId>
 
-    <name>Metreeca/Mesh Tests Suites</name>
-    <description>{TBC}</description>
+    <name>Metreeca/Mesh Test Suite</name>
+    <description>Test utilities and suites for linked data stores.</description>
 
     <dependencies>
 
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>mesh-meta</artifactId>
-        </dependency>
-
-        <dependency> <!-- internal dependency supporting project recompilation on IntelliJ IDEA -->
-            <groupId>com.metreeca</groupId>
-            <artifactId>mesh-mint</artifactId>
-            <scope>provided</scope>
+            <artifactId>mesh-toys</artifactId>
         </dependency>
 
         <dependency>
@@ -58,29 +52,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-
-            <plugin>
-
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-
-                <configuration>
-                    <annotationProcessorPaths>
-
-                    <path>
-                            <groupId>com.metreeca</groupId>
-                            <artifactId>mesh-mint</artifactId>
-                        </path>
-
-                    </annotationProcessorPaths>
-                </configuration>
-
-            </plugin>
-
-        </plugins>
-    </build>
 
 </project>

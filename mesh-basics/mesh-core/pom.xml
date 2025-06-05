@@ -30,7 +30,7 @@
     <artifactId>mesh-core</artifactId>
 
     <name>Metreeca/Mesh Data Model</name>
-    <description>{TBC}</description>
+    <description>Core model and abstractions for linked data.</description>
 
     <dependencies>
         <dependency>

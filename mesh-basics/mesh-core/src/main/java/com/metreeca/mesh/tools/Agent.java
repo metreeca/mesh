@@ -46,6 +46,12 @@ import static java.util.Objects.requireNonNull;
 import static java.util.function.Predicate.not;
 import static java.util.regex.Pattern.compile;
 
+/**
+ * REST API agent for handling HTTP-style operations.
+ *
+ * <p>Provides a complete REST API implementation that maps HTTP operations to store operations
+ * with automatic content negotiation, validation, and error handling.</p>
+ */
 public final class Agent {
 
     private static final String GET="GET";
@@ -112,10 +118,29 @@ public final class Agent {
     private final Function<AgentRequest, String> slug;
 
 
+    /**
+     * Creates an agent with automatic ID generation.
+     *
+     * @param model the data model for validation and transformation
+     * @param codec the codec for serialization and deserialization
+     * @param store the persistence store for data operations
+     *
+     * @throws NullPointerException if any parameter is {@code null}
+     */
     public Agent(final Value model, final Codec codec, final Store store) {
         this(model, codec, store, request -> uuid());
     }
 
+    /**
+     * Creates an agent with custom ID generation.
+     *
+     * @param model the data model for validation and transformation
+     * @param codec the codec for serialization and deserialization
+     * @param store the persistence store for data operations
+     * @param slug  the function for generating resource identifiers
+     *
+     * @throws NullPointerException if any parameter is {@code null}
+     */
     public Agent(final Value model, final Codec codec, final Store store, final Function<AgentRequest, String> slug) {
 
         if ( model == null ) {
@@ -142,6 +167,15 @@ public final class Agent {
     }
 
 
+    /**
+     * Processes an HTTP-style request and generates an appropriate response.
+     *
+     * @param request  the incoming request to process
+     * @param response the response object to populate
+     *
+     * @throws NullPointerException     if either parameter is {@code null}
+     * @throws IllegalArgumentException if the request contains invalid data
+     */
     public void process(final AgentRequest request, final AgentResponse response) {
 
         if ( request == null ) {

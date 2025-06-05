@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Reverse {
 
+    /**
+     * Retrieves the reverse property IRI.
+     *
+     * @return the IRI of the RDF property this method represents in reverse; defaults to empty string
+     */
     String value() default "";
 
 }

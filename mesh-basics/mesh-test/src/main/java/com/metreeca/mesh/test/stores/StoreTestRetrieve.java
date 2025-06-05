@@ -37,10 +37,22 @@ import static com.metreeca.shim.URIs.base;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test framework for basic store retrieval operations.
+ *
+ * <p>Validates fundamental object retrieval capabilities including
+ * single object access, nested object navigation, and basic query operations. Tests ensure proper data binding and
+ * relationship handling for the {@linkplain Store} implementation.</p>
+ */
 abstract class StoreTestRetrieve {
 
     // !!! virtual model merging
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

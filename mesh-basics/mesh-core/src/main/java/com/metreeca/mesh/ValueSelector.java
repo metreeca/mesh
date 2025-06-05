@@ -29,6 +29,12 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.util.function.Predicate.not;
 
+/**
+ * JSONPath-style value selection utilities.
+ *
+ * <p>Provides methods to select values from JSON-LD structures using JSONPath-style syntax. Supports
+ * object property access, array indexing, and wildcard selection.</p>
+ */
 final class ValueSelector {
 
     private static final Pattern DOT_PATTERN=Pattern.compile("(?:^|\\.)(?<dot>\\w+)");
@@ -50,6 +56,25 @@ final class ValueSelector {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Selects values from a JSON-LD value using a JSONPath-style selector.
+     *
+     * <p>Supported path syntax:</p>
+     * <ul>
+     *   <li>{@code .property} - select object property</li>
+     *   <li>{@code ['property']} - select object property with escaping</li>
+     *   <li>{@code [0]} - select array element by index</li>
+     *   <li>{@code .*} or {@code [*]} - wildcard selection</li>
+     * </ul>
+     *
+     * @param value the value to select from
+     * @param path  the selection path
+     *
+     * @return the selected value
+     *
+     * @throws NullPointerException     if either {@code value} or {@code path} is {@code null}
+     * @throws IllegalArgumentException if the path is malformed
+     */
     static Value select(final Value value, final String path) {
         if ( path.isEmpty() || path.equals("$") ) { return value; } else {
 
