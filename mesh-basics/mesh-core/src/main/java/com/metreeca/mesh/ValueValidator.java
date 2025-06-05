@@ -48,8 +48,8 @@ import static java.util.stream.Collectors.toSet;
  * SHACL-based value validation utilities.
  *
  * <p>Provides comprehensive validation of {@linkplain Value} instances against {@linkplain Shape} constraints
- * using SHACL (Shapes Constraint Language) semantics. Supports validation of datatypes, cardinality, value
- * constraints, property shapes, and custom constraints.</p>
+ * using SHACL (Shapes Constraint Language) semantics. Supports validation of datatypes, cardinality, value constraints,
+ * property shapes, and custom constraints.</p>
  */
 @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
 final class ValueValidator {
@@ -57,7 +57,42 @@ final class ValueValidator {
     private static Optional<Value> optional(final Value value) { return optional(Optional.of(value)); }
 
     private static Optional<Value> optional(final Optional<Value> value) {
-        return value.filter(not(Value::isEmpty));
+        return value.map(ValueValidator::prune).filter(not(Value::isEmpty));
+    }
+
+
+    private static Value prune(final Value value) {
+        return value.accept(new Visitor<>() {
+
+            @Override public Value visit(final Value host, final String string) {
+                return string.isBlank() ? Nil() : host;
+            }
+
+            @Override public Value visit(final Value host, final Map<String, Value> fields) {
+
+                final Value object=object(fields.entrySet().stream()
+                        .map(e -> entry(e.getKey(), e.getValue().accept(this)))
+                        .filter(not(e -> e.getValue().isEmpty()))
+                );
+
+                return object.isEmpty() ? Nil() : object;
+            }
+
+            @Override public Value visit(final Value host, final List<Value> values) {
+
+                final Value array=array(values.stream()
+                        .map(v -> v.accept(this))
+                        .filter(not(Value::isEmpty))
+                );
+
+                return array.isEmpty() ? Nil() : array;
+            }
+
+            @Override public Value visit(final Value host, final Object object) {
+                return host;
+            }
+
+        });
     }
 
 
