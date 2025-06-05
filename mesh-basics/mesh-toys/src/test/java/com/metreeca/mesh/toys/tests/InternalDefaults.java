@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import org.junit.jupiter.api.Test;
+import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Internal;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Set;
 
-final class DefaultValuesTest {
+import static com.metreeca.shim.Collections.set;
 
+@Frame
+public interface InternalDefaults {
 
-    @Test void testReturnDefaultValues() {
-        assertThat(new DefaultValuesFrame().dflt()).isNotNull();
-    }
-
-    @Test void testReturnUserDefinedValues() {
-        assertThat(new DefaultValuesFrame().dflt(null).dflt()).isNull();
-    }
-
-    @Test void testReturnInitialPrimitiveValues() {
-        assertThat(new DefaultValuesFrame().dfltPrimitive(null).dfltPrimitive()).isEqualTo(0);
-    }
+    @Internal
+    default Set<String> value() { return set(); }
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
 

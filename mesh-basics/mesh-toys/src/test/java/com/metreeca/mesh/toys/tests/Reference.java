@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Id;
 
-import java.util.Set;
+import java.net.URI;
 
 @Frame
-public interface References {
+public interface Reference {
 
-    Set<? extends Reference> values();
+    @Id
+    URI id();
+
+    String label();
 
 }

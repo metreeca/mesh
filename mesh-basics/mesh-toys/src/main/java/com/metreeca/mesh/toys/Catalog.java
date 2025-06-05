@@ -33,11 +33,6 @@ import java.util.Set;
 @Virtual
 public interface Catalog<T extends Resource> extends Resource {
 
-    /**
-     * Retrieves the collection of resources in this catalog.
-     *
-     * @return the set of catalog members
-     */
     @Forward("rdfs:member")
     Set<T> members();
 

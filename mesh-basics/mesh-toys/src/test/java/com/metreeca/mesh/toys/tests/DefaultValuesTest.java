@@ -14,9 +14,25 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import com.metreeca.mesh.meta.jsonld.Frame;
+import org.junit.jupiter.api.Test;
 
-@Frame
-public interface NoFields { }
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class DefaultValuesTest {
+
+
+    @Test void testReturnDefaultValues() {
+        assertThat(new DefaultValuesFrame().dflt()).isNotNull();
+    }
+
+    @Test void testReturnUserDefinedValues() {
+        assertThat(new DefaultValuesFrame().dflt(null).dflt()).isNull();
+    }
+
+    @Test void testReturnInitialPrimitiveValues() {
+        assertThat(new DefaultValuesFrame().dfltPrimitive(null).dfltPrimitive()).isEqualTo(0);
+    }
+
+}

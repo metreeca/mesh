@@ -18,9 +18,12 @@ package com.metreeca.mesh.toys;
 
 import com.metreeca.mesh.meta.jsonld.*;
 import com.metreeca.mesh.meta.jsonld.Class;
+import com.metreeca.mesh.meta.shacl.MaxLength;
+import com.metreeca.mesh.meta.shacl.MinLength;
 import com.metreeca.mesh.meta.shacl.Required;
 
 import java.net.URI;
+import java.time.Instant;
 
 /**
  * Base interface for all domain resources.
@@ -36,30 +39,24 @@ import java.net.URI;
 @Namespace(prefix="rdfs", value="http://www.w3.org/2000/01/rdf-schema#")
 public interface Resource {
 
-    /**
-     * Retrieves the unique identifier for this resource.
-     *
-     * @return the resource URI
-     */
     @Id
     URI id();
 
-    /**
-     * Retrieves the resource type classification.
-     *
-     * @return the resource type identifier
-     */
     @Type
     String type();
 
 
-    /**
-     * Retrieves the human-readable label for this resource.
-     *
-     * @return the resource label
-     */
     @Required
     @Forward("rdfs:")
+    @MinLength(5)
+    @MaxLength(80)
     String label();
+
+
+    @Hidden
+    Instant created();
+
+    @Hidden
+    Instant mutated();
 
 }

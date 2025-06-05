@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.queries.Query;
 
@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.metreeca.mesh.Value.*;
 import static com.metreeca.mesh.queries.Query.query;
-import static com.metreeca.mesh.toys.frames.ToValue.BASE;
-import static com.metreeca.mesh.toys.frames.ToValue.DFLT;
+import static com.metreeca.mesh.toys.tests.ToValue.BASE;
+import static com.metreeca.mesh.toys.tests.ToValue.DFLT;
 import static com.metreeca.shim.Collections.stash;
 
 import static org.assertj.core.api.Assertions.assertThat;

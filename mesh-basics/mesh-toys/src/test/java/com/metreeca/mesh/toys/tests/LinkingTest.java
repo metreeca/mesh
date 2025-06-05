@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import org.junit.jupiter.api.Test;
 
 import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.toys.frames.LinkingFrame.toValue;
+import static com.metreeca.mesh.toys.tests.LinkingFrame.toValue;
 import static com.metreeca.shim.Collections.set;
 import static com.metreeca.shim.URIs.base;
 

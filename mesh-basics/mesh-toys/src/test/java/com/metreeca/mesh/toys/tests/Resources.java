@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
 
-@Frame
-public interface CovariantBase {
+import java.util.Set;
 
-    Reference value();
+@Frame
+public interface Resources extends References {
+
+    Set<Resource> values();
+
 
 }

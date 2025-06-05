@@ -14,28 +14,14 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
-import com.metreeca.mesh.meta.jsonld.Id;
-
-import java.net.URI;
-
-import static com.metreeca.shim.URIs.base;
 
 @Frame
-public interface ToValue {
+public interface Covariant extends CovariantBase {
 
-    URI BASE=base();
-    int DFLT=1;
-
-
-    @Id
-    default URI id() { return BASE; }
-
-
-    int plain();
-
-    default int dflt() { return DFLT; }
+    @Override
+    Resource value();
 
 }

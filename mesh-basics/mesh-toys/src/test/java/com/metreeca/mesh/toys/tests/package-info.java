@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
-
-import com.metreeca.mesh.meta.jsonld.Frame;
-
-import java.util.Set;
-
-@Frame
-public interface Resources extends References {
-
-    Set<Resource> values();
-
-
-}
+/**
+ * Frame generation tests.
+ */
+package com.metreeca.mesh.toys.tests;

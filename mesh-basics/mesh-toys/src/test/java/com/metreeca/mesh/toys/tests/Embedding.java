@@ -14,17 +14,27 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
+import com.metreeca.mesh.meta.jsonld.Embedded;
 import com.metreeca.mesh.meta.jsonld.Frame;
 
 import java.util.Set;
 
 @Frame
-public interface Linking {
+public interface Embedding {
 
-    Resource resource();
+    @Embedded
+    Reference reference();
 
-    Set<Resource> resources();
+    @Embedded
+    Description description();
+
+
+    @Embedded
+    Set<Reference> references();
+
+    @Embedded
+    Set<Description> descriptions();
 
 }

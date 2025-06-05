@@ -14,36 +14,18 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import com.metreeca.mesh.meta.jsonld.Frame;
+import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import static com.metreeca.shim.URIs.base;
 
-@Frame
-public interface Resource extends Reference {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    enum Option { X, Y, Z }
+final class DefaultIdTest {
 
-
-    String value();
-
-    Set<String> values();
-
-
-    Option option();
-
-    Set<Option> options();
-
-
-    Resource resource();
-
-    Set<Resource> resources();
-
-
-    Map<Locale, String> texts();
-
+    @Test void testIncludeDefaultIdInDeltaFrameValue() {
+        assertThat(new DefaultIdFrame(true).toValue().id()).contains(base());
+    }
 
 }

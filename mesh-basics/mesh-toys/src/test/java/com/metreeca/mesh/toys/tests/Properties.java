@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
+import com.metreeca.mesh.meta.jsonld.Forward;
 import com.metreeca.mesh.meta.jsonld.Frame;
-import com.metreeca.mesh.meta.jsonld.Id;
-
-import java.net.URI;
+import com.metreeca.mesh.meta.jsonld.Reverse;
 
 @Frame
-public interface Reference {
+public interface Properties {
 
-    @Id
-    URI id();
+    @Forward
+    String forward();
 
-    String label();
+    @Reverse
+    String reverse();
+
+    @Forward
+    @Reverse
+    String symmetric();
+
+    @Forward("advance")
+    @Reverse("retreat")
+    String custom();
 
 }
