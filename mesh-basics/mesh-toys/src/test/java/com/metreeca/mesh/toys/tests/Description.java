@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
 
 @Frame
-public interface Covariant extends CovariantBase {
+public interface Description {
 
-    @Override
-    Resource value();
+    String value();
 
 }

@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import com.metreeca.mesh.meta.jsonld.Embedded;
+
 import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Id;
 
-import java.util.Set;
+import java.net.URI;
+
+import static com.metreeca.shim.URIs.base;
 
 @Frame
-public interface Embedding {
+public interface DefaultId {
 
-    @Embedded
-    Reference reference();
-
-    @Embedded
-    Description description();
-
-
-    @Embedded
-    Set<Reference> references();
-
-    @Embedded
-    Set<Description> descriptions();
+    @Id
+    default URI id() { return base(); }
 
 }

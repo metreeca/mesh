@@ -16,16 +16,22 @@
 
 package com.metreeca.mesh.toys;
 
+import com.metreeca.mesh.Value;
 import com.metreeca.mesh.meta.jsonld.*;
 import com.metreeca.mesh.meta.jsonld.Class;
-import com.metreeca.mesh.meta.shacl.MaxInclusive;
-import com.metreeca.mesh.meta.shacl.MinInclusive;
-import com.metreeca.mesh.meta.shacl.Pattern;
-import com.metreeca.mesh.meta.shacl.Required;
+import com.metreeca.mesh.meta.shacl.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
+import java.util.function.Function;
+
+import static com.metreeca.mesh.Value.*;
+
+import static java.util.Collections.singleton;
 
 /**
  * Employee records with personal, organizational, and career information.
@@ -36,6 +42,7 @@ import java.util.Set;
  */
 @Frame
 @Class
+@Constraint(Employee.Integrity.class)
 public interface Employee extends Resource {
 
     @Override
@@ -46,132 +53,120 @@ public interface Employee extends Resource {
     }
 
 
-    /**
-     * Retrieves the employee identification code.
-     *
-     * @return the numeric employee code
-     */
     @Required
     @Pattern("^\\d+$")
     String code();
 
 
-    /**
-     * Retrieves the employee's first name.
-     *
-     * @return the employee forename
-     */
     @Required
     String forename();
 
-    /**
-     * Retrieves the employee's last name.
-     *
-     * @return the employee surname
-     */
     @Required
     String surname();
 
-    /**
-     * Retrieves the employee's birth date.
-     *
-     * @return the employee birthdate
-     */
     @Required
     LocalDate birthdate();
 
 
-    /**
-     * Retrieves the employee's job title.
-     *
-     * @return the employee job title
-     */
     @Required
     String title();
 
-    /**
-     * Retrieves the employee's seniority level.
-     *
-     * @return the seniority level (1-5)
-     */
     @Required
     @MinInclusive("1")
     @MaxInclusive("5")
     int seniority();
 
-    /**
-     * Retrieves the employee's email address.
-     *
-     * @return the employee email
-     */
     @Required
     @Pattern("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
     String email();
 
-    /**
-     * Retrieves when the employee became active.
-     *
-     * @return the activation timestamp
-     */
     @Required
     Instant active();
 
 
-    /**
-     * Retrieves year-to-date performance metrics.
-     *
-     * @return the YTD value
-     */
     @MinInclusive("0")
     double ytd();
 
-    /**
-     * Retrieves last period performance metrics.
-     *
-     * @return the last period value
-     */
     @MinInclusive("0")
     double last();
 
-    /**
-     * Retrieves performance change metrics.
-     *
-     * @return the performance delta
-     */
     double delta();
 
 
-    /**
-     * Retrieves the office where this employee works.
-     *
-     * @return the employee's assigned office
-     */
     @Required
     Office office();
 
-    /**
-     * Retrieves the employee's direct supervisor.
-     *
-     * @return the supervising employee, or {@code null} if none
-     */
     Employee supervisor();
 
-    /**
-     * Retrieves employees reporting to this employee.
-     *
-     * @return the set of direct reports
-     */
     @Foreign
     @Reverse("supervisor")
     Set<Employee> reports();
 
 
-    /**
-     * Retrieves career events for this employee.
-     *
-     * @return the set of career milestones
-     */
     @Embedded
     Set<Event> career();
+
+
+    //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public final class Integrity implements Function<Employee, Value> {
+
+        @Override public Value apply(final Employee employee) {
+
+            return object(
+
+                    field("supervisor", supervisors(employee).contains(employee)
+                            ? string("reference loop")
+                            : Nil()
+                    ),
+
+                    field("reports", reports(employee).contains(employee)
+                            ? string("reference loop")
+                            : Nil()
+                    )
+
+            );
+        }
+
+
+        private Set<Employee> supervisors(final Employee employee) {
+
+            final Set<Employee> supervisors=new HashSet<>();
+            final Set<Employee> visited=new HashSet<>();
+
+            Employee current=employee.supervisor();
+
+            while ( current != null && visited.add(current) ) {
+                supervisors.add(current);
+                current=current.supervisor();
+            }
+
+            return supervisors;
+        }
+
+        private Set<Employee> reports(final Employee employee) {
+
+            final Set<Employee> reports=new HashSet<>();
+
+            final Set<Employee> visited=new HashSet<>(singleton(employee));
+            final Queue<Employee> pending=new ArrayDeque<>(singleton(employee));
+
+            while ( !pending.isEmpty() ) {
+
+                final Employee current=pending.poll();
+
+                for (final Employee report : current.reports()) {
+                    if ( visited.add(report) ) {
+                        reports.add(report);
+                        pending.offer(report);
+                    }
+                }
+
+            }
+
+            return reports;
+        }
+
+    }
 
 }

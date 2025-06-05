@@ -325,8 +325,7 @@ public abstract class StoreTest {
                         field(country, array(
                                 text("en", record.get(header.indexOf("countryNameEN"))),
                                 text("de", record.get(header.indexOf("countryNameDE"))),
-                                text("fr", record.get(header.indexOf("countryNameFR"))),
-                                text("it", record.get(header.indexOf("countryNameIT")))
+                                text("fr", record.get(header.indexOf("countryNameFR")))
                         )),
 
                         entry(employees, array(records.stream()

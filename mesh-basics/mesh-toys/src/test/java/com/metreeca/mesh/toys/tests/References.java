@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
-import com.metreeca.mesh.meta.jsonld.Internal;
 
 import java.util.Set;
 
-import static com.metreeca.shim.Collections.set;
-
 @Frame
-public interface InternalDefaults {
+public interface References {
 
-    @Internal
-    default Set<String> value() { return set(); }
+    Set<? extends Reference> values();
 
 }

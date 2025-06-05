@@ -61,28 +61,10 @@ public interface Resources extends Catalog<Resource> {
     public static final List<EmployeeFrame> EMPLOYEES=list(parse(Resources::employees));
 
 
-    /**
-     * Retrieves an office by identifier.
-     *
-     * @param id the office identifier
-     *
-     * @return the office frame, or empty if not found
-     *
-     * @throws NullPointerException if {@code id} is {@code null}
-     */
     public static Optional<OfficeFrame> office(final URI id) {
         return OFFICES.stream().filter(office -> Objects.equals(office.id(), id)).findFirst();
     }
 
-    /**
-     * Retrieves an employee by identifier.
-     *
-     * @param id the employee identifier
-     *
-     * @return the employee frame, or empty if not found
-     *
-     * @throws NullPointerException if {@code id} is {@code null}
-     */
     public static Optional<EmployeeFrame> employee(final URI id) {
         return EMPLOYEES.stream().filter(employee -> Objects.equals(employee.id(), id)).findFirst();
     }
@@ -122,9 +104,8 @@ public interface Resources extends Catalog<Resource> {
                         .city(record.get(header.indexOf("cityName")))
                         .country(map(
                                 entry(ENGLISH, record.get(header.indexOf("countryNameEN"))),
-                                entry(GERMAN, record.get(header.indexOf("countryNameDE"))),
                                 entry(FRENCH, record.get(header.indexOf("countryNameFR"))),
-                                entry(ITALIAN, record.get(header.indexOf("countryNameIT")))
+                                entry(GERMAN, record.get(header.indexOf("countryNameDE")))
                         ))
 
                         .employees(set(records.stream()

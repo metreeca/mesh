@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
-
+package com.metreeca.mesh.toys.tests;
 
 import com.metreeca.mesh.meta.jsonld.Frame;
-import com.metreeca.mesh.meta.jsonld.Id;
-
-import java.net.URI;
-
-import static com.metreeca.shim.URIs.base;
 
 @Frame
-public interface DefaultId {
+public interface CovariantBase {
 
-    @Id
-    default URI id() { return base(); }
+    Reference value();
 
 }

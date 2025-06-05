@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import org.junit.jupiter.api.Test;
+import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Id;
+
+import java.net.URI;
 
 import static com.metreeca.shim.URIs.base;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@Frame
+public interface ToValue {
 
-final class DefaultIdTest {
+    URI BASE=base();
+    int DFLT=1;
 
-    @Test void testIncludeDefaultIdInDeltaFrameValue() {
-        assertThat(new DefaultIdFrame(true).toValue().id()).contains(base());
-    }
+
+    @Id
+    default URI id() { return BASE; }
+
+
+    int plain();
+
+    default int dflt() { return DFLT; }
 
 }

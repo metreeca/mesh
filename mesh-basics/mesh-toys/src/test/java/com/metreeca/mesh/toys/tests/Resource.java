@@ -14,27 +14,36 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
 
-import com.metreeca.mesh.meta.jsonld.Forward;
 import com.metreeca.mesh.meta.jsonld.Frame;
-import com.metreeca.mesh.meta.jsonld.Reverse;
+
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 @Frame
-public interface Properties {
+public interface Resource extends Reference {
 
-    @Forward
-    String forward();
+    enum Option { X, Y, Z }
 
-    @Reverse
-    String reverse();
 
-    @Forward
-    @Reverse
-    String symmetric();
+    String value();
 
-    @Forward("advance")
-    @Reverse("retreat")
-    String custom();
+    Set<String> values();
+
+
+    Option option();
+
+    Set<Option> options();
+
+
+    Resource resource();
+
+    Set<Resource> resources();
+
+
+    Map<Locale, String> texts();
+
 
 }

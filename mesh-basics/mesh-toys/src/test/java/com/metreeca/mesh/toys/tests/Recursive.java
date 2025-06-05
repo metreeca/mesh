@@ -14,7 +14,25 @@
  * limitations under the License.
  */
 
-/**
- * Frame generation tests.
- */
-package com.metreeca.mesh.toys.frames;
+package com.metreeca.mesh.toys.tests;
+
+import com.metreeca.mesh.meta.jsonld.Frame;
+import com.metreeca.mesh.meta.jsonld.Id;
+
+import java.net.URI;
+import java.util.Set;
+
+import static com.metreeca.shim.Collections.set;
+import static com.metreeca.shim.URIs.base;
+
+@Frame
+public interface Recursive {
+
+    @Id
+    default URI id() { return base(); }
+
+    default Recursive value() { return this; }
+
+    default Set<Recursive> values() { return set(this); }
+
+}

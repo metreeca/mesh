@@ -50,19 +50,9 @@ public interface Event extends Toys {
     @Required
     Action action();
 
-    /**
-     * Retrieves when this event occurred.
-     *
-     * @return the event date
-     */
     @Required
     LocalDate date();
 
-    /**
-     * Retrieves additional notes about this event.
-     *
-     * @return the event notes, or {@code null} if none
-     */
     String notes();
 
 }

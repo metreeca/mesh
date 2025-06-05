@@ -18,9 +18,8 @@
  * Sample data models for testing and demonstration purposes.
  *
  * <p>Provides a realistic domain model representing an organization with offices,
- * employees, and career events. The model demonstrates comprehensive usage of
- * Metreeca/Mesh frame annotations including relationships, constraints, and
- * data modeling patterns.</p>
+ * employees, and career events. The model demonstrates comprehensive usage of Metreeca/Mesh frame annotations including
+ * relationships, constraints, and data modeling patterns.</p>
  *
  * <h2>Domain Model</h2>
  *
@@ -31,15 +30,15 @@
  *         information and employee associations</li>
  *     <li><strong>{@linkplain com.metreeca.mesh.toys.Employee}</strong> - Personnel records with personal details,
  *         organizational relationships, and career tracking</li>
- *     <li><strong>{@linkplain Event}</strong> - Career milestones and organizational changes
+ *     <li><strong>{@linkplain com.metreeca.mesh.toys.Event}</strong> - Career milestones and organizational changes
  *         embedded within employee records</li>
- *     <li><strong>{@linkplain Catalog}</strong> - Generic collection interface for
+ *     <li><strong>{@linkplain com.metreeca.mesh.toys.Catalog}</strong> - Generic collection interface for
  *         organizing domain entities</li>
  * </ul>
  *
  * <h2>Test Data</h2>
  *
- * <p>The {@linkplain Resources} interface provides access to realistic test datasets
+ * <p>The {@linkplain com.metreeca.mesh.toys.Resources} interface provides access to realistic test datasets
  * including 7 offices and 23 employees with complete relationships, constraints,
  * and multilingual content. Data is loaded from TSV files and automatically
  * converted to frame instances.</p>
