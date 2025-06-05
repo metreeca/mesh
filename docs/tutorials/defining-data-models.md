@@ -12,7 +12,7 @@ Focusing on the *Office* and *Employees* data tables of the BIRT sample dataset,
 data model, according to the following high‑level UML model (see also
 the [standard datatypes](../handbooks/datatypes.md) reference for types used in the diagram).
 
-![BIRT UML Model](birt.svg)
+![BIRT UML Model](birt.svg#100)
 
 ## JSON-LD Context
 
