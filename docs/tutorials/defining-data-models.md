@@ -2,14 +2,21 @@
 title: "Defining JSON-LD Data Models"
 ---
 
-In this tutorial you will learn how to use shapes to define declarative data models that will drive data validation and
+In this tutorial you will learn how to use shapes to define declarative data models that drive data validation and
 other linked data processing tools.
 
-Focusing on the *Office* and *Employees* data tables of the BIRT sample dataset, we will build step by step a complete
-data model, according to the following high‑level UML model (see also
-the [standard datatypes](../handbooks/datatypes.md) reference for types used in the diagram).
+Focusing on the *Employees* data tables of the BIRT sample dataset, as outlined in the following high‑level UML model,
+we will build a complete
+data model step by step.
 
 ![BIRT UML Model](toys.png#100)
+
+By the end of this tutorial, you will understand how to:
+
+- Configure JSON-LD properties and RDF relationships
+- Apply SHACL validation constraints for data quality
+- Build complete resource shapes with multiple properties
+- Validate values and access validation reports
 
 # What Are Shapes?
 
@@ -17,549 +24,648 @@ Shapes are declarative definitions that serve as the foundation for data modelli
 services. They represent comprehensive specifications for what valid data looks like, combining structural rules, type
 constraints, and business logic validation into cohesive data blueprints.
 
-# JSON-LD Context
+Think of shapes as templates that define:
 
-The Metreeca/Mesh framework builds upon the [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) specification to provide
-semantic data modelling capabilities. JSON-LD enables the expression of linked data using familiar JSON syntax while
-maintaining full compatibility with RDF and semantic web technologies. The shapes framework extends this foundation by
-providing declarative validation and structural constraints that ensure data consistency and semantic integrity.
+- What properties an object can have
+- What datatypes those properties must use
+- What validation rules apply to property values
+- How properties relate to RDF predicates for semantic web integration
 
-Shapes serve as blueprints that define how JSON-LD documents should be structured, what properties they may contain, and
-how these properties relate to RDF vocabularies and ontologies. This approach bridges the gap between developer-friendly
-JSON and semantically rich linked data.
-
-## Initial Shape Definitions
-
-The simplest shape accepts any value:
+The simplest shape accepts any value without constraints. This serves as the starting point for all shape definitions:
 
 ```java
 import static com.metreeca.mesh.shapes.Shape.shape;
 
-final Shape emptyShape = shape();
+public static Shape emptyShape() {
+    return shape();
+}
 ```
 
-Add constraints to make shapes more specific:
+# JSON-LD Structures
 
-```java
-import static com.metreeca.mesh.Value.*;
+The Metreeca/Mesh framework builds upon the [JSON for Linked Data (JSON-LD)](https://www.w3.org/TR/json-ld/)
+specification for linked data
+serialisation.
 
-final Shape nameShape = shape()
-    .datatype(String())
-    .minLength(1)
-    .maxLength(100)
-    .required();
-```
+JSON-LD provides a method for encoding linked data using JSON syntax. Key capabilities include:
 
-## Properties
-
-Properties connect field names to RDF predicates and define semantic relationships.
-
-### Property Names and Forward URIs
-
-Properties map JSON field names to RDF predicates:
-
-```java
-import static com.metreeca.mesh.shapes.Property.property;
-
-// Automatic URI generation from property name
-property("name")
-    .forward(true)  // Creates URI based on property name
-    .shape(nameShape);
-
-// Explicit URI specification
-property("title")
-    .forward(term("http://purl.org/dc/terms/title"))
-    .shape(nameShape);
-```
+- **Context mapping** - Define vocabularies and map JSON properties to RDF predicates and types
+- **Type coercion** - Automatically convert JSON values to appropriate RDF datatypes
+- **Language tagging** - Support multilingual content with language-specific literals
+- **Graph structures** - Represent complex relationships and nested objects as RDF graphs
+- **API compatibility** - Maintain standard JSON syntax for seamless web service integration
 
 ## Class Constructs
 
-Object shapes require class information and identity properties.
+Class constructs transform shapes into object definitions with identity and type information. This enables
+JSON-LD serialisation with proper `@id` and `@type` fields.
 
 ### Id and Type Properties
 
-Define identity and type fields for objects:
+The `id()` and `type()` methods designate which properties supply identity and type information for JSON-LD contexts:
 
 ```java
+import static com.metreeca.mesh.shapes.Shape.shape;
 import static com.metreeca.mesh.shapes.Type.type;
 
-final Type EmployeeType = type("Employee");
-
-final Shape employeeShape = shape()
-    .id("id")           // Identity field name
-    .type("type")       // Type field name
-    .clazz(EmployeeType); // Class constraint
+public static Shape basicEmployeeShape() {
+    return shape()
+        .id("id")           // @id field name
+        .type("type");      // @type field name
+}
 ```
 
-Setting `id()` and `type()` automatically configures the shape's datatype to `Object()`.
+Setting `id()` and `type()` automatically configures the shape's datatype to `Object()`, ensuring the shape
+validates object values rather than primitive values.
 
-### Virtual Properties
+### Class Constraints
 
-Virtual properties exist only in serialization without corresponding RDF statements:
+Class constraints specify which RDF classes a resource belongs to. This enables type checking and semantic
+interoperability with other RDF systems:
 
 ```java
-property("displayName")
-    .virtual(true)
-    .shape(shape()
-        .datatype(String())
-        .optional());
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.shapes.Type.type;
+
+public static Shape classConstraintsExample() {
+    return shape()
+        .clazz(type("Employee", URI.create("https://data.example.net/#Employee")));
+}
 ```
 
 ## Property Constructs
 
-Properties support various behavioral modifiers and relationship directions.
+Properties define the structure of objects by mapping JSON field names to RDF predicates, enabling seamless
+translation between JSON-LD serialisation and RDF graph storage. These relationships form the foundation of
+linked data by connecting resources into semantic graphs through typed predicates.
 
-### Hidden Properties
+### Property Names
 
-Hidden properties are excluded from default serialization:
+Every property needs a name that appears in JSON serialisation. The `Property` factory creates property definitions
+that link names to shapes and RDF predicates:
 
 ```java
-property("internalId")
-    .hidden(true)
-    .forward(true)
-    .shape(shape()
-        .datatype(String())
-        .optional());
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+
+public static Property forenameProperty() {
+    return property("forename")
+            .shape(shape()
+                    .datatype(String()));
+}
 ```
 
-### Foreign and Embedded Properties
+### Property URIs
 
-Control cascade behavior during updates:
+Property URIs uniquely identify relationships from a resource to its property values. You can either use
+automatic URI generation or specify explicit URIs for precise control over RDF serialisation:
 
 ```java
-// Foreign: reference external resources, not updated in cascade
-property("reports")
-    .foreign(true)
-    .reverse(term("supervisor"))
-    .shape(shape()
-        .datatype(Object())
-        .multiple());
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
 
-// Embedded: updated in cascade, serialized inline
-property("career")
-    .embedded(true)
-    .forward(true)
-    .shape(shape()
-        .datatype(Object())
-        .multiple());
+public static Property automaticForenameProperty() {
+    return property("forename")
+            .forward(true)
+            .shape(shape()
+                    .datatype(String()));
+}
+
+public static Property explicitForenameProperty() {
+    return property("forename")
+            .forward(URI.create("https://data.example.net/#forename"))
+            .shape(shape()
+                    .datatype(String()));
+}
 ```
 
-### Forward and Reverse URIs
+### Forward Relationships
 
-Define relationship directions:
+Forward relationships represent outgoing connections from a resource to related objects or values:
 
 ```java
-// Forward relationship: Employee -> Office
-property("office")
-    .forward(true)
-    .shape(shape()
-        .datatype(Object())
-        .required());
+import static com.metreeca.mesh.shapes.Property.property;
 
-// Reverse relationship: Office <- Employee
-property("employees")
-    .reverse(term("office"))
-    .shape(shape()
-        .datatype(Object())
-        .multiple());
+// Employee -> Office relationship
+
+public static Property forwardRelationshipExample() {
+    return property("office")
+            .forward(URI.create("https://data.example.net/#office"));
+}
 ```
 
-#### Simultaneous Forward and Reverse
+### Reverse Relationships
 
-Properties can define bidirectional relationships:
+Reverse relationships represent incoming connections from other resources. These are particularly useful for
+navigating hierarchical or bidirectional relationships:
 
 ```java
-property("colleague")
-    .forward(term("knows"))
-    .reverse(term("knownBy"))
-    .shape(shape()
-        .datatype(Object())
-        .multiple());
+import static com.metreeca.mesh.shapes.Property.property;
+
+// Employee <- reports relationship (reverse of supervisor)
+
+public static Property reverseRelationshipExample() {
+    return property("reports")
+            .reverse(URI.create("https://data.example.net/#supervisor"));
+}
+```
+
+## Property Ownership
+
+The framework provides two distinct ownership models for managing relationships between resources, each optimised
+for different data architecture patterns and lifecycle requirements.
+
+| Aspect               | Embedded Properties                       | Foreign Properties                                  |
+|----------------------|-------------------------------------------|-----------------------------------------------------|
+| **Ownership**        | Owned by parent resource                  | Independent resources                               |
+| **Update behaviour** | Cascade updates and deletions from parent | No modification during parent updates and deletions |
+| **Lifecycle**        | Managed with parent                       | Autonomous lifecycle                                |
+| **Use cases**        | Composition, owned data                   | References, shared resources                        |
+
+- **Use embedded properties** for data that logically belongs to and should be managed with the parent resource
+- **Use foreign properties** for references to independent resources that have their own management lifecycle
+
+> [!IMPORTANT]
+>
+> Embedded and foreign annotations are mutually exclusive to prevent ambiguous ownership semantics
+
+### Embedded Properties
+
+Embedded relationships define properties that represent owned objects updated in cascade during resource operations.
+When a resource is updated or deleted, embedded properties are automatically updated or deleted alongside the parent
+resource, ensuring data consistency for tightly coupled object hierarchies.
+
+For example, an employee's career events are embedded objects that belong exclusively to the employee and should
+be updated together:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+
+public static Property embeddedRelationshipExample() {
+    return property("career")
+            .forward(URI.create("https://data.example.net/#career"))
+            .embedded(true);
+}
+```
+
+### Foreign Properties
+
+Foreign relationships define properties that reference independent resources managed elsewhere in the system.
+When a resource is updated or deleted, foreign properties are not modified, preserving the autonomy of the
+linked resources and preventing unintended side effects across resource boundaries.
+
+For example, an employee's reports relationship is foreign because the reporting employees are independent
+resources with their own lifecycle:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+
+public static Property foreignRelationshipExample() {
+    return property("reports")
+            .reverse(URI.create("https://data.example.net/#supervisor"))
+            .foreign(true);
+}
 ```
 
 # SHACL Constraints
 
-The Metreeca/Mesh framework implements a subset of
-the [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/) W3C recommendation for validating RDF graphs.
-SHACL provides a standardized vocabulary for describing structural and value constraints on linked data, enabling
-precise validation rules that ensure data quality and consistency across distributed systems.
+The Metreeca/Mesh framework implements core [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/)
+constraints for validating RDF graphs.
 
-By leveraging SHACL constraints, the framework ensures that JSON-LD data conforms to defined schemas while maintaining
-semantic interoperability. These constraints operate at both the syntactic level (data types, cardinality) and the
-semantic level (relationships, business rules), providing comprehensive validation capabilities for linked data
-applications.
+SHACL provides a declarative approach to validate RDF data by defining shapes that describe
+expected structures and constraints. Key capabilities include:
 
-## Class Constraints
+- **Structural validation** - Define required and optional properties with cardinality constraints
+- **Datatype validation** - Ensure values conform to specific RDF datatypes like strings, numbers, and dates
+- **Value constraints** - Implement business rules through enumeration, pattern matching, and range validation
+- **Relationship validation** - Validate connections between resources and enforce referential integrity
+- **Custom validation** - Apply domain-specific business logic through custom constraint functions
 
-### Single Class Constraints
+## Datatype Constraints
 
-Define the primary type for a resource:
+Datatype constraints ensure values conform to specific RDF datatypes, enabling type safety and proper
+serialisation across different formats.
 
-```java
-final Shape employeeShape=shape()
-        .clazz(type("Employee"))
-        .property(property("name").forward(true).shape(nameShape));
-```
+### String Datatypes
 
-### Multiple Class Constraints
-
-Assign multiple types to a resource:
+String properties are the most common datatype for textual information:
 
 ```java
-final Shape managerShape=shape()
-        .clazz(type("Manager"), type("Employee"), type("Person"))
-        .property(property("department").forward(true).shape(nameShape));
-```
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
 
-The first type is the explicit class; subsequent types are implicit parent classes.
-
-## Property Constraints
-
-### Value Constraints
-
-Constrain property values to specific sets or patterns:
-
-```java
-// Enumeration constraints
-final Shape statusShape=shape()
-                .datatype(String())
-                .in(value("ACTIVE"), value("INACTIVE"), value("PENDING"))
-                .required();
-
-// Required values (at least one must be present)
-final Shape departmentShape=shape()
-        .datatype(String())
-        .hasValue(value("Engineering"), value("Sales"))
-        .multiple();
-```
-
-### Numeric Range Constraints
-
-Define bounds for numeric values:
-
-```java
-// Inclusive and exclusive bounds
-final Shape salaryShape=shape()
-                .datatype(Decimal())
-                .minInclusive(value(new BigDecimal("0")))
-                .maxExclusive(value(new BigDecimal("1000000")))
-                .optional();
-
-// Age constraints
-final Shape ageShape=shape()
-        .datatype(Integral())
-        .minInclusive(value(18))
-        .maxInclusive(value(65))
-        .required();
-```
-
-### String Constraints
-
-Validate string format and length:
-
-```java
-// Pattern and length validation
-final Shape phoneShape=shape()
-                .datatype(String())
-                .pattern("^\\+?[1-9]\\d{1,14}$")
-                .minLength(10)
-                .maxLength(15)
-                .optional();
-
-// Email format validation
-final Shape emailShape=shape()
-        .datatype(String())
-        .pattern("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
-        .required();
-```
-
-### Cardinality Constraints
-
-Control the number of property values:
-
-```java
-// Explicit count constraints
-final Shape skillsShape=shape()
-                .datatype(String())
-                .minCount(1)
-                .maxCount(10);
-
-// Convenience methods for common cardinalities
-shape().
-
-required()    // exactly 1 (minCount=1, maxCount=1)
-
-shape().
-
-optional()    // 0 or 1 (minCount=0, maxCount=1)
-
-shape().
-
-repeatable()  // at least 1 (minCount=1, no maxCount)
-
-shape().
-
-multiple()    // 0 or more (no minCount, no maxCount)
-
-shape().
-
-exactly(3)    // exactly 3 (minCount=3, maxCount=3)
-```
-
-### Language Constraints
-
-Validate multilingual text properties:
-
-```java
-// Language tag constraints
-final Shape descriptionShape=shape()
-                .datatype(Text())
-                .languageIn("en", "fr", "de")
-                .uniqueLang(true)  // Each language at most once
-                .multiple();
-```
-
-### Node Shape Constraints
-
-Reference other shapes for complex validation:
-
-```java
-// Reference to another shape
-final Shape officeRefShape=shape()
-                .datatype(Object())
-                .nodeShape(() -> officeShape())
-                .required();
-
-// Recursive references
-final Shape employeeShape=shape()
-        .property(property("supervisor")
-                .forward(true)
-                .shape(() -> employeeShape().optional()));
-```
-
-## Custom Class Constraints
-
-Implement domain-specific validation logic:
-
-```java
-final Function<Value, Value> employeeValidator=value -> {
-    final Optional<Value> birthdate=value.get("birthdate");
-    final Optional<Value> hireDate=value.get("hireDate");
-
-    if ( birthdate.isPresent() && hireDate.isPresent() ) {
-        final LocalDate birth=birthdate.get().as(LocalDate.class).orElse(null);
-        final LocalDate hire=hireDate.get().as(LocalDate.class).orElse(null);
-
-        if ( birth != null && hire != null && birth.plusYears(16).isAfter(hire) ) {
-            return error("Employee must be at least 16 years old at hire date");
-        }
-    }
-
-    return value;
-};
-
-final Shape employeeShape=shape()
-        .clazz(type("Employee"))
-        .constraints(employeeValidator)
-        .property(property("birthdate").forward(true).shape(
-                shape().datatype(LocalDate()).required()))
-        .property(property("hireDate").forward(true).shape(
-                shape().datatype(LocalDate()).required()));
-```
-
-## Sample Validation
-
-Validate data against defined shapes:
-
-```java
-final Shape shape=employeeShape();
-final Value employee=object(
-        entry("id", value("emp123")),
-        entry("type", value("Employee")),
-        entry("code", value("12345")),
-        entry("forename", value("John")),
-        entry("surname", value("Doe")),
-        entry("birthdate", value(LocalDate.of(1985, 5, 15))),
-        entry("email", value("john.doe@company.com")),
-        entry("seniority", value(3))
-);
-
-final Value result=shape.validate(employee);
-if(result.
-
-error().
-
-isPresent()){
-        System.out.
-
-println("Validation failed: "+result.error().
-
-get());
-        }else{
-        System.out.
-
-println("Employee data is valid");
+public static Property employeeSurnameProperty() {
+    return property("surname")
+            .forward(URI.create("https://data.example.net/#surname"))
+            .shape(shape()
+                    .datatype(String()));
 }
 ```
 
-### Validation Error Examples
+### Numeric Datatypes
+
+Numeric properties enable mathematical operations and range validation. The Integral datatype represents
+whole numbers like counts, rankings, and identifiers:
 
 ```java
-// Missing required field
-final Value invalidEmployee=object(
-                entry("id", value("emp124")),
-                entry("forename", value("Jane"))
-                // Missing required surname, email, etc.
-        );
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.Integral;
 
-// Invalid data type
-final Value typeErrorEmployee=object(
-        entry("id", value("emp125")),
-        entry("seniority", value("high"))  // Should be integer 1-5
-);
-
-// Constraint violation
-final Value constraintErrorEmployee=object(
-        entry("id", value("emp126")),
-        entry("email", value("invalid-email"))  // Fails pattern constraint
-);
+public static Property employeeSeniorityProperty() {
+    return property("seniority")
+            .forward(URI.create("https://data.example.net/#seniority"))
+            .shape(shape()
+                    .datatype(Integral()));
+}
 ```
 
-# Employee and Office Model Examples
+### Date and Time Datatypes
 
-Combining all concepts into comprehensive data models:
+Temporal properties capture time-based information using standard RDF datatypes. LocalDate represents
+calendar dates without time zones:
 
 ```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.LocalDate;
+
+// Employee birthdate
+public static Property employeeBirthdateProperty() {
+    return property("birthdate")
+            .forward(URI.create("https://data.example.net/#birthdate"))
+            .shape(shape()
+                    .datatype(LocalDate()));
+}
+```
+
+## Value Range Constraints
+
+Range constraints define acceptable value boundaries for numeric and ordered datatypes. These constraints
+implement business rules like "seniority must be between 1 and 5" or "sales figures cannot be negative".
+
+### Minimum Inclusive Bounds
+
+Minimum inclusive bounds ensure values are greater than or equal to a specified limit:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.Integral;
+import static com.metreeca.mesh.Value.value;
+
+// Employee seniority with minimum value
+public static Property seniorityWithMinimumExample() {
+    return property("seniority")
+            .forward(URI.create("https://data.example.net/#seniority"))
+            .shape(shape()
+                    .datatype(Integral())
+                    .minInclusive(value(1)));
+}
+```
+
+### Maximum Inclusive Bounds
+
+Maximum inclusive bounds ensure values are less than or equal to a specified limit. Combining minimum and
+maximum bounds creates valid ranges:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.Integral;
+import static com.metreeca.mesh.Value.value;
+
+// Employee seniority with both bounds (1-5 scale)
+public static Property seniorityWithBoundsExample() {
+    return property("seniority")
+            .forward(URI.create("https://data.example.net/#seniority"))
+            .shape(shape()
+                    .datatype(Integral())
+                    .minInclusive(value(1))
+                    .maxInclusive(value(5)));
+}
+```
+
+## Text Constraints
+
+Text constraints validate string properties beyond basic datatype checking. These constraints implement
+business rules about data quality and user interface requirements.
+
+### Length Constraints
+
+Length constraints ensure text values fall within acceptable size limits, preventing both empty values
+and excessively long text:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+
+// Employee label with length constraints (5-80 characters)
+public static Property labelProperty() {
+    return property("label")
+            .forward(URI.create("http://www.w3.org/2000/01/rdf-schema#label"))
+            .shape(shape()
+                    .datatype(String())
+                    .minLength(5)
+                    .maxLength(80));
+}
+```
+
+### Pattern Matching
+
+Regular expression patterns validate text format according to specific rules. This enables enforcement
+of business formats like codes, email addresses, and structured identifiers:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+
+public static Property numericCodeProperty() {
+    return property("code")
+            .forward(URI.create("https://data.example.net/#code"))
+            .shape(shape()
+                    .datatype(String())
+                    .pattern("^\\d+$"));
+}
+
+public static Property emailValidationProperty() {
+    return property("email")
+            .forward(URI.create("https://data.example.net/#email"))
+            .shape(shape()
+                    .datatype(String())
+                    .pattern("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"));
+}
+```
+
+## Value Enumeration Constraints
+
+Enumeration constraints restrict values to predefined sets, implementing controlled vocabularies and
+closed lists. These constraints ensure consistency and enable validation against known options.
+
+### Closed Value Sets
+
+The `in()` constraint limits values to a specific closed set of allowed options, implementing controlled vocabularies:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+import static com.metreeca.mesh.Value.value;
+
+public static Property statusEnumerationExample() {
+    return property("status")
+            .forward(URI.create("https://data.example.net/#status"))
+            .shape(shape()
+                    .datatype(String())
+                    .in(value("ACTIVE"), value("INACTIVE"), value("PENDING")));
+}
+```
+
+### Required Values
+
+The `hasValue()` constraint ensures specific values are present in multi-valued properties. This implements
+rules like "every employee must belong to at least one of these departments":
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+import static com.metreeca.mesh.Value.value;
+
+public static Property departmentRequirementExample() {
+    return property("department")
+            .forward(URI.create("https://data.example.net/#department"))
+            .shape(shape()
+                    .datatype(String())
+                    .hasValue(value("Engineering"), value("Sales")));
+}
+```
+
+## Language Constraints
+
+Language constraints enable multilingual data support by controlling language tags on literal values.
+These constraints are essential for international applications and semantic web interoperability.
+
+### Language Tag Specification
+
+The `languageIn()` constraint restricts text values to specific languages, enabling controlled multilingual content:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.Text;
+
+public static Property multilingualDescriptionExample() {
+    return property("description")
+            .forward(URI.create("https://data.example.net/#description"))
+            .shape(shape()
+                    .datatype(Text())
+                    .languageIn("en", "fr", "de"));
+}
+```
+
+### Unique Language Requirements
+
+The `uniqueLang()` constraint ensures each language appears at most once in multi-valued text properties,
+preventing duplicate translations:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.Text;
+
+public static Property uniqueLanguageDescriptionExample() {
+    return property("description")
+            .forward(URI.create("https://data.example.net/#description"))
+            .shape(shape()
+                    .datatype(Text())
+                    .languageIn("en", "fr", "de")
+                    .uniqueLang(true));
+}
+```
+
+## Cardinality Constraints
+
+Cardinality constraints control how many values a property can have. These constraints implement business
+rules about required information and relationship multiplicity.
+
+### Explicit Count Constraints
+
+Explicit cardinality constraints define precise bounds on value counts, implementing rules like
+"employees must have 1-10 skills":
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.Value.String;
+
+public static Property skillsCardinalityExample() {
+    return property("skills")
+            .forward(URI.create("https://data.example.net/#skills"))
+            .shape(shape()
+                    .datatype(String())
+                    .minCount(1)
+                    .maxCount(10));
+}
+```
+
+### Cardinality Shorthands
+
+Common cardinality patterns have convenient shorthand methods that make code more readable and express
+intent clearly:
+
+```java
+import static com.metreeca.mesh.shapes.Shape.shape;
+
+public static void cardinalityShorthandsExamples() {
+
+    shape().required();    // minCount=1, maxCount=1
+    shape().optional();    // minCount=0, maxCount=1
+    shape().multiple();    // no minCount, no maxCount
+    shape().repeatable();  // minCount=1, no maxCount
+    shape().exactly(3);    // minCount=3, maxCount=3
+
+}
+```
+
+# A Complete Model
+
+Now we'll assemble all the concepts covered in this tutorial into a complete Employee shape definition.
+This demonstrates how individual constraints combine to create comprehensive data models.
+
+The complete Employee shape combines identity, class, and property constraints into a cohesive definition
+that validates employee data according to business rules:
+
+```java
+import static com.metreeca.mesh.shapes.Property.property;
+import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.mesh.shapes.Type.type;
+import static com.metreeca.mesh.Value.*;
+
 public static Shape employeeShape() {
     return shape()
+
             .id("id")
             .type("type")
-            .clazz(type("Employee"), type("Resource"))
 
-            // Basic information
+            .clazz(type("Employee", URI.create("https://data.example.net/#Employee")),
+                    type("Resource", URI.create("https://data.example.net/#Resource")))
+
             .property(property("code")
-                    .forward(true)
+                    .forward(URI.create("https://data.example.net/#code"))
                     .shape(shape()
                             .datatype(String())
                             .pattern("^\\d+$")
                             .required()))
 
             .property(property("forename")
-                    .forward(true)
+                    .forward(URI.create("https://data.example.net/#forename"))
                     .shape(shape()
                             .datatype(String())
-                            .minLength(1)
-                            .maxLength(50)
                             .required()))
 
             .property(property("surname")
-                    .forward(true)
-                    .shape(shape()
-                            .datatype(String())
-                            .minLength(1)
-                            .maxLength(50)
-                            .required()))
-
-            // Organizational relationships
-            .property(property("office")
-                    .forward(true)
-                    .shape(() -> officeShape().required()))
-
-            .property(property("supervisor")
-                    .forward(true)
-                    .shape(() -> employeeShape().optional()))
-
-            .property(property("reports")
-                    .foreign(true)
-                    .reverse(term("supervisor"))
-                    .shape(() -> employeeShape().multiple()));
-}
-
-public static Shape officeShape() {
-    return shape()
-            .id("id")
-            .type("type")
-            .clazz(type("Office"), type("Resource"))
-
-            .property(property("code")
-                    .forward(true)
-                    .shape(shape()
-                            .datatype(String())
-                            .pattern("^\\d+$")
-                            .required()))
-
-            .property(property("city")
-                    .forward(true)
+                    .forward(URI.create("https://data.example.net/#surname"))
                     .shape(shape()
                             .datatype(String())
                             .required()))
 
-            .property(property("employees")
-                    .foreign(true)
-                    .reverse(term("office"))
-                    .shape(() -> employeeShape().multiple()));
+            .property(property("email")
+                    .forward(URI.create("https://data.example.net/#email"))
+                    .shape(shape()
+                            .datatype(String())
+                            .pattern("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+                            .required()))
+
+            .property(property("seniority")
+                    .forward(URI.create("https://data.example.net/#seniority"))
+                    .shape(shape()
+                            .datatype(Integral())
+                            .minInclusive(value(1))
+                            .maxInclusive(value(5))
+                            .required()))
+
+            .property(property("birthdate")
+                    .forward(URI.create("https://data.example.net/#birthdate"))
+                    .shape(shape()
+                            .datatype(LocalDate())
+                            .required()));
 }
 ```
 
-# Shape Composition and Reusability
+# Validating Values
 
-Shapes support composition patterns for code reuse:
+Validation examples demonstrate how shapes enforce data quality rules in practice. Understanding both
+valid and invalid examples helps developers build robust data processing applications.
 
-## Shape Extension
+### Valid Data Examples
+
+Valid data satisfies all shape constraints, enabling successful processing and storage:
 
 ```java
-// Base person shape
-final Shape personShape=shape()
-                .property(property("forename").forward(true).shape(nameShape))
-                .property(property("surname").forward(true).shape(nameShape))
-                .property(property("birthdate").forward(true).shape(birthdateShape));
+import static com.metreeca.mesh.Value.*;
 
-// Employee extends person
-final Shape employeeShape=personShape
-        .extend(shape()
-                .clazz(type("Employee"))
-                .property(property("code").forward(true).shape(codeShape))
-                .property(property("title").forward(true).shape(titleShape)));
-```
+public static void validDataExample() {
+    final Value validEmployee=object(
+            entry("id", value("emp123")),
+            entry("type", value("Employee")),
+            entry("code", value("12345")),
+            entry("forename", value("John")),
+            entry("surname", value("Doe")),
+            entry("email", value("john.doe@company.com")),
+            entry("seniority", value(3)),
+            entry("birthdate", value(LocalDate.of(1985, 5, 15)))
+    );
 
-## Extension vs Merge
+    final Value result=employeeShape().validate(validEmployee);
 
-- `extend()` - Properties are merged, but explicit classes are not inherited
-- `merge()` - Everything is merged including explicit classes
-
-# Practical Validation Usage
-
-Validate JSON-LD data using defined shapes:
-
-```java
-final Shape shape=employeeShape();
-final Value employee=object(
-        entry("id", value("emp123")),
-        entry("type", value("Employee")),
-        entry("code", value("12345")),
-        entry("forename", value("John")),
-        entry("surname", value("Doe")),
-        entry("email", value("john.doe@company.com"))
-);
-
-final Value result=shape.validate(employee);
-if(result.
-
-error().
-
-isPresent()){
-        System.out.
-
-println("Validation failed: "+result.error().
-
-get());
-        }else{
-        System.out.
-
-println("Employee data is valid");
+    // result will be empty (that is a JSON null value) for valid data indicating successful validation
 }
 ```
 
-This tutorial demonstrated how to define comprehensive JSON-LD data models using the Mesh shapes framework. The
-combination of SHACL constraints, semantic relationships, and validation capabilities provides a powerful foundation for
-building robust linked data applications.
+### Common Validation Errors
+
+Validation failures occur when data violates shape constraints. Understanding common error patterns
+helps developers debug data quality issues:
+
+```java
+import static com.metreeca.mesh.Value.*;
+
+public static void validationErrorExamples() {
+    // Missing required field
+    final Value missingField=object(
+            entry("id", value("emp124")),
+            entry("forename", value("Jane"))
+            // Missing required surname, email, etc.
+    );
+
+    // Invalid pattern
+    final Value invalidEmail=object(
+            entry("id", value("emp125")),
+            entry("email", value("invalid-email"))  // Fails pattern constraint
+    );
+
+    // Out of range value
+    final Value invalidSeniority=object(
+            entry("id", value("emp126")),
+            entry("seniority", value(10))  // Outside 1-5 range
+    );
+}
+```
+
+# Beyond This Tutorial
+
+This tutorial covered the core concepts needed for most data modelling scenarios. For advanced use cases
+and validation requirements, refer to the [shapes reference](../handbooks/shapes.md):
+
+- **Virtual shapes** - Shapes generated on the fly during retrieval operations even when not present in storage
+- **Custom constraints** - Domain-specific validation functions for complex business rules
+- **Shape composition** - Extending and merging shapes for reusability and inheritance
+- **Hidden properties** - Properties excluded from default serialisation but stored internally
+
+The reference provides complete coverage of all shape constructs and their usage patterns.
