@@ -97,6 +97,12 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.metreeca</groupId>
+                <artifactId>mesh-toys</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
 
             <!-- Codecs -->
 
