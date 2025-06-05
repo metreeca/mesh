@@ -39,6 +39,16 @@ import static com.metreeca.shim.Collections.list;
  */
 public interface Store extends AutoCloseable {
 
+    /**
+     * Retrieves data matching the specified model and locales.
+     *
+     * @param model   the model specifying what to retrieve
+     * @param locales the preferred locales for localized content
+     *
+     * @return the retrieved data
+     *
+     * @throws NullPointerException if {@code model} or {@code locales} is {@code null}
+     */
     default Value retrieve(final Valuable model, final Locale... locales) {
 
         if ( model == null ) {
@@ -53,52 +63,73 @@ public interface Store extends AutoCloseable {
     }
 
     /**
+     * Retrieves data matching the specified model and locales.
+     *
      * @param model   a resource value, an array of resource values or a {@linkplain Query query} value
-     * @param locales
+     * @param locales the preferred locales for localized content
      *
-     * @return
+     * @return the retrieved data
      *
-     * @throws NullPointerException     if {@code value} is {@code null}
-     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not
-     *                                  {@linkplain Value#validate() valid}
+     * @throws NullPointerException     if {@code model} or {@code locales} is {@code null}
+     * @throws IllegalArgumentException if {@code model} is not a supported value or if it is not valid
+     * @throws StoreException           if the store operation fails
      */
     Value retrieve(Valuable model, List<Locale> locales) throws StoreException;
 
 
     /**
-     * Creates a resource.
+     * Creates new resources in the store.
      *
      * <p>Embedded values are recursively included in the state of the new resource; other nested values are included
      * only by reference.</p>
      *
-     * <pre>
-     * !!! define embedded
-     * !!! define by reference
-     * </pre>
-     *
      * @param value a resource value or an array of resource values
      *
-     * @return
+     * @return the number of created resources
      *
      * @throws NullPointerException     if {@code value} is {@code null}
-     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not
-     *                                  {@linkplain Value#validate() valid}
+     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not valid
+     * @throws StoreException           if the store operation fails
      */
     int create(Valuable value) throws StoreException;
 
+    /**
+     * Updates existing resources in the store.
+     *
+     * @param value a resource value or an array of resource values
+     *
+     * @return the number of updated resources
+     *
+     * @throws NullPointerException     if {@code value} is {@code null}
+     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not valid
+     * @throws StoreException           if the store operation fails
+     */
     int update(Valuable value) throws StoreException;
 
+    /**
+     * Partially updates existing resources in the store.
+     *
+     * @param value a resource value or an array of resource values with partial data
+     *
+     * @return the number of mutated resources
+     *
+     * @throws NullPointerException     if {@code value} is {@code null}
+     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not valid
+     * @throws StoreException           if the store operation fails
+     */
     int mutate(Valuable value) throws StoreException;
 
     /**
+     * Deletes resources from the store.
+     *
      * @param value a resource value, an array of resource values or a {@linkplain Query query} value returning an array
      *              of resource values
      *
-     * @return
+     * @return the number of deleted resources
      *
      * @throws NullPointerException     if {@code value} is {@code null}
-     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not
-     *                                  {@linkplain Value#validate() valid}
+     * @throws IllegalArgumentException if {@code value} is not a supported value or if it is not valid
+     * @throws StoreException           if the store operation fails
      */
     int delete(Valuable value) throws StoreException;
 
@@ -168,6 +199,13 @@ public interface Store extends AutoCloseable {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Executes a task within the store's transaction context.
+     *
+     * @param task the task to execute
+     *
+     * @throws NullPointerException if {@code task} is {@code null}
+     */
     default void execute(final Consumer<Store> task) {
 
         if ( task == null ) {
@@ -184,6 +222,16 @@ public interface Store extends AutoCloseable {
 
     }
 
+    /**
+     * Executes a function within the store's transaction context.
+     *
+     * @param task the function to execute
+     * @param <V>  the return type
+     *
+     * @return the result of the function
+     *
+     * @throws NullPointerException if {@code task} is {@code null}
+     */
     <V> V execute(Function<Store, V> task);
 
 

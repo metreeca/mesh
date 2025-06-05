@@ -34,7 +34,13 @@ import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Value expression.
+ * Value expression for accessing nested properties and applying transformations.
+ *
+ * <p>Represents a computed expression that can traverse property paths and apply transform operations to values.
+ * Expressions consist of an optional pipeline of transforms followed by a property path.</p>
+ *
+ * @param pipe the sequence of transforms to apply to the resolved value
+ * @param path the property path to navigate through the data structure
  */
 public final record Expression(
 
@@ -56,10 +62,25 @@ public final record Expression(
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Creates an empty expression.
+     *
+     * @return an empty expression with no transforms or path
+     */
     public static Expression expression() {
         return EMPTY;
     }
 
+    /**
+     * Parses a string expression into an Expression object.
+     *
+     * @param expression the string representation of the expression to parse
+     *
+     * @return the parsed expression
+     *
+     * @throws NullPointerException     if {@code expression} is {@code null}
+     * @throws IllegalArgumentException if the expression string is malformed
+     */
     public static Expression expression(final String expression) {
 
         if ( expression == null ) {
@@ -126,19 +147,43 @@ public final record Expression(
     }
 
 
+    /**
+     * Checks if this expression is empty.
+     *
+     * @return {@code true} if this expression has no transforms and no path; {@code false} otherwise
+     */
     public boolean isEmpty() {
         return pipe.isEmpty() && path.isEmpty();
     }
 
+    /**
+     * Checks if this expression includes computed transformations.
+     *
+     * @return {@code true} if this expression has transforms; {@code false} otherwise
+     */
     public boolean isComputed() {
         return !pipe.isEmpty();
     }
 
+    /**
+     * Checks if this expression includes aggregate transformations.
+     *
+     * @return {@code true} if this expression has aggregate transforms; {@code false} otherwise
+     */
     public boolean isAggregate() {
         return pipe.stream().anyMatch(Transform::isAggregate);
     }
 
 
+    /**
+     * Creates a new expression with the specified transforms.
+     *
+     * @param transforms the transforms to include in the pipeline
+     *
+     * @return a new expression with the specified transforms
+     *
+     * @throws NullPointerException if {@code transforms} is {@code null} or contains {@code null} elements
+     */
     public Expression pipe(final Transform... transforms) {
 
         if ( transforms == null || Arrays.stream(transforms).anyMatch(Objects::isNull) ) {
@@ -148,6 +193,15 @@ public final record Expression(
         return pipe(list(transforms));
     }
 
+    /**
+     * Creates a new expression with the specified transforms.
+     *
+     * @param transforms the list of transforms to include in the pipeline
+     *
+     * @return a new expression with the specified transforms
+     *
+     * @throws NullPointerException if {@code transforms} is {@code null} or contains {@code null} elements
+     */
     public Expression pipe(final List<Transform> transforms) {
 
         if ( transforms == null || transforms.stream().anyMatch(Objects::isNull) ) {
@@ -158,6 +212,16 @@ public final record Expression(
     }
 
 
+    /**
+     * Creates a new expression with the specified property path.
+     *
+     * @param steps the property names that form the path
+     *
+     * @return a new expression with the specified path
+     *
+     * @throws NullPointerException     if {@code steps} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if any step uses a reserved property name
+     */
     public Expression path(final String... steps) {
 
         if ( steps == null || Arrays.stream(steps).anyMatch(Objects::isNull) ) {
@@ -167,6 +231,16 @@ public final record Expression(
         return path(list(steps));
     }
 
+    /**
+     * Creates a new expression with the specified property path.
+     *
+     * @param steps the list of property names that form the path
+     *
+     * @return a new expression with the specified path
+     *
+     * @throws NullPointerException     if {@code steps} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if any step uses a reserved property name
+     */
     public Expression path(final List<String> steps) {
 
         if ( steps == null || steps.stream().anyMatch(Objects::isNull) ) {
@@ -181,6 +255,16 @@ public final record Expression(
     }
 
 
+    /**
+     * Applies this expression to a shape to determine the resulting shape.
+     *
+     * @param shape the input shape to apply the expression to
+     *
+     * @return the shape that results from applying this expression
+     *
+     * @throws NullPointerException   if {@code shape} is {@code null}
+     * @throws NoSuchElementException if the expression references unknown properties
+     */
     public Shape apply(final Shape shape) throws NoSuchElementException {
 
         if ( shape == null ) {

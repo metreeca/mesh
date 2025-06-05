@@ -16,12 +16,34 @@
 
 package com.metreeca.mesh.mint.ast;
 
+/**
+ * Property URI mapping annotation for frame methods.
+ *
+ * <p>Internal annotation used by the code generation process to capture
+ * the resolved URI mappings for frame interface properties. Associates methods with their corresponding RDF property
+ * URIs for both forward and reverse relationships.</p>
+ */
 public @interface Property {
 
-    String implied(); // absolute implied forward URI
+    /**
+     * Retrieves the absolute implied forward URI.
+     *
+     * @return the absolute URI for the forward property mapping
+     */
+    String implied();
 
-    String forward() default ""; // absolute forward URI; empty if undefined
+    /**
+     * Retrieves the absolute forward URI.
+     *
+     * @return the absolute forward URI; empty string if undefined
+     */
+    String forward() default "";
 
-    String reverse() default ""; // absolute reverse URI; empty if undefined
+    /**
+     * Retrieves the absolute reverse URI.
+     *
+     * @return the absolute reverse URI; empty string if undefined
+     */
+    String reverse() default "";
 
 }

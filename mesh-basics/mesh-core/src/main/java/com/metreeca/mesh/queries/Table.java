@@ -25,7 +25,12 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Tabular results.
+ * Tabular query results.
+ *
+ * <p>Represents the results of a tabular query as a collection of tuples. Each tuple contains
+ * a set of named values corresponding to the columns defined in the query specification.</p>
+ *
+ * @param rows the list of result tuples
  */
 public final record Table(
 

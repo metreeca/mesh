@@ -23,7 +23,11 @@ import static com.metreeca.mesh.Value.*;
 import static com.metreeca.mesh.shapes.Shape.shape;
 
 /**
- * Value transform.
+ * Value transformation operations for computed expressions.
+ *
+ * <p>Defines transformation operations that can be applied to values in expressions.
+ * Transforms are classified as either aggregate (operate on collections) or scalar
+ * (operate on individual values).</p>
  */
 public enum Transform {
 
@@ -92,11 +96,24 @@ public enum Transform {
     }
 
 
+    /**
+     * Checks if this transform is an aggregate operation.
+     *
+     * @return {@code true} if this transform operates on collections; {@code false} if it operates on individual
+     *         values
+     */
     public boolean isAggregate() {
         return aggregate;
     }
 
 
+    /**
+     * Applies this transform to a shape to determine the resulting shape.
+     *
+     * @param shape the input shape to transform
+     *
+     * @return the shape that results from applying this transformation
+     */
     public abstract Shape apply(final Shape shape);
 
 }

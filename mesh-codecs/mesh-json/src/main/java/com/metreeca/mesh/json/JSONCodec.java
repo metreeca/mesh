@@ -33,7 +33,19 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
 /**
- * JSON codec.
+ * JSON-LD codec for value serialization and deserialization.
+ *
+ * <p>Provides bidirectional conversion between Java {@link Value} objects
+ * and JSON-LD representations while preserving semantic meaning and
+ * structural integrity. Supports multiple encoding formats including
+ * JSON, URL-encoded JSON, and Base64-encoded JSON.</p>
+ *
+ * <p>The codec handles JSON-LD 1.1 features including context processing,
+ * frame-based data shaping, and semantic type preservation. Configuration
+ * options include pruning empty values, base URI resolution, and output
+ * formatting.</p>
+ *
+ * @see <a href="https://www.w3.org/TR/json-ld11/">JSON-LD 1.1 Specification</a>
  */
 public final class JSONCodec implements Codec {
 
@@ -45,6 +57,11 @@ public final class JSONCodec implements Codec {
     private final int indent;
 
 
+    /**
+     * Creates a JSON codec with default configuration.
+     *
+     * @return a new JSON codec with pruning disabled, default base URI, and no indentation
+     */
     public static JSONCodec json() {
         return new JSONCodec(
                 false,
@@ -56,6 +73,16 @@ public final class JSONCodec implements Codec {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Creates a JSON codec with the specified configuration.
+     *
+     * @param prune  if {@code true}, ignore null values, empty arrays and empty objects during encoding
+     * @param base   the base URI for resolving relative URIs in JSON-LD content
+     * @param indent the number of spaces for indentation; 0 for compact output
+     *
+     * @throws NullPointerException     if {@code base} is {@code null}
+     * @throws IllegalArgumentException if {@code base} is not absolute or {@code indent} is negative
+     */
     public JSONCodec(
             final boolean prune,
             final URI base,
@@ -80,6 +107,11 @@ public final class JSONCodec implements Codec {
     }
 
 
+    /**
+     * Retrieves the current prune setting.
+     *
+     * @return {@code true} if null values, empty arrays and empty objects are ignored during encoding
+     */
     public boolean prune() { return prune; }
 
     /**
@@ -98,8 +130,22 @@ public final class JSONCodec implements Codec {
     }
 
 
+    /**
+     * Retrieves the current base URI.
+     *
+     * @return the base URI used for resolving relative URIs in JSON-LD content
+     */
     public URI base() { return base; }
 
+    /**
+     * Configures the base URI for relative URI resolution.
+     *
+     * @param base the new base URI to resolve against the current base
+     *
+     * @return a new JSON codec with the updated base URI
+     *
+     * @throws NullPointerException if {@code base} is {@code null}
+     */
     public JSONCodec base(final URI base) {
 
         if ( base == null ) {
@@ -114,12 +160,33 @@ public final class JSONCodec implements Codec {
     }
 
 
+    /**
+     * Retrieves the current indentation setting.
+     *
+     * @return the number of spaces used for indentation; 0 for compact output
+     */
     public int indent() { return indent; }
 
+    /**
+     * Configures indentation for pretty-printing.
+     *
+     * @param indent if {@code true}, use 4-space indentation; if {@code false}, use compact output
+     *
+     * @return a new JSON codec with the updated indentation setting
+     */
     public JSONCodec indent(final boolean indent) {
         return indent(indent ? 4 : 0);
     }
 
+    /**
+     * Configures indentation for pretty-printing.
+     *
+     * @param indent the number of spaces for indentation; 0 for compact output
+     *
+     * @return a new JSON codec with the updated indentation setting
+     *
+     * @throws IllegalArgumentException if {@code indent} is negative
+     */
     public JSONCodec indent(final int indent) {
 
         if ( indent < 0 ) {

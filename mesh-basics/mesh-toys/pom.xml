@@ -30,7 +30,7 @@
     <artifactId>mesh-toys</artifactId>
 
     <name>Metreeca/Mesh Sample Dataset</name>
-    <description>{TBC}</description>
+    <description>Sample dataset and models for testing and examples.</description>
 
     <dependencies>
 

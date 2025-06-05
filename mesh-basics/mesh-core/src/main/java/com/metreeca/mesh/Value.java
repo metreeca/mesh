@@ -53,7 +53,10 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.*;
 
 /**
- * Extended JSON value.
+ * Immutable JSON-LD value representation.
+ *
+ * <p>Represents JSON-LD values including literals, objects, arrays, and URIs with
+ * type-safe access methods and semantic web compatibility.</p>
  */
 @SuppressWarnings("MethodNamesDifferingOnlyByCase")
 public abstract class Value implements Valuable {

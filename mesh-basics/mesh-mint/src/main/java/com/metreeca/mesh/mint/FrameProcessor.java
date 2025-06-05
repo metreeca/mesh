@@ -38,6 +38,20 @@ import static javax.lang.model.SourceVersion.RELEASE_21;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;
 
+/**
+ * Annotation processor for generating frame implementation classes.
+ *
+ * <p>Processes {@code @Frame} annotated interfaces at compile time and generates
+ * corresponding implementation classes that handle JSON-LD serialization, SHACL validation, and semantic data binding.
+ * The processor integrates with the Java compiler toolchain using the annotation processing API.</p>
+ *
+ * <p>The generated classes eliminate runtime reflection overhead while maintaining
+ * full compatibility with semantic web standards and providing type-safe access to frame properties.</p>
+ *
+ * @see com.metreeca.mesh.meta.jsonld.Frame Frame annotation for marking interfaces
+ * @see com.metreeca.mesh.mint.tools.Generator Code generator for frame implementations
+ * @see com.metreeca.mesh.mint.tools.Introspector Frame introspection utilities
+ */
 @SupportedAnnotationTypes("com.metreeca.mesh.meta.jsonld.Frame")
 @SupportedSourceVersion(RELEASE_21)
 @AutoService(Processor.class)

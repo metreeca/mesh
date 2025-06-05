@@ -22,19 +22,47 @@ import com.metreeca.mesh.meta.shacl.Required;
 
 import java.time.LocalDate;
 
+/**
+ * Career events and milestones within employee records.
+ *
+ * <p>Represents significant career moments including hiring, promotions,
+ * terminations, and retirements. Events are embedded within employee records to track career progression and
+ * organizational changes over time.</p>
+ */
 @Frame
 @Class
 public interface Event extends Toys {
 
+    /**
+     * Types of career actions and organizational changes.
+     */
     enum Action { HIRED, PROMOTED, TERMINATED, RETIRED }
+
+
+    @Override
+    default String label() {
+        return action() != null && date() != null
+                ? "%s %s".formatted(date(), action())
+                : null;
+    }
 
 
     @Required
     Action action();
 
+    /**
+     * Retrieves when this event occurred.
+     *
+     * @return the event date
+     */
     @Required
     LocalDate date();
 
+    /**
+     * Retrieves additional notes about this event.
+     *
+     * @return the event notes, or {@code null} if none
+     */
     String notes();
 
 }

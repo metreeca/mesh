@@ -34,6 +34,13 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Query decomposition utility for hierarchical property access.
+ *
+ * <p>Organizes complex queries into a hierarchical structure based on property
+ * paths, grouping criteria and sub-flakes for nested property access. Used internally for efficient
+ * query generation and optimization.</p>
+ */
 final class Flake {
 
     static Flake flake(final Shape shape, final Map<Expression, Criterion> expressions) {

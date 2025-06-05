@@ -69,6 +69,27 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 import static java.util.stream.Collectors.groupingBy;
 
+/**
+ * Abstract base class for comprehensive {@linkplain Store} testing.
+ *
+ * <p>Provides a complete testing framework for validating store implementations
+ * with realistic Office and Employee test data. Concrete store implementations should extend this class and provide a
+ * store instance to automatically run the full validation suite.</p>
+ *
+ * <p>The framework includes nested test classes organized by functionality:</p>
+ *
+ * <ul>
+ *
+ *     <li>Retrieve operations with basic object navigation</li>
+ *     <li>Value-based queries with filtering, sorting, and pagination</li>
+ *     <li>Tuple-based analytics with aggregations and groupings</li>
+ *     <li>CRUD operations with validation and error handling</li>
+ *
+ * </ul>
+ *
+ * <p>Test data includes realistic relationships between offices and employees
+ * with comprehensive coverage of datatypes and constraints.</p>
+ */
 public abstract class StoreTest {
 
     public static final URI BASE=uri("https://data.example.net/");
@@ -225,6 +246,20 @@ public abstract class StoreTest {
     }
 
 
+    /**
+     * Populates a store with comprehensive test data.
+     *
+     * <p>Loads realistic Office and Employee data models with relationships
+     * from the {@linkplain com.metreeca.mesh.toys.Resources} dataset. The test data includes 7 offices and 23 employees
+     * with proper relationships and datatypes.</p>
+     *
+     * @param <T>   the store type
+     * @param store the store to populate with test data
+     *
+     * @return the populated store instance
+     *
+     * @throws NullPointerException if {@code store} is {@code null}
+     */
     public static <T extends Store> T populate(final T store) {
 
         if ( store == null ) {
@@ -374,6 +409,15 @@ public abstract class StoreTest {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Retrieves the store instance to be tested.
+     *
+     * <p>Concrete test classes must implement this method to provide
+     * the specific store implementation for testing. The returned store should be properly configured and ready for
+     * testing operations.</p>
+     *
+     * @return the store instance under test
+     */
     protected abstract Store store();
 
 

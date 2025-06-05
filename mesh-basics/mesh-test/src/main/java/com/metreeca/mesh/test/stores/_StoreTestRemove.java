@@ -35,8 +35,20 @@ import static com.metreeca.shim.URIs.uri;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+/**
+ * Test framework for store remove operations.
+ *
+ * <p>Validates data removal capabilities including existing resource deletion,
+ * foreign property handling, embedded frame removal, and validation error reporting. Tests ensure proper cascading
+ * behavior and constraint checking for the {@linkplain Store} implementation.</p>
+ */
 abstract class _StoreTestRemove {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

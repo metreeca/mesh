@@ -52,8 +52,20 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test framework for tuple-based analytical operations.
+ *
+ * <p>Validates advanced query functionality including data projections,
+ * aggregations, groupings, and analytical computations. Tests ensure proper handling of tabular data operations,
+ * mathematical transforms, and statistical analysis for the {@linkplain Store} implementation.</p>
+ */
 abstract class StoreTestRetrieveTuples {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

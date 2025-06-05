@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <name>Metreeca/Mesh Stores</name>
-    <description>Linked data persistence stores.</description>
+    <description>Persistence stores for linked data.</description>
 
     <modules>
 

@@ -22,6 +22,13 @@ import java.net.URI;
 
 import static com.metreeca.shim.URIs.uri;
 
+/**
+ * Catalog for managing office collections.
+ *
+ * <p>Provides a virtual container for organizing and accessing office
+ * locations within the organization. The catalog serves as a collection endpoint for office-related operations and
+ * queries.</p>
+ */
 @Frame
 public interface Offices extends Catalog<Office> {
 

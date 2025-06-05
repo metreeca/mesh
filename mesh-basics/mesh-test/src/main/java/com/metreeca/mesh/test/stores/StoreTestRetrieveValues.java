@@ -42,8 +42,20 @@ import static com.metreeca.shim.URIs.item;
 import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test framework for value-based query operations.
+ *
+ * <p>Validates complex query functionality including filtering, sorting,
+ * pagination, and focus operations on collections of values. Tests ensure proper handling of criteria expressions,
+ * range operations, and nested object navigation for the {@linkplain Store} implementation.</p>
+ */
 public abstract class StoreTestRetrieveValues {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
     @Nested

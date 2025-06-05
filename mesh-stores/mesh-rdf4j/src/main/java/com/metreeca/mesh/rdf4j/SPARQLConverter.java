@@ -46,6 +46,17 @@ import static java.util.stream.Collectors.toSet;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
+/**
+ * Bidirectional converter between Mesh Values and RDF4J Values.
+ *
+ * <p>Provides conversion utilities for translating between Metreeca/Mesh
+ * {@linkplain com.metreeca.mesh.Value Value} objects and Eclipse RDF4J {@linkplain Value} objects, enabling seamless
+ * integration between the semantic frameworks.</p>
+ *
+ * <p>Supports conversion of all core datatypes including primitives, temporal
+ * types, URIs, literals with language tags, and complex nested structures. Handles proper RDF datatype mapping and
+ * language tag preservation.</p>
+ */
 final class SPARQLConverter {
 
     static IRI rdf(final URI uri) {

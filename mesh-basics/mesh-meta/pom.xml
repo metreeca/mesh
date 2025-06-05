@@ -30,7 +30,7 @@
     <artifactId>mesh-meta</artifactId>
 
     <name>Metreeca/Mesh Record Annotations</name>
-    <description>{TBC}</description>
+    <description>Annotations for linked data frame definitions.</description>
 
     <dependencies>
 

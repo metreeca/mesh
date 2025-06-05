@@ -24,7 +24,16 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 
 /**
- * Source code generator.
+ * Abstract source code generation framework for structured text output.
+ *
+ * <p>Provides a fluent API for generating formatted code and structured text
+ * with support for blocks, parentheses, lists, indentation, and whitespace
+ * management. Used internally for SPARQL query generation and other structured
+ * text output requirements.</p>
+ *
+ * <p>The framework operates on an internal context that manages
+ * indentation, whitespace normalization, and output formatting. Coders can
+ * be composed and nested to build complex structured output.</p>
  */
 abstract class Coder {
 

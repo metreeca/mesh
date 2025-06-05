@@ -29,7 +29,12 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Tabular entry.
+ * Tabular query result entry.
+ *
+ * <p>Represents a single row in tabular query results. Each tuple contains a list of named
+ * field values corresponding to the columns defined in the query specification.</p>
+ *
+ * @param fields the list of field name-value pairs that make up this tuple
  */
 public record Tuple(
 
@@ -47,6 +52,15 @@ public record Tuple(
     }
 
 
+    /**
+     * Retrieves the value for a named field.
+     *
+     * @param name the name of the field to retrieve
+     *
+     * @return the value for the specified field name if it exists; empty otherwise
+     *
+     * @throws NullPointerException if {@code name} is {@code null}
+     */
     public Optional<Value> value(final String name) {
 
         if ( name == null ) {

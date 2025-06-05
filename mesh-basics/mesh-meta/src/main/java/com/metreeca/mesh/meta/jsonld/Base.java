@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Base {
 
+    /**
+     * Retrieves the base URI.
+     *
+     * @return the base URI for resolving relative URIs within the frame
+     */
     String value();
 
 }

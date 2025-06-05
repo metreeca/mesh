@@ -15,11 +15,11 @@
  */
 
 /**
- * Value modelling and validation framework.
+ * Value modeling and validation framework.
  *
  * <p>This package provides a comprehensive framework for defining  data structures using
  * shape-based constraints. The core abstractions enable declarative modeling of data validation rules that can be
- * applied to various data formats and storage backends.
+ * applied to various data formats and storage backends.</p>
  *
  * <h2>Core Components</h2>
  *
@@ -31,7 +31,7 @@
  *
  * <h2>Standards Alignment</h2>
  *
- * <p>The modelling and validation is built on established W3C standards:
+ * <p>The modelling and validation is built on established W3C standards:</p>
  *
  * <ul>
  *
@@ -47,8 +47,8 @@
  *
  * <p>This standards-based approach ensures interoperability with existing semantic web tools
  * and enables validation of both JSON-LD documents and arbitrary data structures using
- * consistent constraint definitions.
- * <p>
+ * consistent constraint definitions.</p>
+ *
  *  @see <a href="https://www.w3.org/TR/json-ld/">JSON-LD 1.1 - A JSON-based Serialization for Linked Data</a>
  *
  * @see <a href="https://www.w3.org/TR/shacl/#core-components">Shapes Constraint Language (SHACL) - 4. Core

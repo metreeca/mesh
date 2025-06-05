@@ -40,7 +40,7 @@ import static java.util.stream.Collectors.toMap;
  * Value validation constraints.
  *
  * <p>Defines a set of constraints for validating values according to the SHACL specification.
- * Shapes can describe both the structure and validation rules for data values.
+ * Shapes can describe both the structure and validation rules for data values.</p>
  *
  * @param virtual      whether this is a virtual shape that doesn't correspond to stored data
  * @param id           the property name for object identifiers
@@ -566,7 +566,7 @@ public final record Shape(
     /**
      * Configures this shape with an ID property name.
      *
-     * <p>Automatically sets the datatype to Object.
+     * <p>Automatically sets the datatype to Object.</p>
      *
      * @param id the property name for object identifiers
      *
@@ -613,7 +613,7 @@ public final record Shape(
     /**
      * Configures this shape with a type property name.
      *
-     * <p>Automatically sets the datatype to Object.
+     * <p>Automatically sets the datatype to Object.</p>
      *
      * @param type the property name for object types
      *
@@ -1721,7 +1721,7 @@ public final record Shape(
      * Extends this shape with constraints from another shape.
      *
      * <p>Properties are merged by name, with shapes being extended.
-     * The explicit class is not merged from the other shape.
+     * The explicit class is not merged from the other shape.</p>
      *
      * @param shape the shape to extend with
      *
@@ -1770,7 +1770,7 @@ public final record Shape(
      * Merges this shape with constraints from another shape.
      *
      * <p>Unlike extend(), this merges explicit classes and all other constraints.
-     * Properties are merged by name, with shapes being extended.
+     * Properties are merged by name, with shapes being extended.</p>
      *
      * @param shape the shape to merge with
      *

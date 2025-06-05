@@ -27,7 +27,13 @@ import static com.metreeca.shim.Collections.list;
 import static java.lang.String.format;
 
 /**
- * Tabular specs.
+ * Tabular query specifications.
+ *
+ * <p>Defines the structure for tabular query results by combining a shape that describes the data model
+ * with a set of computed value probes that specify which columns should be included in the results.</p>
+ *
+ * @param shape   the shape defining the underlying data structure
+ * @param columns the list of computed value definitions (probes) for result columns
  */
 public final record Specs(
 
@@ -64,6 +70,15 @@ public final record Specs(
     }
 
 
+    /**
+     * Retrieves a column probe by name.
+     *
+     * @param name the name of the column to find
+     *
+     * @return the probe for the specified column name if it exists; empty otherwise
+     *
+     * @throws NullPointerException if {@code name} is {@code null}
+     */
     public Optional<Probe> column(final String name) {
 
         if ( name == null ) {

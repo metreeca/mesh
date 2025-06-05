@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Class {
 
+    /**
+     * Retrieves the RDF class IRI.
+     *
+     * @return the IRI of the RDF class this frame represents; defaults to empty string
+     */
     String value() default "";
 
 }
