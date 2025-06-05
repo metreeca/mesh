@@ -78,6 +78,7 @@
 - **Framework naming**: Always refer to the framework as "Metreeca/Mesh"
 - **Avoid overuse of "you/yours"**: Minimize direct address to maintain professional distance
 - **Concise and direct**: Provide clear, actionable information without unnecessary elaboration
+- Use consistent naming conventions
 - Use British spelling
 
 ## Document Structure
@@ -103,7 +104,9 @@ title: "Tutorial Topic Name"
 - Use H1 (`#`) for major sections
 - Use H2 (`##`) and H3 (`###`) for subsections
 - Never use H4 or deeper - keep hierarchy shallow
-- Ensure proper nesting (start with H1, then H2, then H3)
+- Top-level headings must be H1
+- Ensure proper nesting (start with H1, then H2, then H3); make sure H3 don't follow H1
+- Keep headings short, ideally under 20 chars
 
 ## Content Organization
 
@@ -176,3 +179,26 @@ final Shape exampleShape=shape()
 - Use descriptive link text
 - Prefer relative links for internal documentation
 - Include external links to specifications and standards where relevant
+
+# Reference Documentation Guidelines
+
+## Structure
+
+- Focus on semantics: Use purpose-based section names instead of implementation details
+- Integrate constructors: Move factory methods into relevant sections rather than separate constructor sections
+- Brief section intros: One-line description of each section's purpose
+- Group by function: Organize by what constructs do, not how they work
+
+## Tables
+
+- Two columns: Item and Description
+- Remove redundancy: Link method names directly, no separate link columns
+- Consistent format: Same structure across all sections
+
+## Descriptions
+
+- Extended length: 80-100 characters for comprehensive context
+- Explain effects: What the construct does, not just configuration actions
+- Assume no prior knowledge: Understandable without deep framework familiarity
+- Be specific: Use precise terminology and concrete examples
+- Reference standards: Mention underlying technologies when relevant

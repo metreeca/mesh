@@ -25,7 +25,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Marks a frame interface as virtual in a JSON-LD context.
+ * Marks a frame interface as virtual.
  *
  * <p>Virtual frames are generated on the fly during retrieval operations even if not actually present in the
  * {@link Store}.</p>

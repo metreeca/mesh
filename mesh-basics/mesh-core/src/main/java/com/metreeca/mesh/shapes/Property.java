@@ -34,9 +34,9 @@ import static java.util.function.Predicate.not;
  * constraints for validation. Properties can be marked as hidden, foreign, or embedded to control their processing
  * and serialization behavior.</p>
  *
- * @param hidden      whether this property should be hidden from serialization
- * @param foreign     whether this property references external resources
- * @param embedded    whether this property's values should be embedded inline
+ * @param hidden      whether this property should be hidden from default serialization but remain available if explicitly requested
+ * @param foreign     whether this property is managed by the linked resource and not modified during updates
+ * @param embedded    whether this property is updated in cascade during resource update or mutation operations
  * @param name        the name of the property
  * @param description the descriptive text for the property
  * @param forward     the optional forward predicate URI
@@ -197,7 +197,10 @@ public final record Property(
     /**
      * Configures this property's hidden flag.
      *
-     * @param hidden whether the property should be hidden from serialization
+     * <p>Hidden properties are excluded from default JSON-LD serialisation but remain available
+     * if explicitly requested by the client.</p>
+     *
+     * @param hidden whether the property should be hidden from default serialization
      *
      * @return a new property instance with the specified hidden flag
      */
@@ -222,7 +225,10 @@ public final record Property(
     /**
      * Configures this property's foreign flag.
      *
-     * @param foreign whether the property references external resources
+     * <p>Foreign properties are managed by the linked resource and are not modified during
+     * resource update or mutation operations.</p>
+     *
+     * @param foreign whether the property is managed by the linked resource
      *
      * @return a new property instance with the specified foreign flag
      */
@@ -247,7 +253,10 @@ public final record Property(
     /**
      * Configures this property's embedded flag.
      *
-     * @param embedded whether the property's values should be embedded inline
+     * <p>Embedded properties are updated in cascade during resource update or mutation operations.
+     * They automatically receive Object datatype constraints.</p>
+     *
+     * @param embedded whether the property is updated in cascade during operations
      *
      * @return a new property instance with the specified embedded flag
      */
@@ -336,7 +345,9 @@ public final record Property(
 
 
     /**
-     * Configures this property with a forward predicate URI derived from the property name.
+     * Configures this property's forward predicate.
+     *
+     * <p>Enables a forward predicate automatically derived from the property name for outgoing RDF relationships.</p>
      *
      * @param forward whether to configure a forward predicate
      *
@@ -380,7 +391,9 @@ public final record Property(
 
 
     /**
-     * Configures this property with a reverse predicate URI derived from the property name.
+     * Configures this property's reverse predicate.
+     *
+     * <p>Enables a reverse predicate automatically derived from the property name for incoming RDF relationships.</p>
      *
      * @param reverse whether to configure a reverse predicate
      *

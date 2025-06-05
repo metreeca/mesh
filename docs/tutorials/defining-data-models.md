@@ -5,16 +5,19 @@ title: "Defining JSON-LD Data Models"
 In this tutorial you will learn how to use shapes to define declarative data models that will drive data validation and
 other linked data processing tools.
 
-Shapes define structural rules and validation constraints for JSON-LD data values. Each shape can validate data types,
-cardinality, and semantic relationships.
-
 Focusing on the *Office* and *Employees* data tables of the BIRT sample dataset, we will build step by step a complete
 data model, according to the following high‑level UML model (see also
 the [standard datatypes](../handbooks/datatypes.md) reference for types used in the diagram).
 
-![BIRT UML Model](birt.svg#100)
+![BIRT UML Model](toys.png#100)
 
-## JSON-LD Context
+# What Are Shapes?
+
+Shapes are declarative definitions that serve as the foundation for data modelling, validation and other model-driven
+services. They represent comprehensive specifications for what valid data looks like, combining structural rules, type
+constraints, and business logic validation into cohesive data blueprints.
+
+# JSON-LD Context
 
 The Metreeca/Mesh framework builds upon the [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) specification to provide
 semantic data modelling capabilities. JSON-LD enables the expression of linked data using familiar JSON syntax while
@@ -25,7 +28,7 @@ Shapes serve as blueprints that define how JSON-LD documents should be structure
 how these properties relate to RDF vocabularies and ontologies. This approach bridges the gap between developer-friendly
 JSON and semantically rich linked data.
 
-### Initial Shape Definitions
+## Initial Shape Definitions
 
 The simplest shape accepts any value:
 
@@ -47,11 +50,11 @@ final Shape nameShape = shape()
     .required();
 ```
 
-### Properties
+## Properties
 
 Properties connect field names to RDF predicates and define semantic relationships.
 
-#### Property Names and Forward URIs
+### Property Names and Forward URIs
 
 Properties map JSON field names to RDF predicates:
 
@@ -69,11 +72,11 @@ property("title")
     .shape(nameShape);
 ```
 
-### Class Constructs
+## Class Constructs
 
 Object shapes require class information and identity properties.
 
-#### Id and Type Properties
+### Id and Type Properties
 
 Define identity and type fields for objects:
 
@@ -90,7 +93,7 @@ final Shape employeeShape = shape()
 
 Setting `id()` and `type()` automatically configures the shape's datatype to `Object()`.
 
-#### Virtual Properties
+### Virtual Properties
 
 Virtual properties exist only in serialization without corresponding RDF statements:
 
@@ -102,11 +105,11 @@ property("displayName")
         .optional());
 ```
 
-### Property Constructs
+## Property Constructs
 
 Properties support various behavioral modifiers and relationship directions.
 
-#### Hidden Properties
+### Hidden Properties
 
 Hidden properties are excluded from default serialization:
 
@@ -119,7 +122,7 @@ property("internalId")
         .optional());
 ```
 
-#### Foreign and Embedded Properties
+### Foreign and Embedded Properties
 
 Control cascade behavior during updates:
 
@@ -141,7 +144,7 @@ property("career")
         .multiple());
 ```
 
-#### Forward and Reverse URIs
+### Forward and Reverse URIs
 
 Define relationship directions:
 
@@ -161,7 +164,7 @@ property("employees")
         .multiple());
 ```
 
-##### Simultaneous Forward and Reverse
+#### Simultaneous Forward and Reverse
 
 Properties can define bidirectional relationships:
 
@@ -174,7 +177,7 @@ property("colleague")
         .multiple());
 ```
 
-## SHACL Constraints
+# SHACL Constraints
 
 The Metreeca/Mesh framework implements a subset of
 the [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/) W3C recommendation for validating RDF graphs.
@@ -186,9 +189,9 @@ semantic interoperability. These constraints operate at both the syntactic level
 semantic level (relationships, business rules), providing comprehensive validation capabilities for linked data
 applications.
 
-### Class Constraints
+## Class Constraints
 
-#### Single Class Constraints
+### Single Class Constraints
 
 Define the primary type for a resource:
 
@@ -198,7 +201,7 @@ final Shape employeeShape=shape()
         .property(property("name").forward(true).shape(nameShape));
 ```
 
-#### Multiple Class Constraints
+### Multiple Class Constraints
 
 Assign multiple types to a resource:
 
@@ -210,9 +213,9 @@ final Shape managerShape=shape()
 
 The first type is the explicit class; subsequent types are implicit parent classes.
 
-### Property Constraints
+## Property Constraints
 
-#### Value Constraints
+### Value Constraints
 
 Constrain property values to specific sets or patterns:
 
@@ -230,7 +233,7 @@ final Shape departmentShape=shape()
         .multiple();
 ```
 
-#### Numeric Range Constraints
+### Numeric Range Constraints
 
 Define bounds for numeric values:
 
@@ -250,7 +253,7 @@ final Shape ageShape=shape()
         .required();
 ```
 
-#### String Constraints
+### String Constraints
 
 Validate string format and length:
 
@@ -270,7 +273,7 @@ final Shape emailShape=shape()
         .required();
 ```
 
-#### Cardinality Constraints
+### Cardinality Constraints
 
 Control the number of property values:
 
@@ -303,7 +306,7 @@ shape().
 exactly(3)    // exactly 3 (minCount=3, maxCount=3)
 ```
 
-#### Language Constraints
+### Language Constraints
 
 Validate multilingual text properties:
 
@@ -316,7 +319,7 @@ final Shape descriptionShape=shape()
                 .multiple();
 ```
 
-#### Node Shape Constraints
+### Node Shape Constraints
 
 Reference other shapes for complex validation:
 
@@ -334,7 +337,7 @@ final Shape employeeShape=shape()
                 .shape(() -> employeeShape().optional()));
 ```
 
-### Custom Class Constraints
+## Custom Class Constraints
 
 Implement domain-specific validation logic:
 
@@ -364,7 +367,7 @@ final Shape employeeShape=shape()
                 shape().datatype(LocalDate()).required()));
 ```
 
-### Sample Validation
+## Sample Validation
 
 Validate data against defined shapes:
 
@@ -399,7 +402,7 @@ println("Employee data is valid");
 }
 ```
 
-#### Validation Error Examples
+### Validation Error Examples
 
 ```java
 // Missing required field
@@ -422,7 +425,7 @@ final Value constraintErrorEmployee=object(
 );
 ```
 
-## Employee and Office Model Examples
+# Employee and Office Model Examples
 
 Combining all concepts into comprehensive data models:
 
@@ -498,11 +501,11 @@ public static Shape officeShape() {
 }
 ```
 
-## Shape Composition and Reusability
+# Shape Composition and Reusability
 
 Shapes support composition patterns for code reuse:
 
-### Shape Extension
+## Shape Extension
 
 ```java
 // Base person shape
@@ -519,12 +522,12 @@ final Shape employeeShape=personShape
                 .property(property("title").forward(true).shape(titleShape)));
 ```
 
-### Extension vs Merge
+## Extension vs Merge
 
 - `extend()` - Properties are merged, but explicit classes are not inherited
 - `merge()` - Everything is merged including explicit classes
 
-## Practical Validation Usage
+# Practical Validation Usage
 
 Validate JSON-LD data using defined shapes:
 
@@ -560,14 +563,3 @@ println("Employee data is valid");
 This tutorial demonstrated how to define comprehensive JSON-LD data models using the Mesh shapes framework. The
 combination of SHACL constraints, semantic relationships, and validation capabilities provides a powerful foundation for
 building robust linked data applications.
-
-## Next Steps
-
-You've now learned the fundamentals of defining data models with the Mesh shapes framework. Next, you might
-want to explore:
-
-- [Publishing JSON-LD APIs](publishing-jsonld-apis.md) - How to expose your models as web APIs
-- [Persisting Data](persisting-data.md) - Working with different storage backends
-- [Serialising Data](serialising-data.md) - Converting between different data formats
-
-For more advanced topics, see the [handbooks section](../handbooks/) for detailed reference information.
