@@ -27,30 +27,48 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>mesh-test</artifactId>
+    <artifactId>mesh-toys</artifactId>
 
-    <name>Metreeca/Mesh Tests Suites</name>
+    <name>Metreeca/Mesh Sample Dataset</name>
     <description>{TBC}</description>
 
     <dependencies>
 
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>mesh-toys</artifactId>
+            <artifactId>mesh-meta</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>compile</scope>
+        <dependency> <!-- internal dependency supporting project recompilation on IntelliJ IDEA -->
+            <groupId>com.metreeca</groupId>
+            <artifactId>mesh-mint</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+                    <annotationProcessorPaths>
+
+                        <path>
+                            <groupId>com.metreeca</groupId>
+                            <artifactId>mesh-mint</artifactId>
+                        </path>
+
+                    </annotationProcessorPaths>
+                </configuration>
+
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

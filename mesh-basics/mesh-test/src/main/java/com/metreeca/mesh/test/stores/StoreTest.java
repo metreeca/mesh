@@ -18,10 +18,10 @@ package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.test.EmployeeFrame;
-import com.metreeca.mesh.test.OfficeFrame;
-import com.metreeca.mesh.test.Resources;
 import com.metreeca.mesh.tools.Store;
+import com.metreeca.mesh.toys.EmployeeFrame;
+import com.metreeca.mesh.toys.OfficeFrame;
+import com.metreeca.mesh.toys.Resources;
 
 import org.junit.jupiter.api.Nested;
 
