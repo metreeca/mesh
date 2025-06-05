@@ -22,16 +22,51 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.function.Function;
 
+/**
+ * HTTP-style request abstraction for Agent processing.
+ *
+ * <p>Provides access to request metadata and content in a format suitable
+ * for REST API processing.</p>
+ */
 public interface AgentRequest {
 
+    /**
+     * Retrieves the HTTP method for this request.
+     *
+     * @return the HTTP method (e.g., GET, POST, PUT, DELETE)
+     */
     String method();
 
+    /**
+     * Retrieves the target resource URI for this request.
+     *
+     * @return the resource URI
+     */
     URI resource();
 
+    /**
+     * Retrieves the query string for this request.
+     *
+     * @return the query string, or empty string if none
+     */
     String query();
 
+    /**
+     * Retrieves a header value by name.
+     *
+     * @param name the header name
+     *
+     * @return the header value, or {@code null} if not present
+     */
     String header(String name);
 
+    /**
+     * Retrieves the request body using the provided decoder function.
+     *
+     * @param body the function to decode the input stream
+     *
+     * @return the decoded value from the request body
+     */
     Value input(Function<InputStream, Value> body);
 
 }

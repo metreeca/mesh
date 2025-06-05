@@ -19,7 +19,15 @@ package com.metreeca.mesh.queries;
 import com.metreeca.mesh.Value;
 
 /**
- * Computed value.
+ * Computed value definition for tabular queries.
+ *
+ * <p>Defines a named computed value that can be evaluated using an expression and provides type information
+ * through a value model. Probes are used in tabular queries to specify which computed values should be
+ * included in the results.</p>
+ *
+ * @param name       the display name for this computed value
+ * @param expression the expression that defines how to compute the value
+ * @param model      the value model that defines the expected type and constraints for the computed value
  */
 public final record Probe(
 
@@ -29,6 +37,17 @@ public final record Probe(
 
 ) {
 
+    /**
+     * Creates a new probe with the specified parameters.
+     *
+     * @param name       the display name for the computed value
+     * @param expression the expression that defines the computation
+     * @param model      the value model for type information
+     *
+     * @return a new probe instance
+     *
+     * @throws NullPointerException if any parameter is {@code null}
+     */
     public static Probe probe(final String name, final Expression expression, final Value model) {
 
         if ( name == null ) {

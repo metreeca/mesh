@@ -35,33 +35,95 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Alias {
 
+    /**
+     * Retrieves the minimum exclusive value constraint.
+     *
+     * @return the minimum exclusive constraint; ignored if empty
+     */
     MinExclusive MinExclusive() default @MinExclusive("");
 
+    /**
+     * Retrieves the maximum exclusive value constraint.
+     *
+     * @return the maximum exclusive constraint; ignored if empty
+     */
     MaxExclusive MaxExclusive() default @MaxExclusive("");
 
+    /**
+     * Retrieves the minimum inclusive value constraint.
+     *
+     * @return the minimum inclusive constraint; ignored if empty
+     */
     MinInclusive MinInclusive() default @MinInclusive("");
 
+    /**
+     * Retrieves the maximum inclusive value constraint.
+     *
+     * @return the maximum inclusive constraint; ignored if empty
+     */
     MaxInclusive MaxInclusive() default @MaxInclusive("");
 
-
+    /**
+     * Retrieves the minimum string length constraint.
+     *
+     * @return the minimum length constraint; ignored if 0
+     */
     MinLength MinLength() default @MinLength(0);
 
+    /**
+     * Retrieves the maximum string length constraint.
+     *
+     * @return the maximum length constraint; ignored if 0
+     */
     MaxLength MaxLength() default @MaxLength(0);
 
+    /**
+     * Retrieves the string pattern constraint.
+     *
+     * @return the pattern constraint; ignored if empty
+     */
     Pattern Pattern() default @Pattern("");
 
+    /**
+     * Retrieves the enumeration value constraint.
+     *
+     * @return the enumeration constraint; ignored if empty
+     */
     In In() default @In({});
 
+    /**
+     * Retrieves the language tag constraint.
+     *
+     * @return the language constraint; ignored if empty
+     */
     LanguageIn LanguageIn() default @LanguageIn({});
 
-
+    /**
+     * Retrieves the minimum cardinality constraint.
+     *
+     * @return the minimum count constraint; ignored if 0
+     */
     MinCount MinCount() default @MinCount(0);
 
+    /**
+     * Retrieves the maximum cardinality constraint.
+     *
+     * @return the maximum count constraint; ignored if 0
+     */
     MaxCount MaxCount() default @MaxCount(0);
 
+    /**
+     * Retrieves the required value constraint.
+     *
+     * @return the required value constraint; ignored if empty
+     */
     HasValue HasValue() default @HasValue({});
 
-
+    /**
+     * Retrieves the custom constraint collection.
+     *
+     * @return the custom constraints; ignored if empty
+     */
     Constraints Constraints() default @Constraints({});
 
 }

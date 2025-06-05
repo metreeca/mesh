@@ -24,6 +24,12 @@ import static com.metreeca.mesh.test.stores.StoreTest.Offices;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test validation for testing framework data integrity.
+ *
+ * <p>Validates the correctness and consistency of test data used by the
+ * store testing framework. Ensures test datasets conform to expected schemas and constraint validations.</p>
+ */
 final class StoreTestTest {
 
     @Test void testOffices() {

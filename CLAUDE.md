@@ -18,36 +18,57 @@
 ## Conventions
 
 - Java code follows standard Java conventions
-- Follow existing patterns for property naming in bean interfaces
-- Imports: static imports for factory methods and constants
-- Error handling: use checked exceptions with functional interfaces
 - Naming: PascalCase for classes, camelCase for methods and variables
-- Documentation: use Javadoc for public APIs
+- Imports: static imports for factory methods and constants
 - Use final liberally for immutability
-
-## Javadocs
-
-- Place Javadoc immediately before the documented element
-- Use Javadoc only for public APIs unless required to do otherwise
-- Introduce the class with a concise definition and a brief description of its purpose; keep the definition as short as
-  possible
-- Introduce boolean methods with "Checks if"
-- Introduce read accessors with "Retrieves"
-- Introduce write accessors with "Configures"
-- Report unexpected null values as "@throws NullPointerException if <param> is {@code null}"; if two parameters are
-  to be reported use "if either <param1> or <param2> is {@code null}"; if multiple parameters are to be reported use
-  "if any of <param1>, <param2>, ..., <paramN> is {@code null}"
-- Document record parameters with @param tags in the class description
-- Definitely don't generate example usage sections
-- Don't generate javadocs for overridden methods
+- Follow existing patterns for property naming in bean interfaces
+- Error handling: use checked exceptions with functional interfaces
+- Documentation: use Javadoc for public APIs
 
 ## Testing
 
 - Test classes use JUnit 5 Jupiter (`org.junit.jupiter.api.Test`)
 - Use AssertJ for test assertions (`assertThat()`)
 - Tests follow BDD pattern with arrange-act-assert structure
-- Tests don't cover trivial implementation details, like arguments null checks
 - Follow existing patterns for nested test classes with `@Nested` annotation
+- Tests are preferably written in a functional, fluent style
+- Tests don't cover trivial implementation details, like arguments null checks
+
+# Javadocs Guidelines
+
+- Place Javadoc immediately before the documented element
+- Use Javadoc only for public or protected APIs unless required to do otherwise
+- Keep package, class and method definitions concise, ideally not exceeding 40 chars
+- Cross-link noteworthy mentions of other public or protected packages, classes and methods; use {@linkplain} where
+  sensible in the context
+- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods
+- Make sure <p> tags are always closed with </p>
+- Always add empty lines before and after every element. Never write consecutive elements without blank line separation
+- Definitely don't generate example usage sections
+- Use British spelling
+
+## package.info
+
+- Provide a package overview in package.info, focusing on overall structure and responsibilities; describe individual
+  classes only when critical in the context and keep notes as short as possible
+- Don't generate @see links for subpackages
+
+## Class Javadocs
+
+- Introduce the class with a concise definition and a brief description of its role and responsibilities
+- Document record parameters with @param tags in the class description
+- Don't generate javadocs for test classes
+
+## Method Javadocs
+
+- Introduce boolean methods with "Checks if"
+- Introduce read accessors with "Retrieves"
+- Introduce write accessors with "Configures"
+- Report unexpected null values as "@throws NullPointerException if <param> is {@code null}"; if two parameters are
+  to be reported use "if either <param1> or <param2> is {@code null}"; if multiple parameters are to be reported use
+  "if any of <param1>, <param2>, ..., <paramN> is {@code null}"
+- Always wrap param names, null and true/false in {@code} tags
+- Don't generate javadocs for overridden methods
 
 # Tech Writing Guidelines
 
@@ -57,6 +78,7 @@
 - **Framework naming**: Always refer to the framework as "Metreeca/Mesh"
 - **Avoid overuse of "you/yours"**: Minimize direct address to maintain professional distance
 - **Concise and direct**: Provide clear, actionable information without unnecessary elaboration
+- Use British spelling
 
 ## Document Structure
 
@@ -75,7 +97,6 @@ title: "Tutorial Topic Name"
 - Start with a brief introduction stating what the tutorial covers
 - Include learning objectives in 1-2 sentences
 - Reference related concepts and cross-link to handbooks and other tutorials
-- When appropriate, include a visual diagram (preferably SVG with size notation like `#100`)
 
 ### Heading Hierarchy
 
@@ -115,8 +136,8 @@ final Shape exampleShape=shape()
 ### Code Style
 
 - Follow Java naming conventions (PascalCase for classes, camelCase for methods)
-- Use static imports for factory methods and constants
 - Show complete import statements in examples
+- Use static imports for factory methods and constants
 - Include proper error handling patterns
 
 ### Terminology

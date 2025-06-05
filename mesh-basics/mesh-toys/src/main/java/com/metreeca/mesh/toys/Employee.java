@@ -27,6 +27,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * Employee records with personal, organizational, and career information.
+ *
+ * <p>Represents personnel within the organization including personal details,
+ * job information, organizational relationships, performance metrics, and career history. Employees are linked to
+ * offices and may have supervisory relationships with other employees.</p>
+ */
 @Frame
 @Class
 public interface Employee extends Resource {
@@ -39,56 +46,131 @@ public interface Employee extends Resource {
     }
 
 
+    /**
+     * Retrieves the employee identification code.
+     *
+     * @return the numeric employee code
+     */
     @Required
     @Pattern("^\\d+$")
     String code();
 
 
+    /**
+     * Retrieves the employee's first name.
+     *
+     * @return the employee forename
+     */
     @Required
     String forename();
 
+    /**
+     * Retrieves the employee's last name.
+     *
+     * @return the employee surname
+     */
     @Required
     String surname();
 
+    /**
+     * Retrieves the employee's birth date.
+     *
+     * @return the employee birthdate
+     */
     @Required
     LocalDate birthdate();
 
 
+    /**
+     * Retrieves the employee's job title.
+     *
+     * @return the employee job title
+     */
     @Required
     String title();
 
+    /**
+     * Retrieves the employee's seniority level.
+     *
+     * @return the seniority level (1-5)
+     */
     @Required
     @MinInclusive("1")
     @MaxInclusive("5")
     int seniority();
 
+    /**
+     * Retrieves the employee's email address.
+     *
+     * @return the employee email
+     */
     @Required
     @Pattern("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
     String email();
 
+    /**
+     * Retrieves when the employee became active.
+     *
+     * @return the activation timestamp
+     */
     @Required
     Instant active();
 
 
+    /**
+     * Retrieves year-to-date performance metrics.
+     *
+     * @return the YTD value
+     */
     @MinInclusive("0")
     double ytd();
 
+    /**
+     * Retrieves last period performance metrics.
+     *
+     * @return the last period value
+     */
     @MinInclusive("0")
     double last();
 
+    /**
+     * Retrieves performance change metrics.
+     *
+     * @return the performance delta
+     */
     double delta();
 
 
+    /**
+     * Retrieves the office where this employee works.
+     *
+     * @return the employee's assigned office
+     */
     @Required
     Office office();
 
+    /**
+     * Retrieves the employee's direct supervisor.
+     *
+     * @return the supervising employee, or {@code null} if none
+     */
     Employee supervisor();
 
+    /**
+     * Retrieves employees reporting to this employee.
+     *
+     * @return the set of direct reports
+     */
     @Foreign
     @Reverse("supervisor")
     Set<Employee> reports();
 
 
+    /**
+     * Retrieves career events for this employee.
+     *
+     * @return the set of career milestones
+     */
     @Embedded
     Set<Event> career();
 

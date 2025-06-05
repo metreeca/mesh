@@ -18,8 +18,20 @@ package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.tools.Store;
 
+/**
+ * Test framework for store delete operations.
+ *
+ * <p>Validates data deletion capabilities for existing resources with proper
+ * cascading behavior and constraint checking. Tests ensure complete resource removal and link cleanup for the
+ * {@linkplain Store} implementation.</p>
+ */
 abstract class _StoreTestDelete {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 

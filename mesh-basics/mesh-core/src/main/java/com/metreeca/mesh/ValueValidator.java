@@ -44,6 +44,13 @@ import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * SHACL-based value validation utilities.
+ *
+ * <p>Provides comprehensive validation of {@linkplain Value} instances against {@linkplain Shape} constraints
+ * using SHACL (Shapes Constraint Language) semantics. Supports validation of datatypes, cardinality, value
+ * constraints, property shapes, and custom constraints.</p>
+ */
 @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
 final class ValueValidator {
 
@@ -77,12 +84,30 @@ final class ValueValidator {
     private final boolean delta;
 
 
+    /**
+     * Creates a new value validator.
+     *
+     * @param shape the shape to validate against
+     * @param delta {@code true} if validation is for delta updates; {@code false} otherwise
+     *
+     * @throws NullPointerException if {@code shape} is {@code null}
+     */
     ValueValidator(final Shape shape, final boolean delta) {
         this.shape=shape;
         this.delta=delta;
     }
 
 
+    /**
+     * Validates a value against this validator's shape.
+     *
+     * @param value      the value to validate
+     * @param properties {@code true} if property validation should be performed; {@code false} otherwise
+     *
+     * @return validation errors if any; empty otherwise
+     *
+     * @throws NullPointerException if {@code value} is {@code null}
+     */
     Optional<Value> validate(final Value value, final boolean properties) {
         return optional(array(Stream
 

@@ -18,8 +18,20 @@ package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.tools.Store;
 
+/**
+ * Test framework for store mutation operations.
+ *
+ * <p>Validates complex data mutation capabilities with proper transaction
+ * handling and constraint checking. Tests ensure atomic operations and rollback behavior for the {@linkplain Store}
+ * implementation.</p>
+ */
 abstract class _StoreTestMutate {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 }

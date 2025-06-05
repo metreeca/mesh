@@ -58,8 +58,7 @@ import static java.util.stream.Collectors.toSet;
  * which produces a new criterion representing the intersection of all constraints.</p>
  *
  * <p>Criterion objects maintain internal consistency by validating constraints during construction to ensure they
- * do not conflict (for example, incompatible range limits) and by preventing nested collections in value constraints.
- * </p>
+ * do not conflict (for example, incompatible range limits) and by preventing nested collections in value constraints.</p>
  *
  * @param order the ordering constraint for query results; if present, determines the position of matched values in
  *              query results

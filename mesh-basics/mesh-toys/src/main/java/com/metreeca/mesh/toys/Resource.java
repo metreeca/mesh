@@ -22,6 +22,13 @@ import com.metreeca.mesh.meta.shacl.Required;
 
 import java.net.URI;
 
+/**
+ * Base interface for all domain resources.
+ *
+ * <p>Defines the fundamental structure for domain entities including identity,
+ * type classification, and human-readable labeling. All domain objects extend this interface to inherit consistent
+ * identification and naming patterns.</p>
+ */
 @Frame
 @Class
 @Base("https://data.example.net/")
@@ -29,13 +36,28 @@ import java.net.URI;
 @Namespace(prefix="rdfs", value="http://www.w3.org/2000/01/rdf-schema#")
 public interface Resource {
 
+    /**
+     * Retrieves the unique identifier for this resource.
+     *
+     * @return the resource URI
+     */
     @Id
     URI id();
 
+    /**
+     * Retrieves the resource type classification.
+     *
+     * @return the resource type identifier
+     */
     @Type
     String type();
 
 
+    /**
+     * Retrieves the human-readable label for this resource.
+     *
+     * @return the resource label
+     */
     @Required
     @Forward("rdfs:")
     String label();

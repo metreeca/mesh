@@ -22,6 +22,13 @@ import java.net.URI;
 
 import static com.metreeca.shim.URIs.uri;
 
+/**
+ * Catalog for managing employee collections.
+ *
+ * <p>Provides a virtual container for organizing and accessing employee
+ * records within the organization. The catalog serves as a collection endpoint for employee-related operations and
+ * queries.</p>
+ */
 @Frame
 public interface Employees extends Catalog<Employee> {
 

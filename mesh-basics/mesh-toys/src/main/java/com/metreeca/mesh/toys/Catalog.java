@@ -21,9 +21,23 @@ import com.metreeca.mesh.meta.jsonld.Virtual;
 
 import java.util.Set;
 
+/**
+ * Generic collection interface for organizing domain resources.
+ *
+ * <p>Provides a virtual container for grouping related resources with
+ * consistent collection semantics. Catalogs are virtual resources that aggregate members without persistent storage
+ * requirements.</p>
+ *
+ * @param <T> the type of resources contained in this catalog
+ */
 @Virtual
 public interface Catalog<T extends Resource> extends Resource {
 
+    /**
+     * Retrieves the collection of resources in this catalog.
+     *
+     * @return the set of catalog members
+     */
     @Forward("rdfs:member")
     Set<T> members();
 

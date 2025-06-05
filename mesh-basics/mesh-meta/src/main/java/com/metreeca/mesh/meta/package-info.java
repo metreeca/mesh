@@ -15,7 +15,7 @@
  */
 
 /**
- * Metadata and code generation support for the Mesh framework.
+ * Metadata and code generation framework.
  *
  * <p>This package provides the foundational metadata infrastructure for defining, validating, and
  * generating frame-based data models. It serves as the bridge between declarative data modeling

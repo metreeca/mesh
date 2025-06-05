@@ -32,7 +32,7 @@ import static java.util.function.Predicate.not;
  *
  * <p>Represents a property that can connect resources through forward or reverse predicates, with optional shape
  * constraints for validation. Properties can be marked as hidden, foreign, or embedded to control their processing
- * and serialization behavior.
+ * and serialization behavior.</p>
  *
  * @param hidden      whether this property should be hidden from serialization
  * @param foreign     whether this property references external resources
@@ -182,7 +182,7 @@ public final record Property(
      * Retrieves the shape constraints for this property's values.
      *
      * <p>If the property is embedded, the shape is automatically configured
-     * with an Object datatype constraint.
+     * with an Object datatype constraint.</p>
      *
      * @return the shape constraints for this property's values
      */

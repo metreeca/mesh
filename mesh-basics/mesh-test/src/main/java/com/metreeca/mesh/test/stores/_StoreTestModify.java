@@ -18,8 +18,20 @@ package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.tools.Store;
 
+/**
+ * Test framework for store modification operations.
+ *
+ * <p>Validates data modification capabilities with proper validation
+ * and constraint checking. Tests ensure selective property updates and error handling for the {@linkplain Store}
+ * implementation.</p>
+ */
 abstract class _StoreTestModify {
 
+    /**
+     * Retrieves the store instance for testing.
+     *
+     * @return the store under test
+     */
     protected abstract Store store();
 
 }

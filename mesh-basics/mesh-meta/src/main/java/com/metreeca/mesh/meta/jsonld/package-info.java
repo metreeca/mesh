@@ -15,7 +15,7 @@
  */
 
 /**
- * JSON-LD semantic modeling annotations for linked data representation.
+ * JSON-LD semantic modeling annotations.
  *
  * <p>This package provides annotations for defining JSON-LD context mappings, semantic relationships,
  * and linked data structure within Java frame interfaces. The annotations enable seamless conversion

@@ -100,6 +100,13 @@ public final class Introspector {
     private final Map<Class<?>, TypeMirror> types=new ConcurrentHashMap<>();
 
 
+    /**
+     * Creates an introspector with the specified processing environment.
+     *
+     * @param environment the annotation processing environment for type resolution
+     *
+     * @throws NullPointerException if {@code environment} is {@code null}
+     */
     public Introspector(final ProcessingEnvironment environment) {
 
         this.typeUtils=environment.getTypeUtils();
@@ -109,6 +116,15 @@ public final class Introspector {
     }
 
 
+    /**
+     * Retrieves the AST representation of a frame interface type.
+     *
+     * @param type the type element representing the frame interface
+     *
+     * @return the AST model of the frame interface with validation performed
+     *
+     * @throws FrameException if the type has validation errors or circular references
+     */
     public Clazz clazz(final TypeElement type) {
 
         final Clazz clazz=lookup(type);
@@ -291,8 +307,7 @@ public final class Introspector {
 
     /**
      * Retrieves a TypeMirror for a given Java class.
-     * <p>
-     * Uses a cache to avoid repeated lookups for the same class type.
+     * <p>Uses a cache to avoid repeated lookups for the same class type.</p>
      */
     private TypeMirror type(final Class<?> clazz) {
         return types.computeIfAbsent(clazz, key ->
@@ -303,9 +318,8 @@ public final class Introspector {
 
     /**
      * Maps a TypeMirror to its string representation used in method signature processing.
-     * <p>
-     * Handles basic types, collection types, and specialized map types for text and data entries. Returns predefined
-     * constants for common collection types or throws an exception for unsupported types.
+     * <p>Handles basic types, collection types, and specialized map types for text and data entries. Returns predefined
+     * constants for common collection types or throws an exception for unsupported types.</p>
      */
     private String type(final TypeMirror type, final TypeElement root) {
 
@@ -337,9 +351,8 @@ public final class Introspector {
 
     /**
      * Extracts the item type from a collection type.
-     * <p>
-     * For collection types, retrieves the generic type argument, resolving type variables as needed. For non-collection
-     * types, returns an empty string.
+     * <p>For collection types, retrieves the generic type argument, resolving type variables as needed. For non-collection
+     * types, returns an empty string.</p>
      *
      * @param type The type to examine
      * @param root The root type element for resolving type variables
@@ -364,12 +377,10 @@ public final class Introspector {
 
     /**
      * Maps a TypeMirror to its base representation as a string.
-     * <p>
-     * Handles: - Type variables (returning their simple name) - Primitive types - Boxing types (Boolean, Number, etc.)
+     * <p>Handles: - Type variables (returning their simple name) - Primitive types - Boxing types (Boolean, Number, etc.)
      * - Common Java types (String, URI, etc.) - Temporal types (LocalDate, Instant, etc.) - Frame-annotated interface
-     * types (returning their qualified name)
-     * <p>
-     * Returns null for types that don't match any of the supported categories.
+     * types (returning their qualified name)</p>
+     * <p>Returns null for types that don't match any of the supported categories.</p>
      */
     private String base(final TypeMirror type) {
         return type instanceof final TypeVariable var ? var.asElement().getSimpleName().toString()
@@ -441,10 +452,9 @@ public final class Introspector {
 
     /**
      * Resolves a type variable to its concrete type by analyzing the inheritance hierarchy.
-     * <p>
-     * Builds a map of type bindings by traversing the interface hierarchy of the given class. For each interface, maps
+     * <p>Builds a map of type bindings by traversing the interface hierarchy of the given class. For each interface, maps
      * its type parameters to the actual type arguments used in the implementing class, capturing all type variable
-     * bindings in the inheritance chain.
+     * bindings in the inheritance chain.</p>
      *
      * @param variable The type variable to resolve
      * @param clazz    The class context for resolving the variable
@@ -496,9 +506,8 @@ public final class Introspector {
 
     /**
      * Extracts and processes annotations from an element.
-     * <p>
-     * Retrieves all annotation mirrors from the element, unwraps any container annotations, and expands any annotation
-     * aliases into their constituent constraints.
+     * <p>Retrieves all annotation mirrors from the element, unwraps any container annotations, and expands any annotation
+     * aliases into their constituent constraints.</p>
      *
      * @param element The annotated element to process
      * @param source  The source context for tracking annotation provenance
@@ -514,10 +523,9 @@ public final class Introspector {
 
     /**
      * Expands annotation aliases into their constituent constraints.
-     * <p>
-     * First attempts to resolve the annotation as a pre-compiled class, falling back to source-based resolution if the
+     * <p>First attempts to resolve the annotation as a pre-compiled class, falling back to source-based resolution if the
      * class is not available at runtime. Handles both reflection-based alias expansion for compiled classes and
-     * model-based expansion for source-only annotations.
+     * model-based expansion for source-only annotations.</p>
      *
      * @param meta The annotation to potentially expand
      *
@@ -665,10 +673,9 @@ public final class Introspector {
 
     /**
      * Unwraps container annotations that hold multiple annotations.
-     * <p>
-     * Detects and processes repeatable annotation containers, which use a single value method to hold an array of
+     * <p>Detects and processes repeatable annotation containers, which use a single value method to hold an array of
      * actual annotations. If the annotation is a container, extracts and processes all contained annotations.
-     * Otherwise, processes the annotation directly.
+     * Otherwise, processes the annotation directly.</p>
      *
      * @param annotation The annotation mirror to potentially unwrap
      * @param source     The source context for tracking annotation provenance
@@ -702,9 +709,8 @@ public final class Introspector {
 
     /**
      * Converts an AnnotationMirror to an Annotation model object.
-     * <p>
-     * Extracts the annotation type and all its parameter values, converting them to appropriate Java objects. Handles
-     * special value types like Class references by converting them to their qualified names.
+     * <p>Extracts the annotation type and all its parameter values, converting them to appropriate Java objects. Handles
+     * special value types like Class references by converting them to their qualified names.</p>
      *
      * @param annotation The annotation mirror to convert
      * @param source     The source context for tracking annotation provenance
@@ -732,9 +738,8 @@ public final class Introspector {
 
     /**
      * Converts annotation values to appropriate Java objects.
-     * <p>
-     * Handles: - Lists of annotation values (recursively processing each element) - Type references (converting to
-     * their qualified names) - Other values (returning them as is)
+     * <p>Handles: - Lists of annotation values (recursively processing each element) - Type references (converting to
+     * their qualified names) - Other values (returning them as is)</p>
      *
      * @param value The annotation value to convert
      *
@@ -823,10 +828,24 @@ public final class Introspector {
         return hasAnnotation(method, Internal.class);
     }
 
+    /**
+     * Checks if the annotated element has a Foreign annotation.
+     *
+     * @param method the annotated element to check
+     *
+     * @return {@code true} if the element is annotated with {@code @Foreign}
+     */
     public boolean isForeign(final AnnotatedConstruct method) {
         return hasAnnotation(method, Foreign.class);
     }
 
+    /**
+     * Checks if the annotated element has an Embedded annotation.
+     *
+     * @param method the annotated element to check
+     *
+     * @return {@code true} if the element is annotated with {@code @Embedded}
+     */
     public boolean isEmbedded(final AnnotatedConstruct method) {
         return hasAnnotation(method, Embedded.class);
     }
@@ -901,11 +920,9 @@ public final class Introspector {
 
     /**
      * Checks if an annotation method represents a container for repeatable annotations.
-     * <p>
-     * A method is considered an annotation container if: 1. It's named "value" 2. It returns an array type 3. The array
-     * component type is an annotation type
-     * <p>
-     * This pattern is used by the Java compiler to implement @Repeatable annotations.
+     * <p>A method is considered an annotation container if: 1. It's named "value" 2. It returns an array type 3. The array
+     * component type is an annotation type</p>
+     * <p>This pattern is used by the Java compiler to implement @Repeatable annotations.</p>
      *
      * @param method The method element to check
      *

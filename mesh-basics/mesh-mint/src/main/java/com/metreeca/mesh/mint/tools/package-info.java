@@ -15,6 +15,26 @@
  */
 
 /**
- * {TBC}
+ * Code generation and introspection tools for frame interfaces.
+ *
+ * <p>This package provides the core infrastructure for analyzing annotated Java interfaces
+ * and generating corresponding data binding implementations. The tools support both
+ * compile-time code generation and runtime introspection capabilities.</p>
+ *
+ * <h2>Core Components</h2>
+ *
+ * <ul>
+ *     <li><strong>Introspector</strong> - Analyzes frame interface annotations and produces
+ *         abstract syntax tree representations for code generation</li>
+ *     <li><strong>Generator</strong> - Transforms AST models into executable Java code that
+ *         implements frame interface contracts with full semantic web support</li>
+ * </ul>
+ *
+ * <p>The code generation process transforms declarative frame interfaces into efficient
+ * runtime implementations that handle JSON-LD serialization, SHACL validation, and
+ * semantic data binding automatically.</p>
+ *
+ * @see com.metreeca.mesh.mint.ast Abstract syntax tree model for frame representation
+ * @see com.metreeca.mesh.meta Frame interface annotations
  */
 package com.metreeca.mesh.mint.tools;

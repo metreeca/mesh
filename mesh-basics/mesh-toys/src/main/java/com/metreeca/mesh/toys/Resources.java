@@ -40,17 +40,49 @@ import static java.util.Locale.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.groupingBy;
 
+/**
+ * Master resource catalog with test data and factory methods.
+ *
+ * <p>Provides comprehensive test datasets including offices and employees
+ * with realistic relationships, constraints, and multilingual content. Data is loaded from TSV files and automatically
+ * converted to frame instances for testing and demonstration purposes.</p>
+ */
 @Frame
 public interface Resources extends Catalog<Resource> {
 
+    /**
+     * Comprehensive office test dataset.
+     */
     public static final List<OfficeFrame> OFFICES=list(parse(Resources::offices));
+
+    /**
+     * Comprehensive employee test dataset.
+     */
     public static final List<EmployeeFrame> EMPLOYEES=list(parse(Resources::employees));
 
 
+    /**
+     * Retrieves an office by identifier.
+     *
+     * @param id the office identifier
+     *
+     * @return the office frame, or empty if not found
+     *
+     * @throws NullPointerException if {@code id} is {@code null}
+     */
     public static Optional<OfficeFrame> office(final URI id) {
         return OFFICES.stream().filter(office -> Objects.equals(office.id(), id)).findFirst();
     }
 
+    /**
+     * Retrieves an employee by identifier.
+     *
+     * @param id the employee identifier
+     *
+     * @return the employee frame, or empty if not found
+     *
+     * @throws NullPointerException if {@code id} is {@code null}
+     */
     public static Optional<EmployeeFrame> employee(final URI id) {
         return EMPLOYEES.stream().filter(employee -> Objects.equals(employee.id(), id)).findFirst();
     }

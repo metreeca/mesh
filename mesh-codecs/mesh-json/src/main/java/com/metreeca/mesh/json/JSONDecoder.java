@@ -43,6 +43,22 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.String.format;
 
+/**
+ * JSON-LD decoder for converting JSON to Value objects.
+ *
+ * <p>Processes JSON input streams and constructs {@linkplain Value} objects following JSON-LD semantics.
+ * Handles the complete JSON-LD grammar including objects, arrays, literals, query expressions, and computed probes.
+ * The decoder supports shape-guided validation and type coercion based on SHACL constraints.</p>
+ *
+ * <p>Key features:</p>
+ * <ul>
+ *   <li><strong>Shape-guided parsing</strong> - Uses SHACL shapes for type validation and conversion</li>
+ *   <li><strong>Query syntax support</strong> - Parses query objects with criteria, pagination, and ordering</li>
+ *   <li><strong>Computed probes</strong> - Handles tabular data specifications with computed expressions</li>
+ *   <li><strong>Localized text</strong> - Processes language-tagged strings and locale-specific content</li>
+ *   <li><strong>URI resolution</strong> - Resolves relative URIs against the specified base URI</li>
+ * </ul>
+ */
 final class JSONDecoder {
 
     private static final int MAX_LIMIT=100;

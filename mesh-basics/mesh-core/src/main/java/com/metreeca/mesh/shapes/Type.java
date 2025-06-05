@@ -27,7 +27,7 @@ import static com.metreeca.shim.URIs.term;
  * A type definition with name, description and URI.
  *
  * <p>Represents a semantic type that can be used in data validation and schema definitions.
- * Types provide both a human-readable name and a globally unique URI identifier.
+ * Types provide both a human-readable name and a globally unique URI identifier.</p>
  *
  * @param name        the human-readable name of the type
  * @param description the descriptive text for the type

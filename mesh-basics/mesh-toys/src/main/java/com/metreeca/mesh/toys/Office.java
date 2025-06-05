@@ -26,6 +26,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Organizational office locations with geographical and employee information.
+ *
+ * <p>Represents physical office locations including address details,
+ * localized country names, and associations with employees. Offices serve as organizational units for grouping
+ * personnel and operational activities.</p>
+ */
 @Frame
 @Class
 public interface Office extends Resource {
@@ -38,23 +45,48 @@ public interface Office extends Resource {
     }
 
 
+    /**
+     * Retrieves the office identification code.
+     *
+     * @return the numeric office code
+     */
     @Required
     @Pattern("^\\d+$")
     String code();
 
 
+    /**
+     * Retrieves the city where this office is located.
+     *
+     * @return the office city name
+     */
     @Required
     String city();
 
+    /**
+     * Retrieves localized country names for this office location.
+     *
+     * @return map of locale to country name translations
+     */
     @Required
     Map<Locale, String> country();
 
 
+    /**
+     * Retrieves employees assigned to this office.
+     *
+     * @return the set of office employees
+     */
     @Foreign
     @Reverse("office")
     Set<Employee> employees();
 
 
+    /**
+     * Retrieves the timezone for this office location.
+     *
+     * @return the office timezone
+     */
     @Internal
     ZoneId zone();
 

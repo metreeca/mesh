@@ -29,8 +29,8 @@
 
     <artifactId>mesh-test</artifactId>
 
-    <name>Metreeca/Mesh Tests Suites</name>
-    <description>{TBC}</description>
+    <name>Metreeca/Mesh Test Suite</name>
+    <description>Test utilities and suites for linked data stores.</description>
 
     <dependencies>
 

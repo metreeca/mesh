@@ -19,11 +19,22 @@ package com.metreeca.mesh.tools;
 import java.io.Serial;
 
 
+/**
+ * Exception thrown during store operations.
+ *
+ * <p>Represents errors that occur during data persistence operations
+ * such as create, read, update, or delete operations.</p>
+ */
 public final class StoreException extends RuntimeException {
 
     @Serial private static final long serialVersionUID=-8814113220211228527L;
 
 
+    /**
+     * Creates a store exception with a message.
+     *
+     * @param message the error message
+     */
     public StoreException(final String message) {
         super(message);
     }
