@@ -1,13 +1,13 @@
 <!--- # Metreeca/Mesh --->
 
-<!--[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh.svg)](https://central.sonatype.com/artifact/com.metreeca/mesh/ -->
+<!--[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh)](https://central.sonatype.com/artifact/com.metreeca/metreeca-mesh) -->
 
 > [!IMPORTANT]
 >
-> The live beta version is `4.0-SNAPSHOT`.
->
-> We are actively working toward the first stable release: watch this repo or follow us
+> The edge development version is `4.0-SNAPSHOT`. We are actively working toward the first stable release: watch this
+> repo or follow us
 > on [LinkedIn](https://linkedin.com/company/metreeca) to keep up to date.
+>
 
 Metreeca/Mesh is a lightweight Java framework for rapid development of
 [linked data](https://www.w3.org/2013/data/) services.
@@ -30,8 +30,8 @@ which
 fields and
 nested relationships to include, providing GraphQL-like efficiency while maintaining the simplicity of REST/JSON.
 
-**Standards Compliance** / Built on established [JSON-LD](https://json-ld.org/primer/latest/) and linked data standards
-for easy data interoperability.
+**Standards Compliance** / Built on established [JSON-LD](https://www.w3.org/TR/json-ld11/)
+and [SHACL](https://www.w3.org/TR/shacl/) W3C standards for easy data interoperability.
 
 **Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
 interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code automatically generated at
@@ -186,7 +186,7 @@ public final class Example {
 }
 ```
 
-5. Delve into the [docs](https://metreeca.github.io/mesh/tutorials/) to learn how to:
+5. Delve into the [tutorials](https://metreeca.github.io/mesh/tutorials/) to learn how to:
 
    - define and annotate data models;
    - convert data to / from serialisation formats;
@@ -202,4 +202,4 @@ public final class Example {
 # License
 
 This project is licensed under the Apache 2.0 License –
-see [LICENSE](https://github.com/metreeca/mesh/blob/main/LICENSE) file for details.
+see [LICENSE](https://github.com/metreeca/mesh?tab=Apache-2.0-1-ov-file) file for details.

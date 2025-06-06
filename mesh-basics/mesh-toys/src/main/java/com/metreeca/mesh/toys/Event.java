@@ -31,7 +31,7 @@ import java.time.LocalDate;
  */
 @Frame
 @Class
-public interface Event extends Toys {
+public interface Event extends Resource {
 
     /**
      * Types of career actions and organizational changes.
