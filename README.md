@@ -4,10 +4,10 @@
 
 > [!IMPORTANT]
 >
-> The live beta version is `4.0-SNAPSHOT`.
->
-> We are actively working toward the first stable release: watch this repo or follow us
+> The edge development version is `4.0-SNAPSHOT`. We are actively working toward the first stable release: watch this
+> repo or follow us
 > on [LinkedIn](https://linkedin.com/company/metreeca) to keep up to date.
+>
 
 Metreeca/Mesh is a lightweight Java framework for rapid development of
 [linked data](https://www.w3.org/2013/data/) services.
