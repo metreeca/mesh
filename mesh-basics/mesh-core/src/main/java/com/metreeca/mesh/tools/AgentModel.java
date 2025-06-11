@@ -130,9 +130,18 @@ final class AgentModel {
      * <ul>
      *   <li>For literals: Second value always replaces the first</li>
      *   <li>For arrays: Pairwise merging of elements by position</li>
-     *   <li>For objects: Property-by-property merging of common properties</li>
+     *   <li>For objects: When first object is empty, returns second object; otherwise merges
+     *       properties from both objects with second taking precedence</li>
      *   <li>For queries: Merges models, combines criteria, preserves offset from first query,
      *       and uses minimum non-zero limit</li>
+     * </ul>
+     *
+     * <p>Object merging behaviour:</p>
+     * <ul>
+     *   <li>Properties present in both objects: values from second object take precedence</li>
+     *   <li>Properties only in first object: populated from shape definitions if available</li>
+     *   <li>Properties only in second object: added to result (except reserved fields)</li>
+     *   <li>Empty first object: replaced entirely by second object</li>
      * </ul>
      *
      * <p>Special handling is provided for:</p>
@@ -156,7 +165,7 @@ final class AgentModel {
                 )
 
                 .or(() -> x.object().flatMap(v ->
-                        y.object().map(w -> populate(v, w))
+                        y.object().map(w -> x.isEmpty() ? y : populate(v, w))
                                 .or(() -> y.value(Query.class).map(w -> populate(x, w)))
                 ))
 
@@ -201,14 +210,14 @@ final class AgentModel {
      * Populates a query model using the first element of an array.
      *
      * @param x the source array
-     * @param w the query to populate
+     * @param y the query to populate
      *
      * @return the populated query value
      */
-    private static Value populate(final List<Value> x, final Query w) {
+    private static Value populate(final List<Value> x, final Query y) {
         return x.stream().findFirst()
-                .map(v -> populate(v, w))
-                .orElseGet(() -> value(w));
+                .map(v -> populate(v, y))
+                .orElseGet(() -> value(y));
     }
 
 
@@ -400,25 +409,31 @@ final class AgentModel {
     /**
      * Populates a query with a generic value by converting the value to a query.
      *
-     * @param x the query to populate
-     * @param y the value to merge
+     * <p>If the value {@code y} is already a query, it is used directly. Otherwise,
+     * the value is wrapped as the model of a new query and then merged with the existing query {@code x}.</p>
      *
-     * @return the populated query value
+     * @param x the query to populate
+     * @param y the value to merge (converted to query if necessary)
+     *
+     * @return the populated query value with merged model and combined criteria
      */
     private static Value populate(final Query x, final Value y) {
-        return populate(x, query(y));
+        return populate(x, y.value(Query.class).orElseGet(() -> query(y)));
     }
 
     /**
      * Populates a query with a generic value by converting the value to a query.
      *
-     * @param x the value to merge
+     * <p>If the value {@code x} is already a query, it is used directly. Otherwise,
+     * the value is wrapped as the model of a new query and then merged with the existing query {@code y}.</p>
+     *
+     * @param x the value to merge (converted to query if necessary)
      * @param y the query to populate
      *
-     * @return the populated query value
+     * @return the populated query value with merged model and combined criteria
      */
     private static Value populate(final Value x, final Query y) {
-        return populate(query(x), y);
+        return populate(x.value(Query.class).orElseGet(() -> query(x)), y);
     }
 
 
