@@ -17,6 +17,7 @@ import static com.metreeca.mesh.queries.Criterion.criterion;
 import static com.metreeca.mesh.queries.Query.query;
 import static com.metreeca.mesh.shapes.Property.property;
 import static com.metreeca.mesh.shapes.Shape.shape;
+import static com.metreeca.shim.URIs.base;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,20 +57,22 @@ final class AgentQueryTest {
 
 
     @Test void testURLEncoded() {
-        assertThat(AgentQuery.decode(
+        assertThat(AgentQuery.query(
                 DUMMY_CODEC,
                 URLEncoder.encode("{}", UTF_8),
-                shape()
+                shape(),
+                base()
         )).isEqualTo(
                 string(decoded("{}"))
         );
     }
 
     @Test void testBase64Encoded() {
-        assertThat(AgentQuery.decode(
+        assertThat(AgentQuery.query(
                 DUMMY_CODEC,
                 Base64.getEncoder().encodeToString("{}".getBytes(UTF_8)),
-                shape()
+                shape(),
+                base()
         )).isEqualTo(
                 string(decoded("{}"))
         );
@@ -91,10 +94,11 @@ final class AgentQueryTest {
         final Shape collection=shape()
                 .property(property("items").forward(true).shape(resource));
 
-        assertThat(AgentQuery.decode(
+        assertThat(AgentQuery.query(
                 DUMMY_CODEC,
                 URLEncoder.encode("~name=axel&age>=30", UTF_8),
-                collection
+                collection,
+                base()
         )).isEqualTo(object(
                 Value.shape(collection),
                 field("items", value(query()
@@ -108,10 +112,11 @@ final class AgentQueryTest {
     }
 
     @Test void testPlain() {
-        assertThat(AgentQuery.decode(
+        assertThat(AgentQuery.query(
                 DUMMY_CODEC,
                 "{}",
-                shape()
+                shape(),
+                base()
         )).isEqualTo(
                 string(decoded("{}"))
         );

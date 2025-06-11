@@ -43,6 +43,7 @@ import static com.metreeca.mesh.mint.ast.Method.*;
 import static com.metreeca.shim.Collections.*;
 import static com.metreeca.shim.Locales.locale;
 import static com.metreeca.shim.Strings.*;
+import static com.metreeca.shim.URIs.uri;
 
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.joining;
@@ -162,97 +163,97 @@ public final class Generator {
     private static final Value.Visitor<String> VALUE_VISITOR=new Value.Visitor<>() {
 
         @Override public String visit(final Value host, final Boolean bit) {
-            return "Value.bit(%s)".formatted(host.encode());
+            return "Value.bit(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Number number) {
             return number instanceof final BigInteger integer ? visit(host, integer)
                     : number instanceof final BigDecimal decimal ? visit(host, decimal)
-                    : "Value.number(%s)".formatted(host.encode());
+                    : "Value.number(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Long integral) {
-            return "Value.integral(%s)".formatted(host.encode());
+            return "Value.integral(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Double floating) {
-            return "Value.floating(%s)".formatted(host.encode());
+            return "Value.floating(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final BigInteger integer) {
-            return "Value.integer(new BigInteger(%s))".formatted(quote(host.encode()));
+            return "Value.integer(new BigInteger(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final BigDecimal decimal) {
-            return "Value.decimal(new BigDecimal(%s))".formatted(quote(host.encode()));
+            return "Value.decimal(new BigDecimal(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final String string) {
-            return "Value.string(%s)".formatted(quote(host.encode()));
+            return "Value.string(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final URI uri) {
-            return "Value.uri(URI.create(%s))".formatted(quote(host.encode()));
+            return "Value.uri(URI.create(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Temporal temporal) {
-            return "Value.Temporal().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Temporal().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Year year) {
-            return "Value.Year().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Year().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final YearMonth yearMonth) {
-            return "Value.YearMonth().decode(%s)".formatted(quote(host.encode()));
+            return "Value.YearMonth().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalDate localDate) {
-            return "Value.LocalDate().decode(%s)".formatted(quote(host.encode()));
+            return "Value.LocalDate().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalTime localTime) {
-            return "Value.LocalTime().decode(%s)".formatted(quote(host.encode()));
+            return "Value.LocalTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final OffsetTime offsetTime) {
-            return "Value.OffsetTime().decode(%s)".formatted(quote(host.encode()));
+            return "Value.OffsetTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalDateTime localDateTime) {
-            return "Value.LocalDateTime().decode(%s)".formatted(quote(host.encode()));
+            return "Value.LocalDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final OffsetDateTime offsetDateTime) {
-            return "Value.OffsetDateTime().decode(%s)".formatted(quote(host.encode()));
+            return "Value.OffsetDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final ZonedDateTime zonedDateTime) {
-            return "Value.ZonedDateTime().decode(%s)".formatted(quote(host.encode()));
+            return "Value.ZonedDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Instant instant) {
-            return "Value.Instant().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Instant().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final TemporalAmount amount) {
-            return "Value.TemporalAmount().decode(%s)".formatted(quote(host.encode()));
+            return "Value.TemporalAmount().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Period period) {
-            return "Value.Integer().decode(\"%s\")".formatted(host.encode());
+            return "Value.Integer().decode(\"%s\")".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Duration duration) {
-            return "Value.Duration().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Duration().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Locale locale, final String string) {
-            return "Value.Text().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Text().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final URI datatype, final String string) {
-            return "Value.Data().decode(%s)".formatted(quote(host.encode()));
+            return "Value.Data().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Map<String, Value> fields) {

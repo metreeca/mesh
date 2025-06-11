@@ -557,7 +557,7 @@ public final class Method {
 
                         return new Reference<>(
 
-                                shape().minExclusive(datatype.decode(value).orElseThrow(() ->
+                                shape().minExclusive(datatype.decode(value, clazz.base()).orElseThrow(() ->
                                                 new FrameException(format(
                                                         "malformed @%s limit <%s> @ <%s>",
                                                         simple(MinExclusive.class), value, annotation.source()
@@ -618,7 +618,7 @@ public final class Method {
 
                         return new Reference<>(
 
-                                shape().maxExclusive(datatype.decode(value).orElseThrow(() ->
+                                shape().maxExclusive(datatype.decode(value, clazz.base()).orElseThrow(() ->
                                                 new FrameException(format(
                                                         "malformed @%s limit <%s> @ <%s>",
                                                         simple(MaxExclusive.class), value, annotation.source()
@@ -679,7 +679,7 @@ public final class Method {
 
                         return new Reference<>(
 
-                                shape().minInclusive(datatype.decode(value).orElseThrow(() ->
+                                shape().minInclusive(datatype.decode(value, clazz.base()).orElseThrow(() ->
                                                 new FrameException(format(
                                                         "malformed @%s limit <%s> @ <%s>",
                                                         simple(MinInclusive.class), value, annotation.source()
@@ -739,7 +739,7 @@ public final class Method {
                     try {
 
                         return new Reference<>(
-                                shape().maxInclusive(datatype.decode(value).orElseThrow(() ->
+                                shape().maxInclusive(datatype.decode(value, clazz.base()).orElseThrow(() ->
                                                 new FrameException(format(
                                                         "malformed @%s limit <%s> @ <%s>",
                                                         simple(MaxInclusive.class), value, annotation.source()
@@ -960,7 +960,7 @@ public final class Method {
 
                         return new Reference<>(
 
-                                shape().in(set(value.stream().map(v -> datatype.decode((String)v)
+                                shape().in(set(value.stream().map(v -> datatype.decode((String)v, clazz.base())
                                         .orElseThrow(() -> new FrameException(format(
                                                 "malformed @%s value <%s> @ <%s>",
                                                 simple(In.class), value, annotation.source()
@@ -1221,7 +1221,7 @@ public final class Method {
 
                         return new Reference<>(
 
-                                shape().hasValue(set(value.stream().map(v -> datatype.decode((String)v)
+                                shape().hasValue(set(value.stream().map(v -> datatype.decode((String)v, clazz.base())
                                         .orElseThrow(() -> new FrameException(format(
                                                 "malformed @%s value <%s> @ <%s>",
                                                 simple(HasValue.class), value, annotation.source()

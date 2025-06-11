@@ -63,7 +63,7 @@ final class AgentQuery {
      * Pattern for detecting URL-encoded form data.
      *
      * <p>Matches key-value pairs where keys can contain word characters and query operators
-     * {@code ~<>^@#:*}. Coordinates with {@link Query#query(String, Shape)} for operator support.</p>
+     * {@code ~<>^@#:*}. Coordinates with {@link Query#query(String, Shape, URI)} for operator support.</p>
      */
     private static final Pattern FORM_DATA_PATTERN=Pattern.compile(
             "^[\\w~<>^@#:*]*=[^&]*(?:&[\\w~<>^@#:*]*=[^&]*)*$"
@@ -71,7 +71,7 @@ final class AgentQuery {
 
 
     /**
-     * Decodes a query string into a structured value using the provided codec and shape.
+     * Processes a query string into a structured value using the provided codec and shape.
      *
      * <p>Automatically detects the query format and applies the appropriate decoding strategy:</p>
      * <ol>
@@ -81,25 +81,26 @@ final class AgentQuery {
      *   <li>Plain text: Processed directly by codec</li>
      * </ol>
      *
-     * @param codec the delegate codec
-     * @param query the query string to decode
+     * @param codec the delegate codec for processing decoded content
+     * @param query the query string to process
      * @param shape the target shape for validation and structure
+     * @param base  the base URI for resolving relative URIs in decoded content
      *
-     * @return the decoded value structure
+     * @return the processed value structure
      *
      * @throws NullPointerException if any parameter is {@code null}
      * @throws CodecException       if no suitable collection property is found for form data queries
      * @throws CodecException       if multiple collection properties are found without clear precedence
      */
-    static Value decode(final Codec codec, final String query, final Shape shape) {
+    static Value query(final Codec codec, final String query, final Shape shape, final URI base) {
 
         if ( URL_PATTERN.matcher(query).matches() ) {
 
-            return decode(codec, URLDecoder.decode(query, UTF_8), shape);
+            return query(codec, URLDecoder.decode(query, UTF_8), shape, base);
 
         } else if ( BASE64_PATTERN.matcher(query).matches() ) {
 
-            return decode(codec, new String(Base64.getDecoder().decode(query), UTF_8), shape);
+            return query(codec, new String(Base64.getDecoder().decode(query), UTF_8), shape, base);
 
         } else if ( FORM_DATA_PATTERN.matcher(query).matches() ) {
 
@@ -141,7 +142,7 @@ final class AgentQuery {
 
             return object(
                     shape(shape),
-                    field(collection.name(), value(Query.query(query, collection.shape())))
+                    field(collection.name(), value(Query.query(query, collection.shape(), base)))
             );
 
         } else {

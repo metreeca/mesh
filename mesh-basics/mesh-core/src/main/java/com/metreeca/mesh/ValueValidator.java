@@ -36,6 +36,7 @@ import static com.metreeca.shim.Collections.list;
 import static com.metreeca.shim.Collections.set;
 import static com.metreeca.shim.Exceptions.unsupported;
 import static com.metreeca.shim.Locales.locale;
+import static com.metreeca.shim.URIs.uri;
 
 import static java.lang.String.format;
 import static java.util.Map.entry;
@@ -482,15 +483,15 @@ final class ValueValidator {
             }
 
             @Override public Value visit(final Value host, final URI uri) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Temporal temporal) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final TemporalAmount amount) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Locale locale, final String string) {
@@ -516,15 +517,15 @@ final class ValueValidator {
             }
 
             @Override public Value visit(final Value host, final URI uri) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Temporal temporal) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final TemporalAmount amount) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Locale locale, final String string) {
@@ -542,7 +543,7 @@ final class ValueValidator {
         return optional(shape.pattern().map(pattern -> value.accept(new ScalarVisitor() {
 
             @Override public Value visit(final Value host, final Number number) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final String string) {
@@ -554,15 +555,15 @@ final class ValueValidator {
             }
 
             @Override public Value visit(final Value host, final URI uri) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Temporal temporal) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final TemporalAmount amount) {
-                return visit(host, host.encode());
+                return visit(host, host.encode(uri()));
             }
 
             @Override public Value visit(final Value host, final Locale locale, final String string) {

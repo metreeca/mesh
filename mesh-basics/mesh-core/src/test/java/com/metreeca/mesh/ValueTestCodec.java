@@ -26,6 +26,8 @@ import java.net.URI;
 import java.time.*;
 
 import static com.metreeca.mesh.Value.*;
+import static com.metreeca.shim.URIs.*;
+import static com.metreeca.shim.URIs.uri;
 
 import static java.util.Locale.ROOT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,82 +35,82 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class ValueTestCodec {
 
     @Test void testVoid() {
-        assertThat(Nil().encode()).isEqualTo("null");
-        assertThat(Nil().decode("null")).contains(Nil());
-        assertThat(Nil().decode("not a void")).isEmpty();
+        assertThat(Nil().encode(uri())).isEqualTo("null");
+        assertThat(Nil().decode("null", uri())).contains(Nil());
+        assertThat(Nil().decode("not a void", uri())).isEmpty();
     }
 
     @Test void testBit() {
-        assertThat(bit(true).encode()).isEqualTo("true");
-        assertThat(Bit().decode("false")).contains(bit(false));
-        assertThat(Bit().decode("not a boolean")).isEmpty();
+        assertThat(bit(true).encode(uri())).isEqualTo("true");
+        assertThat(Bit().decode("false", uri())).contains(bit(false));
+        assertThat(Bit().decode("not a boolean", uri())).isEmpty();
     }
 
     @Test void testNumber() {
 
-        assertThat(number(BigInteger.valueOf(123)).encode()).isEqualTo("123");
-        assertThat(number(BigDecimal.valueOf(123.0)).encode()).isEqualTo("123.0");
-        assertThat(number(1.23e1D).encode()).isEqualTo("1.23e1");
+        assertThat(number(BigInteger.valueOf(123)).encode(uri())).isEqualTo("123");
+        assertThat(number(BigDecimal.valueOf(123.0)).encode(uri())).isEqualTo("123.0");
+        assertThat(number(1.23e1D).encode(uri())).isEqualTo("1.23e1");
 
-        assertThat(Number().decode("123")).contains(integer(123));
-        assertThat(Number().decode("123.0")).contains(decimal(123.0));
-        assertThat(Number().decode("1.23e1")).contains(floating(1.23e1));
+        assertThat(Number().decode("123", uri())).contains(integer(123));
+        assertThat(Number().decode("123.0", uri())).contains(decimal(123.0));
+        assertThat(Number().decode("1.23e1", uri())).contains(floating(1.23e1));
 
-        assertThat(Number().decode("not a number")).isEmpty();
+        assertThat(Number().decode("not a number", uri())).isEmpty();
 
     }
 
     @Test void testIntegral() {
-        assertThat(integral(123L).encode()).isEqualTo("123");
-        assertThat(Integral().decode("123")).contains(integral(123));
-        assertThat(Integral().decode("not an integral")).isEmpty();
+        assertThat(integral(123L).encode(uri())).isEqualTo("123");
+        assertThat(Integral().decode("123", uri())).contains(integral(123));
+        assertThat(Integral().decode("not an integral", uri())).isEmpty();
     }
 
     @Test void testFloating() {
 
-        assertThat(floating(123.0D).encode()).isEqualTo("1.23e2");
-        assertThat(Floating().decode("123")).contains(floating(123.0));
+        assertThat(floating(123.0D).encode(uri())).isEqualTo("1.23e2");
+        assertThat(Floating().decode("123", uri())).contains(floating(123.0));
 
-        assertThat(Floating().decode("not an floating")).isEmpty();
+        assertThat(Floating().decode("not an floating", uri())).isEmpty();
 
     }
 
     @Test void testDecimal() {
-        assertThat(decimal(123).encode()).isEqualTo("123.0");
-        assertThat(decimal(123.456).encode()).isEqualTo("123.456");
-        assertThat(Decimal().decode("123.0")).contains(decimal(123.0));
-        assertThat(Decimal().decode("not a decimal")).isEmpty();
+        assertThat(decimal(123).encode(uri())).isEqualTo("123.0");
+        assertThat(decimal(123.456).encode(uri())).isEqualTo("123.456");
+        assertThat(Decimal().decode("123.0", uri())).contains(decimal(123.0));
+        assertThat(Decimal().decode("not a decimal", uri())).isEmpty();
     }
 
     @Test void testInteger() {
-        assertThat(integer(123).encode()).isEqualTo("123");
-        assertThat(Integer().decode("123")).contains(integer(123));
-        assertThat(Integer().decode("not an integer")).isEmpty();
+        assertThat(integer(123).encode(uri())).isEqualTo("123");
+        assertThat(Integer().decode("123", uri())).contains(integer(123));
+        assertThat(Integer().decode("not an integer", uri())).isEmpty();
     }
 
     @Test void testString() {
-        assertThat(string("value").encode()).isEqualTo("value");
-        assertThat(String().decode("value")).contains(string("value"));
+        assertThat(string("value").encode(uri())).isEqualTo("value");
+        assertThat(String().decode("value", uri())).contains(string("value"));
     }
 
     @Test void testURI() {
 
         final URI base=URI.create("https://example.org/base/");
 
-        assertThat(uri(base.resolve("/resources/123")).encode(base)).isEqualTo("/resources/123");
-        assertThat(uri(URI.create("https://example.net/123")).encode(base)).isEqualTo("https://example.net/123");
+        assertThat(Value.uri(base.resolve("/resources/123")).encode(base)).isEqualTo("/resources/123");
+        assertThat(Value.uri(URI.create("https://example.net/123")).encode(base)).isEqualTo("https://example.net/123");
 
-        assertThat(URI().decode("", base)).contains(uri(base));
-        assertThat(URI().decode("/resources/123", base)).contains(uri(base.resolve("/resources/123")));
-        assertThat(URI().decode("https://example.net/123", base)).contains(uri(URI.create("https://example.net/123")));
+        assertThat(URI().decode("", base)).contains(Value.uri(base));
+        assertThat(URI().decode("/resources/123", base)).contains(Value.uri(base.resolve("/resources/123")));
+        assertThat(URI().decode("https://example.net/123", base)).contains(Value.uri(URI.create("https://example.net/123")));
 
         assertThat(URI().decode("not a URI", base)).isEmpty();
     }
 
     @Test void testTemporal() {
-        assertThat(Temporal().decode("2024")).contains(temporal(Year.of(2024)));
-        assertThat(Temporal().decode("2024-01-01")).contains(temporal(LocalDate.of(2024, 1, 1)));
-        assertThat(Temporal().decode("not a temporal")).isEmpty();
+        assertThat(Temporal().decode("2024", uri())).contains(temporal(Year.of(2024)));
+        assertThat(Temporal().decode("2024-01-01", uri())).contains(temporal(LocalDate.of(2024, 1, 1)));
+        assertThat(Temporal().decode("not a temporal", uri())).isEmpty();
     }
 
     @Test void testInstant() {
@@ -116,18 +118,18 @@ final class ValueTestCodec {
         final String encoded="2024-12-20T10:15:30.123Z";
         final Value instant=instant(Instant.parse(encoded));
 
-        assertThat(instant.encode()).isEqualTo(encoded);
-        assertThat(Instant().decode(encoded)).contains(instant);
+        assertThat(instant.encode(uri())).isEqualTo(encoded);
+        assertThat(Instant().decode(encoded, uri())).contains(instant);
 
-        assertThat(Instant().decode("not an instant")).isEmpty();
+        assertThat(Instant().decode("not an instant", uri())).isEmpty();
     }
 
     @Test void testTemporalAmount() {
 
-        assertThat(TemporalAmount().decode("P100D")).contains(temporalAmount(Period.ofDays(100)));
-        assertThat(TemporalAmount().decode("PT100H")).contains(temporalAmount(Duration.ofHours(100)));
+        assertThat(TemporalAmount().decode("P100D", uri())).contains(temporalAmount(Period.ofDays(100)));
+        assertThat(TemporalAmount().decode("PT100H", uri())).contains(temporalAmount(Duration.ofHours(100)));
 
-        assertThat(TemporalAmount().decode("not a temporal amount")).isEmpty();
+        assertThat(TemporalAmount().decode("not a temporal amount", uri())).isEmpty();
 
     }
 
@@ -136,10 +138,10 @@ final class ValueTestCodec {
         final String encoded="PT1H2M3.456S";
         final Value duration=duration(Duration.parse(encoded));
 
-        assertThat(duration.encode()).isEqualTo(encoded);
-        assertThat(Duration().decode(encoded)).contains(duration);
+        assertThat(duration.encode(uri())).isEqualTo(encoded);
+        assertThat(Duration().decode(encoded, uri())).contains(duration);
 
-        assertThat(Duration().decode("not an instant")).isEmpty();
+        assertThat(Duration().decode("not an instant", uri())).isEmpty();
     }
 
     @Test void testText() {
@@ -147,12 +149,12 @@ final class ValueTestCodec {
         final String encoded="value@en";
         final Value text=text("en", "value");
 
-        assertThat(Text().decode(encoded)).contains(text);
+        assertThat(Text().decode(encoded, uri())).contains(text);
 
-        assertThat(text(ROOT, "value").encode()).isEqualTo("value");
+        assertThat(text(ROOT, "value").encode(uri())).isEqualTo("value");
 
-        assertThat(Text().decode("")).contains(text(ROOT, ""));
-        assertThat(Text().decode("@")).contains(text(ROOT, "@"));
+        assertThat(Text().decode("", uri())).contains(text(ROOT, ""));
+        assertThat(Text().decode("@", uri())).contains(text(ROOT, "@"));
 
     }
 
@@ -161,22 +163,22 @@ final class ValueTestCodec {
         final String encoded="value^^/#datatype";
         final Value data=data(URIs.term("datatype"), "value");
 
-        assertThat(data.encode(URIs.base())).isEqualTo(encoded);
-        assertThat(Data().decode(encoded, URIs.base())).contains(data);
+        assertThat(data.encode(base())).isEqualTo(encoded);
+        assertThat(Data().decode(encoded, base())).contains(data);
 
-        assertThat(Data().decode("not a typed")).isEmpty();
+        assertThat(Data().decode("not a typed", uri())).isEmpty();
 
     }
 
     @Test void testObject() {
 
-        assertThat(Object().encode()).isEqualTo("");
-        assertThat(object(id(URIs.item("resource"))).encode(URIs.base())).isEqualTo("/resource");
+        assertThat(Object().encode(uri())).isEqualTo("");
+        assertThat(object(id(item("resource"))).encode(base())).isEqualTo("/resource");
 
-        assertThat(Object().decode("")).contains(Object());
-        assertThat(Object().decode("/resource", URIs.base())).contains(object(id(URIs.item("resource"))));
+        assertThat(Object().decode("", uri())).contains(Object());
+        assertThat(Object().decode("/resource", base())).contains(object(id(item("resource"))));
 
-        assertThat(Object().decode("not an object")).isEmpty();
+        assertThat(Object().decode("not an object", uri())).isEmpty();
     }
 
 }

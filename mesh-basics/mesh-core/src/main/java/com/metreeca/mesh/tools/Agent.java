@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import static com.metreeca.mesh.Value.*;
 import static com.metreeca.mesh.tools.AgentModel.expand;
 import static com.metreeca.mesh.tools.AgentModel.populate;
+import static com.metreeca.mesh.tools.AgentQuery.query;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.URIs.uri;
 import static com.metreeca.shim.URIs.uuid;
@@ -72,7 +73,7 @@ import static java.util.regex.Pattern.compile;
  *   <li><strong>URL-encoded strings</strong> - Automatically decoded and recursively processed</li>
  *   <li><strong>Base64-encoded strings</strong> - Automatically decoded and recursively processed</li>
  *   <li><strong>Form data with operators</strong> - Converted to structured queries as documented in
- *       {@link Query#query(String, Shape)}</li>
+ *       {@link Query#query(String, Shape, URI)}</li>
  *   <li><strong>Plain strings</strong> - Processed directly by the configured codec</li>
  * </ul>
  *
@@ -266,7 +267,7 @@ public final class Agent {
 
             final Value specs=Optional.of(request.query())
                     .filter(not(String::isEmpty))
-                    .map(query -> AgentQuery.decode(codec, query, model.shape().orElseGet(Shape::shape)))
+                    .map(query -> query(codec, query, model.shape().orElseGet(Shape::shape), resource))
                     .orElseGet(() -> object());
 
             final List<Locale> locales=Optional.ofNullable(request.header(ACCEPT_LANGUAGE)).stream()

@@ -1154,20 +1154,6 @@ public abstract class Value implements Valuable {
     }
 
 
-    public String encode() throws UnsupportedOperationException {
-        return encode(URIs.base());
-    }
-
-    public Optional<Value> decode(final String value) throws UnsupportedOperationException {
-
-        if ( value == null ) {
-            throw new NullPointerException("null value");
-        }
-
-        return decode(value, URIs.base());
-    }
-
-
     public String encode(final URI base) throws UnsupportedOperationException {
         return error(new UnsupportedOperationException(format("<%s> encoding", this)));
     }

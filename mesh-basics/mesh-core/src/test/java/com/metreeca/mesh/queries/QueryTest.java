@@ -35,6 +35,7 @@ import static com.metreeca.mesh.queries.Query.query;
 import static com.metreeca.mesh.shapes.Property.property;
 import static com.metreeca.mesh.shapes.Shape.shape;
 import static com.metreeca.shim.Collections.set;
+import static com.metreeca.shim.URIs.base;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -52,7 +53,7 @@ final class QueryTest {
         }
 
         private static Query parse(final String query, final Shape shape) {
-            return query(query, shape);
+            return query(query, shape, base());
         }
 
 

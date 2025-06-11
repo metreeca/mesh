@@ -171,3 +171,11 @@ final Shape exampleShape=shape()
 - Use descriptive link text
 - Prefer relative links for internal documentation
 - Include external links to specifications and standards where relevant
+
+# General Instructions
+
+- Do what has been asked; nothing more, nothing less.
+- NEVER create files unless they're absolutely necessary for achieving your goal.
+- ALWAYS prefer editing an existing file to creating a new one.
+- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly
+  requested by the User.
