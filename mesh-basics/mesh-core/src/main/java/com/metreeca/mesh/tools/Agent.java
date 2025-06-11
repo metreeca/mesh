@@ -119,7 +119,7 @@ public final class Agent {
 
 
     /**
-     * Creates an agent with automatic ID generation.
+     * Creates an agent with automatic id generation.
      *
      * @param model the data model for validation and transformation
      * @param codec the codec for serialization and deserialization
@@ -132,7 +132,7 @@ public final class Agent {
     }
 
     /**
-     * Creates an agent with custom ID generation.
+     * Creates an agent with custom id generation.
      *
      * @param model the data model for validation and transformation
      * @param codec the codec for serialization and deserialization

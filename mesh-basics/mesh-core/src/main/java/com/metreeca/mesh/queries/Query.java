@@ -186,8 +186,9 @@ public final record Query(
                     final Value datatype=expression.apply(shape).datatype().orElseGet(Value::String);
 
                     criteria.compute(expression, (key, criterion) -> (criterion == null
-                            ? Criterion.criterion()
-                            : criterion).lte(datatype.decode(value).orElseThrow(() -> malformed(datatype, value)))
+                                    ? Criterion.criterion()
+                                    : criterion
+                            ).lte(datatype.decode(value).orElseThrow(() -> malformed(datatype, value)))
                     );
 
                 } else if ( label.endsWith(">") ) {
