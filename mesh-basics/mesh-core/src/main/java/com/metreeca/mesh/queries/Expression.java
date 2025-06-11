@@ -72,7 +72,7 @@ public final record Expression(
     }
 
     /**
-     * Parses a string expression into an Expression object.
+     * Parses a string expression into an expression object.
      *
      * @param expression the string representation of the expression to parse
      *

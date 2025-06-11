@@ -16,7 +16,9 @@
 
 package com.metreeca.mesh.tools;
 
+import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.shapes.Shape;
 import com.metreeca.shim.Locales;
 
@@ -51,6 +53,41 @@ import static java.util.regex.Pattern.compile;
  *
  * <p>Provides a complete REST API implementation that maps HTTP operations to store operations
  * with automatic content negotiation, validation, and error handling.</p>
+ *
+ * <h2>HTTP Method Mapping</h2>
+ *
+ * <p>HTTP methods are mapped to corresponding store operations:</p>
+ * <ul>
+ *   <li>{@code GET} → {@link Store#retrieve(Valuable, List)} - Retrieves resources with optional filtering and sorting</li>
+ *   <li>{@code PUT} → {@link Store#create(Valuable)} - Creates new resources with generated or provided identifiers</li>
+ *   <li>{@code UPDATE} → {@link Store#update(Valuable)} - Replaces existing resources completely</li>
+ *   <li>{@code PATCH} → {@link Store#mutate(Valuable)} - Partially updates existing resources</li>
+ *   <li>{@code DELETE} → {@link Store#delete(Valuable)} - Removes existing resources</li>
+ * </ul>
+ *
+ * <h2>Query String Processing</h2>
+ *
+ * <p>Query strings are automatically detected and processed using four strategies:</p>
+ * <ul>
+ *   <li><strong>URL-encoded strings</strong> - Automatically decoded and recursively processed</li>
+ *   <li><strong>Base64-encoded strings</strong> - Automatically decoded and recursively processed</li>
+ *   <li><strong>Form data with operators</strong> - Converted to structured queries as documented in
+ *       {@link Query#query(String, Shape)}</li>
+ *   <li><strong>Plain strings</strong> - Processed directly by the configured codec</li>
+ * </ul>
+ *
+ * <p>Form data queries are automatically converted to collection queries by identifying suitable
+ * collection properties in the target shape (either properties with {@code rdfs:member} predicates
+ * or Object-typed properties with {@code maxCount > 1}).</p>
+ *
+ * <h2>Content Negotiation</h2>
+ *
+ * <p>The agent supports content negotiation through standard HTTP headers:</p>
+ * <ul>
+ *   <li>{@code Accept} - Determines response format (JSON or JSON-LD)</li>
+ *   <li>{@code Accept-Language} - Locale preferences for internationalised content</li>
+ *   <li>{@code Content-Type} - Only {@code application/json} is supported for input</li>
+ * </ul>
  */
 public final class Agent {
 
@@ -229,7 +266,7 @@ public final class Agent {
 
             final Value specs=Optional.of(request.query())
                     .filter(not(String::isEmpty))
-                    .map(query -> codec.decode(query, model.shape().orElseGet(Shape::shape)))
+                    .map(query -> AgentQuery.decode(codec, query, model.shape().orElseGet(Shape::shape)))
                     .orElseGet(() -> object());
 
             final List<Locale> locales=Optional.ofNullable(request.header(ACCEPT_LANGUAGE)).stream()

@@ -18,22 +18,11 @@ package com.metreeca.mesh.tools;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
-import com.metreeca.mesh.queries.Query;
-import com.metreeca.mesh.shapes.Property;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.shim.URIs;
 
 import java.io.*;
-import java.net.URI;
-import java.util.List;
 
-import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.tools.AgentModel.expand;
-import static com.metreeca.shim.Collections.list;
-
-import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.joining;
 
 /**
  * Data serialization and deserialization interface.
@@ -42,75 +31,6 @@ import static java.util.stream.Collectors.joining;
  * data formats with shape-based validation and transformation support.</p>
  */
 public interface Codec {
-
-    URI MEMBERS=URIs.uri("http://www.w3.org/2000/01/rdf-schema#member");
-
-    /**
-     * Creates a query value from a query string and shape.
-     *
-     * @param query the query string to parse
-     * @param shape the shape providing context for the query
-     *
-     * @return a structured query value
-     *
-     * @throws NullPointerException if either parameter is {@code null}
-     * @throws CodecException       if the query cannot be parsed or no collection property is found
-     */
-    static Value query(final String query, final Shape shape) {
-
-        if ( query == null ) {
-            throw new NullPointerException("null query");
-        }
-
-        if ( shape == null ) {
-            throw new NullPointerException("null shape");
-        }
-
-        final Property collection=shape.properties().stream()
-
-                .filter(property -> property.forward()
-                        .filter(MEMBERS::equals)
-                        .isPresent()
-                )
-
-                .findFirst()
-
-                .orElseGet(() -> {
-
-                    final List<Property> collections=list(shape.properties().stream().filter(property ->
-
-                            property.shape().is(Object()) && property.shape().maxCount()
-                                    .filter(maxCount -> maxCount > 1)
-                                    .isPresent()
-
-                    ));
-
-                    if ( collections.size() == 1 ) {
-
-                        return collections.getFirst();
-
-                    } else if ( collections.isEmpty() ) {
-
-                        throw new CodecException("no collection property found");
-
-                    } else {
-
-                        throw new CodecException(format("multiple collection properties found <%s>",
-                                collections.stream().map(Property::name).collect(joining(", "))
-                        ));
-
-                    }
-
-                });
-
-        return object(
-                shape(shape),
-                field(collection.name(), expand(value(Query.query(query, collection.shape()))))
-        );
-    }
-
-
-    //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Encodes a value to a string representation.

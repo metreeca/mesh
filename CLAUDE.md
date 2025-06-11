@@ -35,7 +35,8 @@
 - Keep package, class and method definitions concise, ideally not exceeding 40 chars
 - Cross-link noteworthy mentions of other public or protected packages, classes and methods; use {@linkplain} where
   sensible in the context
-- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods
+- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods in public
+  Javadocs, as they won't appear in generated documentation
 - Make sure <p> tags are always closed with </p>
 - Always add empty lines before and after every element. Never write consecutive elements without blank line separation
 - Definitely don't generate example usage sections
