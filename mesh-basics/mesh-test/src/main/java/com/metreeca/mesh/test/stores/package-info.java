@@ -15,7 +15,7 @@
  */
 
 /**
- * Comprehensive testing framework for {@linkplain com.metreeca.mesh.tools.Store Store} implementations.
+ * Comprehensive testing framework for {@linkplain com.metreeca.mesh.pipe.Store Store} implementations.
  *
  * <p>Provides a structured test suite that validates all aspects of store functionality
  * including data retrieval, CRUD operations, querying, filtering, sorting, and analytics.
@@ -55,7 +55,7 @@
  * <p>Store implementations should extend {@linkplain com.metreeca.mesh.test.stores.StoreTest} and provide a
  * concrete store instance to run the complete validation suite.</p>
  *
- * @see com.metreeca.mesh.tools.Store Store interface specification
+ * @see com.metreeca.mesh.pipe.Store Store interface specification
  * @see com.metreeca.mesh.toys Test data models and examples
  */
 package com.metreeca.mesh.test.stores;

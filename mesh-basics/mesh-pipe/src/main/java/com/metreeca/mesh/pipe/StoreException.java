@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import java.io.Serial;
 
 
 /**
- * Exception thrown during store operations.
+ * Storage-related exception.
  *
  * <p>Represents errors that occur during data persistence operations
  * such as create, read, update, or delete operations.</p>

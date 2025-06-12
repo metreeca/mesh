@@ -29,7 +29,7 @@
 
     <artifactId>mesh-core</artifactId>
 
-    <name>Metreeca/Mesh Data Model</name>
+    <name>Metreeca/Mesh JSON-LD Data Model</name>
     <description>Core model and abstractions for linked data.</description>
 
     <dependencies>

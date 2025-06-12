@@ -32,13 +32,4 @@
     <name>Metreeca/Mesh JSON-LD Codec</name>
     <description>JSON-LD codec for linked data.</description>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>com.metreeca</groupId>
-            <artifactId>mesh-core</artifactId>
-        </dependency>
-
-    </dependencies>
-
 </project>

@@ -19,7 +19,7 @@ package com.metreeca.mesh.rdf4j;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
-import com.metreeca.mesh.tools.Store;
+import com.metreeca.mesh.pipe.Store;
 
 import org.eclipse.rdf4j.common.exception.ValidationException;
 import org.eclipse.rdf4j.repository.Repository;
@@ -50,7 +50,7 @@ import static java.util.Objects.requireNonNull;
  * All operations are logged with timing information for performance monitoring.</p>
  *
  * @see <a href="https://rdf4j.org">Eclipse RDF4J</a>
- * @see com.metreeca.mesh.tools.Store Store interface specification
+ * @see Store Store interface specification
  */
 public final class RDF4JStore implements Store {
 

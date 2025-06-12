@@ -18,18 +18,15 @@ package com.metreeca.mesh.json;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.Codec;
+import com.metreeca.mesh.pipe.CodecException;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.Codec;
-import com.metreeca.mesh.tools.CodecException;
 import com.metreeca.shim.URIs;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URI;
-import java.net.URLDecoder;
-import java.util.Base64;
 
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,9 +45,6 @@ import static java.util.Objects.requireNonNull;
  * @see <a href="https://www.w3.org/TR/json-ld11/">JSON-LD 1.1 Specification</a>
  */
 public final class JSONCodec implements Codec {
-
-
-    //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private final boolean prune;
     private final URI base;
@@ -203,43 +197,6 @@ public final class JSONCodec implements Codec {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override public Value decode(final String source, final Shape shape) throws CodecException {
-
-        if ( source == null ) {
-            throw new NullPointerException("null source");
-        }
-
-        if ( shape == null ) {
-            throw new NullPointerException("null shape");
-        }
-
-        if ( source.startsWith("{") ) { // JSON
-
-            try ( final StringReader reader=new StringReader(source) ) {
-
-                return decode(reader, shape);
-
-            } catch ( final IOException unexpected ) {
-                throw new UncheckedIOException(unexpected);
-            }
-
-        } else if ( source.startsWith("%7B") ) { // URLEncoded JSON
-
-            return decode(URLDecoder.decode(source, UTF_8), shape);
-
-        } else if ( source.startsWith("e3") ) { // Base64 JSON
-
-            return decode(new String(Base64.getDecoder().decode(source), UTF_8), shape);
-
-        } else { // query parameters
-
-            return Codec.query(source, shape);
-
-        }
-
-    }
-
-
     @Override public <A extends Appendable> A encode(final A target, final Valuable value) throws CodecException, IOException {
         if ( target == null ) {
             throw new NullPointerException("null target");
@@ -260,7 +217,7 @@ public final class JSONCodec implements Codec {
             throw new NullPointerException("null shape");
         }
 
-        return new JSONDecoder(this, unwrap(source)).decode(shape);
+        return new JSONDecoder(this, source).decode(shape);
     }
 
     @Override public <R extends Readable> Value decode(final R source) throws CodecException, IOException {
@@ -269,57 +226,7 @@ public final class JSONCodec implements Codec {
             throw new NullPointerException("null source");
         }
 
-        return new JSONDecoder(this, unwrap(source)).decode(null);
+        return new JSONDecoder(this, source).decode(null);
     }
-
-
-    //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private <R extends Readable> Readable unwrap(final R source) throws IOException {
-
-        if ( source instanceof final Reader reader && reader.markSupported() ) {
-
-            final char[] buffer=new char[3];
-
-            reader.mark(buffer.length);
-            reader.read(buffer);
-            reader.reset();
-
-            final String head=new String(buffer);
-
-            if ( head.startsWith("{") ) { // JSON
-
-                return source;
-
-            } else if ( head.startsWith("%7B") ) { // URLEncoded JSON
-
-                return new StringReader(URLDecoder.decode(read(reader), UTF_8));
-
-            } else if ( head.startsWith("e3") ) { // Base64 JSON
-
-                return new StringReader(new String(Base64.getDecoder().decode(read(reader)), UTF_8));
-
-            } else { // query parameters
-
-                throw new UnsupportedOperationException(";( be implemented"); // !!!
-
-            }
-
-        } else {
-
-            return source;
-
-        }
-    }
-
-    private static String read(final Reader reader) throws IOException {
-
-        final StringWriter writer=new StringWriter();
-
-        reader.transferTo(writer);
-
-        return writer.toString();
-    }
-
 
 }

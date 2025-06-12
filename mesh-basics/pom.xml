@@ -36,6 +36,7 @@
     <modules>
 
         <module>mesh-core</module>
+        <module>mesh-pipe</module>
         <module>mesh-meta</module>
         <module>mesh-mint</module>
         <module>mesh-test</module>

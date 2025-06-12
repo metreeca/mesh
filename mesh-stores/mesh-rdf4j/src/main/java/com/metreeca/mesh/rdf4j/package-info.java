@@ -17,7 +17,7 @@
 /**
  * RDF4J-based graph store implementation for semantic data storage.
  *
- * <p>Provides a comprehensive {@linkplain com.metreeca.mesh.tools.Store Store} implementation
+ * <p>Provides a comprehensive {@linkplain com.metreeca.mesh.pipe.Store Store} implementation
  * built on Eclipse RDF4J infrastructure, enabling persistent storage and querying of 
  * semantic graph data with full SPARQL 1.1 support.</p>
  *
@@ -52,6 +52,6 @@
  *
  * @see <a href="https://rdf4j.org">Eclipse RDF4J</a>
  * @see <a href="https://www.w3.org/TR/sparql11-query/">SPARQL 1.1 Query Language</a>
- * @see com.metreeca.mesh.tools.Store Store interface specification
+ * @see com.metreeca.mesh.pipe.Store Store interface specification
  */
 package com.metreeca.mesh.rdf4j;

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.queries.Criterion;
 import com.metreeca.mesh.queries.Specs;
 import com.metreeca.mesh.shapes.Property;
 import com.metreeca.mesh.shapes.Shape;
@@ -24,15 +25,30 @@ import com.metreeca.mesh.shapes.Shape;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.util.Map.Entry;
 
-import static com.metreeca.mesh.Value.*;
+import static com.metreeca.mesh.Value.Array;
+import static com.metreeca.mesh.Value.Data;
+import static com.metreeca.mesh.Value.Nil;
+import static com.metreeca.mesh.Value.String;
+import static com.metreeca.mesh.Value.Text;
+import static com.metreeca.mesh.Value.array;
+import static com.metreeca.mesh.Value.data;
+import static com.metreeca.mesh.Value.field;
+import static com.metreeca.mesh.Value.id;
+import static com.metreeca.mesh.Value.integer;
+import static com.metreeca.mesh.Value.object;
+import static com.metreeca.mesh.Value.shape;
+import static com.metreeca.mesh.Value.string;
+import static com.metreeca.mesh.Value.text;
+import static com.metreeca.mesh.Value.type;
+import static com.metreeca.mesh.Value.value;
+import static com.metreeca.mesh.pipe.AgentModel.expand;
+import static com.metreeca.mesh.pipe.AgentModel.populate;
 import static com.metreeca.mesh.queries.Criterion.criterion;
 import static com.metreeca.mesh.queries.Query.query;
 import static com.metreeca.mesh.shapes.Property.property;
 import static com.metreeca.mesh.shapes.Shape.shape;
-import static com.metreeca.mesh.tools.AgentModel.expand;
-import static com.metreeca.mesh.tools.AgentModel.populate;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.Collections.list;
 import static com.metreeca.shim.Locales.ANY;
@@ -55,7 +71,7 @@ final class AgentModelTest {
 
             final Value array=array(
                     string("value"),
-                    object(Value.shape(Shape.shape().property(property("p").forward(true).shape(Shape.shape().datatype(Object())))))
+                    object(shape(shape().property(property("p").forward(true).shape(shape().datatype(object())))))
             );
 
             assertThat(expand(array)).isEqualTo(array(list(array.values().map(AgentModel::expand))));
@@ -64,7 +80,7 @@ final class AgentModelTest {
 
         @Test void testExpandObjectWithoutId() {
             assertThat(expand(object())).isEqualTo(object(
-                    Value.shape(Shape.shape()),
+                    shape(shape()),
                     id(uri())
             ));
         }
@@ -73,7 +89,7 @@ final class AgentModelTest {
             assertThat(expand(object(
                     id(base())
             ))).isEqualTo(object(
-                    Value.shape(Shape.shape()),
+                    shape(shape()),
                     id(uri())
             ));
         }
@@ -83,10 +99,10 @@ final class AgentModelTest {
             final Shape shape=shape().property(property("x").forward(true).shape(shape().datatype(String())));
 
             assertThat(expand(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("x", string("x"))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("x", string("x"))
             ));
@@ -99,9 +115,9 @@ final class AgentModelTest {
             );
 
             assertThat(expand(object(
-                    Value.shape(shape)
+                    shape(shape)
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("x", String())
             ));
@@ -110,22 +126,22 @@ final class AgentModelTest {
 
         @Test void testExpandObjectNestedValues() {
 
-            final Property q=property("q").forward(true).shape(shape().datatype(Object()).maxCount(1));
-            final Property p=property("p").forward(true).shape(shape().datatype(Object()).maxCount(1));
+            final Property q=property("q").forward(true).shape(shape().datatype(object()).maxCount(1));
+            final Property p=property("p").forward(true).shape(shape().datatype(object()).maxCount(1));
 
             assertThat(expand(object(
-                    Value.shape(Shape.shape().property(p)),
+                    shape(shape().property(p)),
                     field("p", object(
-                            Value.shape(Shape.shape().property(q))
+                            shape(shape().property(q))
                     ))
             ))).isEqualTo(object(
-                    Value.shape(Shape.shape().property(p)),
+                    shape(shape().property(p)),
                     id(uri()),
                     field("p", object(
-                            Value.shape(Shape.shape().property(q)),
+                            shape(shape().property(q)),
                             id(uri()),
                             entry("q", object(
-                                    Value.shape(q.shape()),
+                                    shape(q.shape()),
                                     id(uri())
                             ))
                     ))
@@ -140,9 +156,9 @@ final class AgentModelTest {
             );
 
             assertThat(expand(value(query(object(
-                    Value.shape(shape)
+                    shape(shape)
             ))))).isEqualTo(value(query(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("x", String())
             ))));
@@ -153,7 +169,7 @@ final class AgentModelTest {
             assertThat(expand(object(
                     field("x", string("x"))
             ))).isEqualTo(object(
-                    Value.shape(Shape.shape()),
+                    shape(shape()),
                     id(uri())
             ));
         }
@@ -163,9 +179,9 @@ final class AgentModelTest {
             final Shape shape=shape().property(property("x").forward(true));
 
             assertThat(expand(object(
-                    Value.shape(shape)
+                    shape(shape)
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri())
             ));
         }
@@ -178,12 +194,12 @@ final class AgentModelTest {
             final Shape shape=shape().property(p);
 
             assertThat(expand(object(
-                    Value.shape(shape)
+                    shape(shape)
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("p", object(
-                            Value.shape(p.shape()),
+                            shape(p.shape()),
                             id(uri())
                     ))
             ));
@@ -197,9 +213,9 @@ final class AgentModelTest {
                     .property(property("visible").forward(true).hidden(false).shape(shape().datatype(String())));
 
             assertThat(expand(object(
-                    Value.shape(shape)
+                    shape(shape)
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("visible", array(String()))
             ));
@@ -215,14 +231,14 @@ final class AgentModelTest {
 
             assertThat(expand(object(
 
-                    Value.shape(shape),
+                    shape(shape),
 
                     field("p", string("value")),
                     field("r", Nil())
 
             ))).isEqualTo(object(
 
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
 
                     field("p", string("value")),
@@ -237,10 +253,10 @@ final class AgentModelTest {
                     .property(property("p").forward(true).shape(shape().datatype(String())));
 
             assertThat(expand(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", Array())
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("p", Array())
             ));
@@ -254,10 +270,10 @@ final class AgentModelTest {
             );
 
             assertThat(expand(object(
-                    Value.shape(shape),
-                    field("p", array())
+                    shape(shape),
+                    field("p", Array())
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     id(uri()),
                     field("p", array(Text()))
             ));
@@ -274,7 +290,7 @@ final class AgentModelTest {
         }
 
         @Test void testPopulateLiteralFromObject() {
-            assertThat(populate(String(), Object())).isEqualTo(Object());
+            assertThat(populate(String(), object())).isEqualTo(object());
         }
 
         @Test void testPopulateLiteralFromArray() {
@@ -287,10 +303,11 @@ final class AgentModelTest {
 
 
         @Test void testPopulateObjectFromString() {
-            assertThat(populate(Object(), String())).isEqualTo(String());
+            assertThat(populate(object(), String())).isEqualTo(String());
         }
 
         @Test void testPopulateObjectFromObject() {
+
             assertThat(populate(object(
                     field("w", integer(2)),
                     field("x", integer(3)),
@@ -302,6 +319,20 @@ final class AgentModelTest {
             ))).isEqualTo(object(
                     field("x", integer(5)),
                     field("y", object(entry("a", integer(6))))
+            ));
+        }
+
+        @Test void testPopulateObjectEWithIgnoredFieldsFromObject() {
+            assertThat(populate(object(
+                    shape(shape())
+            ), object(
+                    field("x", integer(5)),
+                    field("y", object(entry("a", integer(6)))),
+                    field("z", integer(7))
+            ))).isEqualTo(object(
+                    field("x", integer(5)),
+                    field("y", object(entry("a", integer(6)))),
+                    field("z", integer(7))
             ));
         }
 
@@ -326,19 +357,19 @@ final class AgentModelTest {
                     ));
 
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", string("value"))
             ), object(
-                    Value.shape(shape)
+                    shape(shape)
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", String())
             ));
 
         }
 
         @Test void testPopulateObjectFromArray() {
-            assertThat(populate(Object(), Array())).isEqualTo(Array());
+            assertThat(populate(object(), Array())).isEqualTo(Array());
         }
 
         @Test void testPopulateObjectFromQuery() {
@@ -364,10 +395,10 @@ final class AgentModelTest {
             assertThat(populate(object(type("x")), object())).isEqualTo(object());
             assertThat(populate(object(type("x")), object(type("y")))).isEqualTo(object(type("y")));
 
-            assertThat(populate(object(Value.shape(Shape.shape().minInclusive(integer(1)))), object())).isEqualTo(object());
+            assertThat(populate(object(shape(shape().minInclusive(integer(1)))), object())).isEqualTo(object());
 
-            final Map.Entry<String, Value> x=Value.shape(Shape.shape().minInclusive(integer(1)));
-            final Map.Entry<String, Value> y=Value.shape(Shape.shape().maxInclusive(integer(10)));
+            final Entry<String, Value> x=shape(shape().minInclusive(integer(1)));
+            final Entry<String, Value> y=shape(shape().maxInclusive(integer(10)));
 
             assertThat(populate(object(x), object())).isEqualTo(object());
             assertThat(populate(object(x), object(y))).isEqualTo(object(y));
@@ -380,7 +411,7 @@ final class AgentModelTest {
         }
 
         @Test void testPopulateArrayFromObject() {
-            assertThat(populate(Array(), Object())).isEqualTo(Object());
+            assertThat(populate(Array(), object())).isEqualTo(object());
         }
 
         @Test void testPopulateArrayFromArray() {
@@ -508,6 +539,35 @@ final class AgentModelTest {
             ));
         }
 
+        @Test void testPopulateQueryWithOnlyConstraintsFromObject() {
+
+            // x is a query containing an empty model and some constraints
+
+            final Shape shape=shape()
+                    .property(property("x").forward(true));
+
+            final Criterion criterion=criterion().gt(integer(0));
+
+            final Value x=value(query()
+                    .model(object(
+                            shape(shape)
+                    ))
+                    .where("x", criterion)
+            );
+
+            // y is an object
+
+            final Value y=object(
+                    shape(shape),
+                    field("x", string("test"))
+            );
+
+            assertThat(populate(x, y)).isEqualTo(value(query()
+                    .model(y)
+                    .where("x", criterion)
+            ));
+        }
+
 
         @Test void testPopulateSpecsFromObject() {
             assertThat(populate(value(new Specs(shape(), list())), object(field("x", String()))))
@@ -526,68 +586,68 @@ final class AgentModelTest {
 
         @Test void testPopulateTextFromDefinedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "one")))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "one")))
             ));
         }
 
         @Test void testPopulateTextFromWildcardValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("*", "?")))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "?")))
             ));
         }
 
         @Test void testPopulateTextFromMismatchedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("it", "uno")))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ));
         }
 
         @Test void testPopulateTextFromUndefinedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array())
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text("en", "")))
             ));
         }
 
         @Test void testPopulateTextWildcard() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(text(ANY, "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(
                             text("en", ""),
                             text("it", "")
                     ))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(
                             text("en", ""),
                             text("it", "")
@@ -607,39 +667,39 @@ final class AgentModelTest {
 
         @Test void testPopulateDataFromDefinedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "one")))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "one")))
             ));
         }
 
         @Test void testPopulateDataFromMismatchedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:y", "uno")))
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "")))
             ));
         }
 
         @Test void testPopulateDataFromUndefinedValue() {
             assertThat(populate(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "")))
             ), object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array())
             ))).isEqualTo(object(
-                    Value.shape(shape),
+                    shape(shape),
                     field("p", array(data("test:x", "")))
             ));
         }

@@ -76,7 +76,7 @@
  * with JSON-LD and linked data principles.</p>
  *
  * @see com.metreeca.mesh.Value Core value model for query targets
- * @see com.metreeca.mesh.tools.Store Storage abstraction for query execution
+ * @see com.metreeca.mesh.pipe.Store Storage abstraction for query execution
  * @see com.metreeca.mesh.shapes Shape constraints for query validation
  */
 package com.metreeca.mesh.queries;

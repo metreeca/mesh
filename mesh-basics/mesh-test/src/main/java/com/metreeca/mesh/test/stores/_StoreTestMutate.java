@@ -16,7 +16,7 @@
 
 package com.metreeca.mesh.test.stores;
 
-import com.metreeca.mesh.tools.Store;
+import com.metreeca.mesh.pipe.Store;
 
 /**
  * Test framework for store mutation operations.

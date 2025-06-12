@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.queries.Criterion;
@@ -28,15 +28,13 @@ import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.queries.Query.query;
+import static com.metreeca.mesh.Value.Visitor;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.Collections.list;
 import static com.metreeca.shim.Locales.ANY;
 import static com.metreeca.shim.URIs.uri;
 
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.*;
 
@@ -69,17 +67,17 @@ final class AgentModel {
         return model.accept(new Visitor<>() {
 
             @Override public Value visit(final Value host, final List<Value> values) {
-                return array(list(values.stream().map(value -> value.accept(this))));
+                return Value.array(list(values.stream().map(value -> value.accept(this))));
             }
 
             @Override public Value visit(final Value host, final Map<String, Value> fields) {
-                return object(list(Stream.concat(
+                return Value.object(Collections.list(Stream.concat(
 
                         // default shape and id
 
                         Stream.of(
                                 Value.shape(host.shape().orElseGet(Shape::shape)),
-                                id(uri())
+                                Value.id(uri())
                         ),
 
                         // shape-inferred properties
@@ -94,16 +92,16 @@ final class AgentModel {
 
                                     return Optional.ofNullable(fields.get(name))
 
-                                            .map(v -> shape.is(Text()) && v.equals(Array())
-                                                    ? array(Text())
+                                            .map(v -> shape.is(Value.Text()) && v.equals(Value.Array())
+                                                    ? Value.array(Value.Text())
                                                     : v.accept(this)
                                             )
 
                                             .or(() -> model(shape))
 
-                                            .filter(not(v -> v.equals(Nil())))
+                                            .filter(not(v -> v.equals(Value.Nil())))
 
-                                            .map(v -> field(name, v))
+                                            .map(v -> Value.field(name, v))
 
                                             .stream();
 
@@ -113,7 +111,7 @@ final class AgentModel {
             }
 
             @Override public Value visit(final Value host, final Object object) {
-                return object instanceof final Query query ? value(query.model(query.model().accept(this)))
+                return object instanceof final Query query ? Value.value(query.model(query.model().accept(this)))
                         : host;
             }
 
@@ -130,9 +128,18 @@ final class AgentModel {
      * <ul>
      *   <li>For literals: Second value always replaces the first</li>
      *   <li>For arrays: Pairwise merging of elements by position</li>
-     *   <li>For objects: Property-by-property merging of common properties</li>
+     *   <li>For objects: When first object is empty, returns second object; otherwise merges
+     *       properties from both objects with second taking precedence</li>
      *   <li>For queries: Merges models, combines criteria, preserves offset from first query,
      *       and uses minimum non-zero limit</li>
+     * </ul>
+     *
+     * <p>Object merging behaviour:</p>
+     * <ul>
+     *   <li>Properties present in both objects: values from second object take precedence</li>
+     *   <li>Properties only in first object: populated from shape definitions if available</li>
+     *   <li>Properties only in second object: added to result (except reserved fields)</li>
+     *   <li>Empty first object: replaced entirely by second object</li>
      * </ul>
      *
      * <p>Special handling is provided for:</p>
@@ -156,7 +163,7 @@ final class AgentModel {
                 )
 
                 .or(() -> x.object().flatMap(v ->
-                        y.object().map(w -> populate(v, w))
+                        y.object().map(w -> x.isEmpty() ? y : populate(v, w))
                                 .or(() -> y.value(Query.class).map(w -> populate(x, w)))
                 ))
 
@@ -182,14 +189,14 @@ final class AgentModel {
      * @return the merged array
      */
     private static Value populate(final List<Value> x, final List<Value> y) {
-        return array(IntStream.range(0, max(x.size(), y.size()))
+        return Value.array(IntStream.range(0, max(x.size(), y.size()))
                 .mapToObj(i -> {
 
-                    final Value v=i < x.size() ? x.get(i) : Nil();
-                    final Value w=i < y.size() ? y.get(i) : Nil();
+                    final Value v=i < x.size() ? x.get(i) : Value.Nil();
+                    final Value w=i < y.size() ? y.get(i) : Value.Nil();
 
-                    return v.equals(Nil()) ? w
-                            : w.equals(Nil()) ? v
+                    return v.equals(Value.Nil()) ? w
+                            : w.equals(Value.Nil()) ? v
                             : populate(v, w);
 
                 })
@@ -201,14 +208,14 @@ final class AgentModel {
      * Populates a query model using the first element of an array.
      *
      * @param x the source array
-     * @param w the query to populate
+     * @param y the query to populate
      *
      * @return the populated query value
      */
-    private static Value populate(final List<Value> x, final Query w) {
+    private static Value populate(final List<Value> x, final Query y) {
         return x.stream().findFirst()
-                .map(v -> populate(v, w))
-                .orElseGet(() -> value(w));
+                .map(v -> populate(v, y))
+                .orElseGet(() -> Value.value(y));
     }
 
 
@@ -224,7 +231,7 @@ final class AgentModel {
      * @return the merged object
      */
     private static Value populate(final Map<String, Value> x, final Map<String, Value> y) {
-        return object(list(x.entrySet().stream()
+        return Value.object(list(x.entrySet().stream()
 
                 .flatMap(e -> Optional.ofNullable(y.get(e.getKey()))
 
@@ -232,14 +239,14 @@ final class AgentModel {
                                 .flatMap(AgentModel::model)
                         )
 
-                        .map(w -> field(e.getKey(), shape(y, e.getKey())
-                                .filter(s -> s.is(Text()) && s.isMultiple())
+                        .map(w -> Value.field(e.getKey(), shape(y, e.getKey())
+                                .filter(s -> s.is(Value.Text()) && s.isMultiple())
                                 .isPresent() ?
 
                                 text(e.getValue(), w)
 
                                 : shape(y, e.getKey())
-                                .filter(s -> s.is(Data()) && s.isMultiple())
+                                .filter(s -> s.is(Value.Data()) && s.isMultiple())
                                 .isPresent() ?
 
                                 data(e.getValue(), w)
@@ -282,7 +289,7 @@ final class AgentModel {
      * @return a merged array of text values
      */
     private static Value text(final List<Value> x, final List<Value> y) {
-        return array(list(x.stream()
+        return Value.array(list(x.stream()
                 .flatMap(v -> v.text().stream())
                 .flatMap(v ->
 
@@ -334,7 +341,7 @@ final class AgentModel {
      * @return a merged array of data values
      */
     private static Value data(final List<Value> x, final List<Value> y) {
-        return array(list(x.stream()
+        return Value.array(list(x.stream()
                 .flatMap(v -> v.data().stream())
                 .map(v ->
 
@@ -367,7 +374,7 @@ final class AgentModel {
      * @return the merged query value
      */
     private static Value populate(final Query x, final Query y) {
-        return value(new Query(
+        return Value.value(new Query(
 
                 populate(x.model(), y.model()),
 
@@ -378,7 +385,7 @@ final class AgentModel {
                         ))),
 
                 x.offset(),
-                x.limit() == 0 ? y.limit() : y.limit() == 0 ? x.limit() : min(x.limit(), y.limit())
+                x.limit() == 0 ? y.limit() : y.limit() == 0 ? x.limit() : Math.min(x.limit(), y.limit())
 
         ));
     }
@@ -394,31 +401,37 @@ final class AgentModel {
     private static Value populate(final Query x, final List<Value> y) {
         return y.stream().findFirst()
                 .map(w -> populate(x, w))
-                .orElseGet(() -> value(x));
+                .orElseGet(() -> Value.value(x));
     }
 
     /**
      * Populates a query with a generic value by converting the value to a query.
+     *
+     * <p>If the value {@code y} is already a query, it is used directly. Otherwise,
+     * the value is wrapped as the model of a new query and then merged with the existing query {@code x}.</p>
      *
      * @param x the query to populate
-     * @param y the value to merge
+     * @param y the value to merge (converted to query if necessary)
      *
-     * @return the populated query value
+     * @return the populated query value with merged model and combined criteria
      */
     private static Value populate(final Query x, final Value y) {
-        return populate(x, query(y));
+        return populate(x, y.value(Query.class).orElseGet(() -> Query.query(y)));
     }
 
     /**
      * Populates a query with a generic value by converting the value to a query.
      *
-     * @param x the value to merge
+     * <p>If the value {@code x} is already a query, it is used directly. Otherwise,
+     * the value is wrapped as the model of a new query and then merged with the existing query {@code y}.</p>
+     *
+     * @param x the value to merge (converted to query if necessary)
      * @param y the query to populate
      *
-     * @return the populated query value
+     * @return the populated query value with merged model and combined criteria
      */
     private static Value populate(final Value x, final Query y) {
-        return populate(query(x), y);
+        return populate(x.value(Query.class).orElseGet(() -> Query.query(x)), y);
     }
 
 
@@ -433,7 +446,7 @@ final class AgentModel {
      * @return an Optional containing the shape of the named property, or empty if not found
      */
     private static Optional<Shape> shape(final Map<String, Value> fields, final String name) {
-        return Optional.ofNullable(fields.get(CONTEXT))
+        return Optional.ofNullable(fields.get(Value.CONTEXT))
                 .flatMap(v -> v.value(Shape.class))
                 .flatMap(s -> s.property(name))
                 .map(Property::shape);
@@ -449,13 +462,13 @@ final class AgentModel {
     private static Optional<Value> model(final Shape shape) {
         return shape.datatype()
 
-                .map(datatype -> datatype.equals(Object())
-                        ? object(Value.shape(shape), id(uri()))
+                .map(datatype -> datatype.equals(Value.Object())
+                        ? Value.object(Value.shape(shape), Value.id(uri()))
                         : datatype
                 )
 
                 .map(value -> shape.isMultiple()
-                        ? array(value)
+                        ? Value.array(value)
                         : value
                 );
     }

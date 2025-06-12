@@ -7,13 +7,7 @@
 - `mvn test -Dtest=TestClassName` - Run a specific test class
 - `mvn test -Dtest=TestClassName#testMethodName` - Run a specific test method
 
-## Major Release
-
-- review triggers for `.github/workflows/main-sync.yml`
-
-## Minor Release
-
-# Coding Standards
+# Coding Guidelines
 
 ## Conventions
 
@@ -41,7 +35,8 @@
 - Keep package, class and method definitions concise, ideally not exceeding 40 chars
 - Cross-link noteworthy mentions of other public or protected packages, classes and methods; use {@linkplain} where
   sensible in the context
-- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods
+- Make absolutely sure not to link, mention or discuss package-protected or private classes or methods in public
+  Javadocs, as they won't appear in generated documentation
 - Make sure <p> tags are always closed with </p>
 - Always add empty lines before and after every element. Never write consecutive elements without blank line separation
 - Definitely don't generate example usage sections
@@ -78,7 +73,6 @@
 - **Framework naming**: Always refer to the framework as "Metreeca/Mesh"
 - **Avoid overuse of "you/yours"**: Minimize direct address to maintain professional distance
 - **Concise and direct**: Provide clear, actionable information without unnecessary elaboration
-- Use consistent naming conventions
 - Use British spelling
 
 ## Document Structure
@@ -104,9 +98,7 @@ title: "Tutorial Topic Name"
 - Use H1 (`#`) for major sections
 - Use H2 (`##`) and H3 (`###`) for subsections
 - Never use H4 or deeper - keep hierarchy shallow
-- Top-level headings must be H1
-- Ensure proper nesting (start with H1, then H2, then H3); make sure H3 don't follow H1
-- Keep headings short, ideally under 20 chars
+- Ensure proper nesting (start with H1, then H2, then H3)
 
 ## Content Organization
 
@@ -180,25 +172,10 @@ final Shape exampleShape=shape()
 - Prefer relative links for internal documentation
 - Include external links to specifications and standards where relevant
 
-# Reference Documentation Guidelines
+# General Instructions
 
-## Structure
-
-- Focus on semantics: Use purpose-based section names instead of implementation details
-- Integrate constructors: Move factory methods into relevant sections rather than separate constructor sections
-- Brief section intros: One-line description of each section's purpose
-- Group by function: Organize by what constructs do, not how they work
-
-## Tables
-
-- Two columns: Item and Description
-- Remove redundancy: Link method names directly, no separate link columns
-- Consistent format: Same structure across all sections
-
-## Descriptions
-
-- Extended length: 80-100 characters for comprehensive context
-- Explain effects: What the construct does, not just configuration actions
-- Assume no prior knowledge: Understandable without deep framework familiarity
-- Be specific: Use precise terminology and concrete examples
-- Reference standards: Mention underlying technologies when relevant
+- Do what has been asked; nothing more, nothing less.
+- NEVER create files unless they're absolutely necessary for achieving your goal.
+- ALWAYS prefer editing an existing file to creating a new one.
+- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly
+  requested by the User.

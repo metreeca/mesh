@@ -19,7 +19,6 @@ package com.metreeca.mesh;
 import com.metreeca.mesh.queries.Table;
 import com.metreeca.mesh.queries.Tuple;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.CodecException;
 import com.metreeca.shim.Locales;
 import com.metreeca.shim.URIs;
 
@@ -192,7 +191,7 @@ public abstract class Value implements Valuable {
         ));
     }
 
-    public static CodecException malformed(final Value model, final String value) {
+    public static ValueException malformed(final Value model, final String value) {
 
         if ( model == null ) {
             throw new NullPointerException("null model");
@@ -202,7 +201,7 @@ public abstract class Value implements Valuable {
             throw new NullPointerException("null value");
         }
 
-        return new CodecException(format(
+        return new ValueException(format(
                 "malformed <%s> value <%s>", model, value
         ));
     }
@@ -1151,20 +1150,6 @@ public abstract class Value implements Valuable {
             }
 
         });
-    }
-
-
-    public String encode() throws UnsupportedOperationException {
-        return encode(URIs.base());
-    }
-
-    public Optional<Value> decode(final String value) throws UnsupportedOperationException {
-
-        if ( value == null ) {
-            throw new NullPointerException("null value");
-        }
-
-        return decode(value, URIs.base());
     }
 
 

@@ -6,7 +6,7 @@ on:
     tags:
       - v4.0.*
     branches:
-      - release/4.0 # !!! remove
+      - release/* # !!! remove
 
 jobs:
 

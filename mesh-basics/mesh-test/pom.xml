@@ -36,6 +36,11 @@
 
         <dependency>
             <groupId>com.metreeca</groupId>
+            <artifactId>mesh-pipe</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.metreeca</groupId>
             <artifactId>mesh-toys</artifactId>
         </dependency>
 

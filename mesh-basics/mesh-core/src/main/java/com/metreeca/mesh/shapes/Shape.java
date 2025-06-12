@@ -17,7 +17,6 @@
 package com.metreeca.mesh.shapes;
 
 import com.metreeca.mesh.Value;
-import com.metreeca.mesh.tools.Store;
 import com.metreeca.shim.Collections;
 import com.metreeca.shim.Locales;
 
@@ -43,13 +42,12 @@ import static java.util.stream.Collectors.toMap;
  * <p>Defines a set of constraints for validating values according to the SHACL specification.
  * Shapes can describe both the structure and validation rules for data values.</p>
  *
- * @param virtual      whether this is a virtual shape, that is generated on the fly during retrieval operations even if
- *                     not actually present in the {@link Store}.
+ * @param virtual      whether this is a virtual shape that doesn't correspond to stored data
  * @param id           the property name for object identifiers
  * @param type         the property name for object types
  * @param datatype     the expected datatype constraint
- * @param clazz        the explicit class constraint used to populate {@code @type} property and as primary target type
- * @param clazzes      the set of implicit class constraints that values must also be instances of
+ * @param clazz        the explicit class constraint
+ * @param clazzes      the set of implicit class constraints
  * @param minExclusive the minimum exclusive value constraint
  * @param maxExclusive the maximum exclusive value constraint
  * @param minInclusive the minimum inclusive value constraint
@@ -530,9 +528,6 @@ public final record Shape(
     /**
      * Configures this shape's virtual flag.
      *
-     * <p>Virtual shapes are generated on the fly during retrieval operations even if not actually present in the
-     * store.</p>
-     *
      * @param virtual whether this shape should be virtual
      *
      * @return a new shape instance with the specified virtual flag
@@ -571,8 +566,7 @@ public final record Shape(
     /**
      * Configures this shape with an ID property name.
      *
-     * <p>Designates which property supplies the {@code @id} value for the JSON-LD context,
-     * providing unique resource identifiers. Automatically sets the datatype to Object.</p>
+     * <p>Automatically sets the datatype to Object.</p>
      *
      * @param id the property name for object identifiers
      *
@@ -619,8 +613,7 @@ public final record Shape(
     /**
      * Configures this shape with a type property name.
      *
-     * <p>Designates which property supplies the {@code @type} value for the JSON-LD context,
-     * providing RDF class types for resources. Automatically sets the datatype to Object.</p>
+     * <p>Automatically sets the datatype to Object.</p>
      *
      * @param type the property name for object types
      *
@@ -714,10 +707,6 @@ public final record Shape(
     /**
      * Configures this shape with class constraints.
      *
-     * <p>Values are expected to be instances of all specified types. The explicit type is used to populate
-     * the {@code @type} property for disambiguation and may serve as the primary target type for operations
-     * like SHACL generation.</p>
-     *
      * @param explicit the explicit class constraint
      * @param implicit additional implicit class constraints
      *
@@ -740,10 +729,6 @@ public final record Shape(
 
     /**
      * Configures this shape with class constraints.
-     *
-     * <p>Values are expected to be instances of all specified types. The explicit type is used to populate
-     * the {@code @type} property for disambiguation and may serve as the primary target type for operations
-     * like SHACL generation.</p>
      *
      * @param explicit the explicit class constraint
      * @param implicit the collection of implicit class constraints
@@ -794,9 +779,6 @@ public final record Shape(
 
     /**
      * Configures this shape with implicit class constraints only.
-     *
-     * <p>Values are expected to be instances of all specified types. Since no explicit type is specified,
-     * there is no designated type for {@code @type} property population.</p>
      *
      * @param implicit the implicit class constraints
      *
@@ -1461,9 +1443,7 @@ public final record Shape(
 
 
     /**
-     * Configures this shape with cardinality [0..*] allowing unlimited values.
-     *
-     * <p>Shorthand for clearing both {@link #minCount(int)} and {@link #maxCount(int)} constraints.</p>
+     * Configures this shape to allow multiple values (no cardinality limit).
      *
      * @return this shape instance unchanged
      */
@@ -1472,9 +1452,7 @@ public final record Shape(
     }
 
     /**
-     * Configures this shape with cardinality [1..*] requiring at least one value.
-     *
-     * <p>Shorthand for {@link #minCount(int) minCount(1)}.</p>
+     * Configures this shape to require at least one value.
      *
      * @return a new shape instance with minimum cardinality of 1
      */
@@ -1483,9 +1461,7 @@ public final record Shape(
     }
 
     /**
-     * Configures this shape with cardinality [0..1] allowing zero or one value.
-     *
-     * <p>Shorthand for {@link #maxCount(int) maxCount(1)}.</p>
+     * Configures this shape to allow at most one value.
      *
      * @return a new shape instance with maximum cardinality of 1
      */
@@ -1494,9 +1470,7 @@ public final record Shape(
     }
 
     /**
-     * Configures this shape with cardinality [1..1] requiring exactly one value.
-     *
-     * <p>Shorthand for {@link #exactly(int) exactly(1)}.</p>
+     * Configures this shape to require exactly one value.
      *
      * @return a new shape instance with cardinality of exactly 1
      */
@@ -1506,9 +1480,7 @@ public final record Shape(
 
 
     /**
-     * Configures this shape with cardinality [n..n] requiring exactly the specified number of values.
-     *
-     * <p>Shorthand for {@link #minCount(int) minCount(limit)}.{@link #maxCount(int) maxCount(limit)}.</p>
+     * Configures this shape to require exactly the specified number of values.
      *
      * @param limit the exact number of values required (must be non-negative)
      *
@@ -1599,9 +1571,6 @@ public final record Shape(
     /**
      * Configures this shape with custom validation constraints.
      *
-     * <p>Custom validation functions take a value as argument and return a trace value detailing constraint
-     * violations. Empty trace values indicate successful validation and are ignored.</p>
-     *
      * @param constraints the custom validation functions
      *
      * @return a new shape instance with the specified custom constraints
@@ -1620,9 +1589,6 @@ public final record Shape(
 
     /**
      * Configures this shape with custom validation constraints.
-     *
-     * <p>Custom validation functions take a value as argument and return a trace value detailing constraint
-     * violations. Empty trace values indicate successful validation and are ignored.</p>
      *
      * @param constraints the collection of custom validation functions
      *
@@ -1752,14 +1718,10 @@ public final record Shape(
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Extends this shape with constraints from another shape while preserving class hierarchy.
+     * Extends this shape with constraints from another shape.
      *
-     * <p>Combines all constraints from both shapes, but preserves this shape's explicit class constraint
-     * to maintain inheritance relationships. The other shape's explicit class is added to implicit classes.
-     * Properties are merged by name with their shapes being extended recursively.</p>
-     *
-     * <p>Use this method for class inheritance scenarios where you want to add constraints from a parent
-     * shape while keeping the current shape's type identity.</p>
+     * <p>Properties are merged by name, with shapes being extended.
+     * The explicit class is not merged from the other shape.</p>
      *
      * @param shape the shape to extend with
      *
@@ -1805,21 +1767,16 @@ public final record Shape(
     }
 
     /**
-     * Merges this shape with constraints from another shape including explicit classes.
+     * Merges this shape with constraints from another shape.
      *
-     * <p>Combines all constraints from both shapes including explicit class constraints, which must be
-     * compatible (identical). This creates a unified shape that satisfies all constraints from both sources.
-     * Properties are merged by name with their shapes being extended recursively.</p>
-     *
-     * <p>Use this method for composition scenarios where you want to combine constraints from multiple
-     * shapes of the same type or when building complex constraint sets.</p>
+     * <p>Unlike extend(), this merges explicit classes and all other constraints.
+     * Properties are merged by name, with shapes being extended.</p>
      *
      * @param shape the shape to merge with
      *
      * @return a new shape instance with constraints from both shapes
      *
      * @throws NullPointerException if {@code shape} is {@code null}
-     * @throws IllegalArgumentException if explicit classes are incompatible
      */
     public Shape merge(final Shape shape) {
 

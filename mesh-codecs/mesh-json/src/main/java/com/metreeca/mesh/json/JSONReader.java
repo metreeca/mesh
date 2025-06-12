@@ -17,7 +17,7 @@
 package com.metreeca.mesh.json;
 
 
-import com.metreeca.mesh.tools.CodecException;
+import com.metreeca.mesh.pipe.CodecException;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

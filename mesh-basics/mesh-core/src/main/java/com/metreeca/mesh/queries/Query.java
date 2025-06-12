@@ -19,8 +19,8 @@ package com.metreeca.mesh.queries;
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.CodecException;
 
+import java.net.URI;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.Map.Entry;
@@ -141,19 +141,21 @@ public final record Query(
      *   <li>{@code field>=value} - greater than or equal filter</li>
      *   <li>{@code ~field=value} - pattern matching filter</li>
      *   <li>{@code ^field=value} - sort order (increasing, decreasing, or numeric)</li>
-     *   <li>{@code @=value} - result offset</li>
-     *   <li>{@code #=value} - result limit</li>
+     *   <li>{@code @=value} - pagination offset</li>
+     *   <li>{@code #=value} - pagination limit</li>
      * </ul>
      *
      * @param query the URL-encoded query string to be parsed
      * @param shape the shape providing context for expression resolution and value decoding
+     * @param base  the base URI for resolving relative URIs in decoded values
      *
      * @return a structured query representing the parsed query string
      *
-     * @throws NullPointerException if either {@code query} or {@code shape} is {@code null}
-     * @throws CodecException       if the query string is malformed
+     * @throws NullPointerException     if any parameter is {@code null}
+     * @throws IllegalArgumentException if {@code base} is not an absolute URI
+     * @throws CodecException           if the query string is malformed
      */
-    public static Query query(final String query, final Shape shape) {
+    public static Query query(final String query, final Shape shape, final URI base) {
 
         if ( query == null ) {
             throw new NullPointerException("null query");
@@ -162,6 +164,15 @@ public final record Query(
         if ( shape == null ) {
             throw new NullPointerException("null shape");
         }
+
+        if ( base == null ) {
+            throw new NullPointerException("null base");
+        }
+
+        if ( !base.isAbsolute() ) {
+            throw new IllegalArgumentException(format("relative base URI <%s>", base));
+        }
+
 
         final Map<Expression, Criterion> criteria=new HashMap<>();
         final Map<Expression, Set<Value>> options=new HashMap<>();
@@ -186,8 +197,9 @@ public final record Query(
                     final Value datatype=expression.apply(shape).datatype().orElseGet(Value::String);
 
                     criteria.compute(expression, (key, criterion) -> (criterion == null
-                            ? Criterion.criterion()
-                            : criterion).lte(datatype.decode(value).orElseThrow(() -> malformed(datatype, value)))
+                                    ? Criterion.criterion()
+                                    : criterion
+                            ).lte(datatype.decode(value, base).orElseThrow(() -> malformed(datatype, value)))
                     );
 
                 } else if ( label.endsWith(">") ) {
@@ -197,7 +209,7 @@ public final record Query(
 
                     criteria.compute(expression, (key, criterion) -> (criterion == null
                             ? Criterion.criterion()
-                            : criterion).gte(datatype.decode(value).orElseThrow(() -> malformed(datatype, value)))
+                            : criterion).gte(datatype.decode(value, base).orElseThrow(() -> malformed(datatype, value)))
                     );
 
                 } else if ( label.startsWith("~") ) {
@@ -241,7 +253,7 @@ public final record Query(
 
                         if ( !value.equals("*") ) {
                             set.add(value.isBlank() ? Nil() :
-                                    datatype.decode(value).orElseThrow(() -> malformed(datatype, value)));
+                                    datatype.decode(value, base).orElseThrow(() -> malformed(datatype, value)));
                         }
 
                         return set;

@@ -18,10 +18,10 @@ package com.metreeca.mesh.test.stores;
 
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.Store;
 import com.metreeca.mesh.queries.Specs;
 import com.metreeca.mesh.queries.Table;
 import com.metreeca.mesh.queries.Tuple;
-import com.metreeca.mesh.tools.Store;
 
 import org.junit.jupiter.api.Test;
 

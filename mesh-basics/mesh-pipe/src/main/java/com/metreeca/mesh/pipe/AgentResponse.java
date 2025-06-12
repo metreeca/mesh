@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import java.io.OutputStream;
 import java.util.function.Consumer;
