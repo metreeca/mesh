@@ -81,6 +81,12 @@
 
             <dependency>
                 <groupId>com.metreeca</groupId>
+                <artifactId>mesh-pipe</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.metreeca</groupId>
                 <artifactId>mesh-meta</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -93,13 +99,13 @@
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>mesh-test</artifactId>
+                <artifactId>mesh-toys</artifactId>
                 <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.metreeca</groupId>
-                <artifactId>mesh-toys</artifactId>
+                <artifactId>mesh-test</artifactId>
                 <version>${revision}</version>
             </dependency>
 

@@ -5,6 +5,8 @@ on:
   push:
     tags:
       - v4.0.*
+    branches:
+      - release/* # !!! remove
 
 jobs:
 

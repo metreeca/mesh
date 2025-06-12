@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import java.io.Serial;
 
 import static java.lang.String.format;
 
 /**
- * Exception thrown during codec operations.
+ * Serialization-related exception.
  *
  * <p>Represents errors that occur during value encoding or decoding operations,
  * with optional position information for syntactic errors.</p>
@@ -33,6 +33,7 @@ public final class CodecException extends RuntimeException {
 
     private final int line;
     private final int column;
+
     private boolean syntactic=true; // !!! remove
 
 

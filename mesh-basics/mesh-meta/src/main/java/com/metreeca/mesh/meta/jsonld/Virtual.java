@@ -16,8 +16,6 @@
 
 package com.metreeca.mesh.meta.jsonld;
 
-import com.metreeca.mesh.tools.Store;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -28,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Marks a frame interface as virtual in a JSON-LD context.
  *
  * <p>Virtual frames are generated on the fly during retrieval operations even if not actually present in the
- * {@link Store}.</p>
+ * storage.</p>
  */
 @Target(TYPE)
 @Retention(RUNTIME)

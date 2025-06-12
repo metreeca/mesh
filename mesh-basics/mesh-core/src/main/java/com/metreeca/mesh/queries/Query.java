@@ -19,7 +19,6 @@ package com.metreeca.mesh.queries;
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.CodecException;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -142,8 +141,8 @@ public final record Query(
      *   <li>{@code field>=value} - greater than or equal filter</li>
      *   <li>{@code ~field=value} - pattern matching filter</li>
      *   <li>{@code ^field=value} - sort order (increasing, decreasing, or numeric)</li>
-     *   <li>{@code @=value} - result offset</li>
-     *   <li>{@code #=value} - result limit</li>
+     *   <li>{@code @=value} - pagination offset</li>
+     *   <li>{@code #=value} - pagination limit</li>
      * </ul>
      *
      * @param query the URL-encoded query string to be parsed

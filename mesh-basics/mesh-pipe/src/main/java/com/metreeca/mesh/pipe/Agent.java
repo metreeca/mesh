@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.ValueException;
 import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.shapes.Shape;
 import com.metreeca.shim.Locales;
@@ -35,9 +36,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static com.metreeca.mesh.Value.*;
-import static com.metreeca.mesh.tools.AgentModel.expand;
-import static com.metreeca.mesh.tools.AgentModel.populate;
-import static com.metreeca.mesh.tools.AgentQuery.query;
+import static com.metreeca.mesh.pipe.AgentModel.expand;
+import static com.metreeca.mesh.pipe.AgentModel.populate;
+import static com.metreeca.mesh.pipe.AgentQuery.query;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.URIs.uri;
 import static com.metreeca.shim.URIs.uuid;
@@ -268,7 +269,7 @@ public final class Agent {
             final Value specs=Optional.of(request.query())
                     .filter(not(String::isEmpty))
                     .map(query -> query(codec, query, model.shape().orElseGet(Shape::shape), resource))
-                    .orElseGet(() -> object());
+                    .orElseGet(Value::Object);
 
             final List<Locale> locales=Optional.ofNullable(request.header(ACCEPT_LANGUAGE)).stream()
                     .flatMap(accept -> values(accept, LANG_PATTERN))
@@ -300,13 +301,13 @@ public final class Agent {
 
                     );
 
-        } catch ( final NoSuchElementException e ) {
+        } catch ( final NoSuchElementException|ValueException e ) {
 
             response.status(UNPROCESSABLE_ENTITY);
             response.header(CONTENT_TYPE, JSON);
             response.output(output -> encode(output, string(e.getMessage())));
 
-        } catch ( final CodecException e ) {
+        } catch ( final CodecException e ) { // !!! merge after isSyntactic() is removed
 
             response.status(e.isSyntactic() ? BAD_REQUEST : UNPROCESSABLE_ENTITY);
             response.header(CONTENT_TYPE, JSON);
@@ -352,7 +353,13 @@ public final class Agent {
 
             );
 
-        } catch ( final CodecException e ) {
+        } catch ( final ValueException e ) {
+
+            response.status(UNPROCESSABLE_ENTITY);
+            response.header(CONTENT_TYPE, JSON);
+            response.output(output -> encode(output, string(e.getMessage())));
+
+        } catch ( final CodecException e ) { // !!! merge after isSyntactic() is removed
 
             response.status(e.isSyntactic() ? BAD_REQUEST : UNPROCESSABLE_ENTITY);
             response.header(CONTENT_TYPE, JSON);
@@ -392,7 +399,13 @@ public final class Agent {
 
             );
 
-        } catch ( final CodecException e ) {
+        } catch ( final ValueException e ) {
+
+            response.status(UNPROCESSABLE_ENTITY);
+            response.header(CONTENT_TYPE, JSON);
+            response.output(output -> encode(output, string(e.getMessage())));
+
+        } catch ( final CodecException e ) { // !!! merge after isSyntactic() is removed
 
             response.status(e.isSyntactic() ? BAD_REQUEST : UNPROCESSABLE_ENTITY);
             response.header(CONTENT_TYPE, JSON);
@@ -432,7 +445,13 @@ public final class Agent {
 
             );
 
-        } catch ( final CodecException e ) {
+        } catch ( final ValueException e ) {
+
+            response.status(UNPROCESSABLE_ENTITY);
+            response.header(CONTENT_TYPE, JSON);
+            response.output(output -> encode(output, string(e.getMessage())));
+
+        } catch ( final CodecException e ) { // !!! merge after isSyntactic() is removed
 
             response.status(e.isSyntactic() ? BAD_REQUEST : UNPROCESSABLE_ENTITY);
             response.header(CONTENT_TYPE, JSON);

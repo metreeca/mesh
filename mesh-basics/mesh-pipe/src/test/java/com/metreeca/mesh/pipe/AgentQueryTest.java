@@ -1,4 +1,4 @@
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
@@ -81,9 +81,9 @@ final class AgentQueryTest {
     @Test void testFormData() {
 
         final Shape resource=shape()
-                .datatype(Object())
+                .datatype(Value.Object())
                 .property(property("name").forward(true).shape(shape()
-                        .datatype(String())
+                        .datatype(Value.String())
                         .maxCount(1)
                 ))
                 .property(property("age").forward(true).shape(shape()

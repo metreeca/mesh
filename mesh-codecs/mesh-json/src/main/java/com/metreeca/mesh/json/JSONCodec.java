@@ -18,9 +18,9 @@ package com.metreeca.mesh.json;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.Codec;
+import com.metreeca.mesh.pipe.CodecException;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.Codec;
-import com.metreeca.mesh.tools.CodecException;
 import com.metreeca.shim.URIs;
 
 import java.io.IOException;

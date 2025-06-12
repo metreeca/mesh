@@ -29,7 +29,7 @@
 
     <artifactId>mesh-mint</artifactId>
 
-    <name>Metreeca/Mesh Record Generator</name>
+    <name>Metreeca/Mesh Frame Generator</name>
     <description>Annotation processor for linked data frame generation.</description>
 
     <properties>

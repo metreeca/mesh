@@ -23,36 +23,20 @@
 
     <parent>
         <groupId>com.metreeca</groupId>
-        <artifactId>mesh</artifactId>
+        <artifactId>mesh-basics</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>mesh-stores</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>mesh-pipe</artifactId>
 
-    <name>Metreeca/Mesh Stores</name>
-    <description>Persistence stores for linked data.</description>
-
-    <modules>
-
-        <module>mesh-rdf4j</module>
-
-    </modules>
-
+    <name>Metreeca/Mesh JSON-LD Data Pipeline</name>
+    <description>Processing and storage services for linked data.</description>
 
     <dependencies>
-
         <dependency>
             <groupId>com.metreeca</groupId>
-            <artifactId>mesh-pipe</artifactId>
+            <artifactId>mesh-core</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.metreeca</groupId>
-            <artifactId>mesh-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 </project>

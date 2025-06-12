@@ -16,8 +16,8 @@
 
 package com.metreeca.mesh.test.stores;
 
-import com.metreeca.mesh.tools.Store;
-import com.metreeca.mesh.tools.StoreException;
+import com.metreeca.mesh.pipe.Store;
+import com.metreeca.mesh.pipe.StoreException;
 import com.metreeca.mesh.toys.EmployeeFrame;
 import com.metreeca.mesh.toys.EventFrame;
 import com.metreeca.mesh.toys.OfficeFrame;

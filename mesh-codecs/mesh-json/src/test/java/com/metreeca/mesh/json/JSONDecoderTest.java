@@ -18,12 +18,12 @@ package com.metreeca.mesh.json;
 
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.CodecException;
 import com.metreeca.mesh.queries.Probe;
 import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.queries.Specs;
 import com.metreeca.mesh.shapes.Property;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.CodecException;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

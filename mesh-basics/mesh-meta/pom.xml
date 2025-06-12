@@ -29,7 +29,7 @@
 
     <artifactId>mesh-meta</artifactId>
 
-    <name>Metreeca/Mesh Record Annotations</name>
+    <name>Metreeca/Mesh Frame Annotations</name>
     <description>Annotations for linked data frame definitions.</description>
 
     <dependencies>

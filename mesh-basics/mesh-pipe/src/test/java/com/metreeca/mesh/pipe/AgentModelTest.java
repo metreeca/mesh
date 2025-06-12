@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.queries.Criterion;
@@ -30,7 +30,6 @@ import java.util.Map.Entry;
 import static com.metreeca.mesh.Value.Array;
 import static com.metreeca.mesh.Value.Data;
 import static com.metreeca.mesh.Value.Nil;
-import static com.metreeca.mesh.Value.Object;
 import static com.metreeca.mesh.Value.String;
 import static com.metreeca.mesh.Value.Text;
 import static com.metreeca.mesh.Value.array;
@@ -44,12 +43,12 @@ import static com.metreeca.mesh.Value.string;
 import static com.metreeca.mesh.Value.text;
 import static com.metreeca.mesh.Value.type;
 import static com.metreeca.mesh.Value.value;
+import static com.metreeca.mesh.pipe.AgentModel.expand;
+import static com.metreeca.mesh.pipe.AgentModel.populate;
 import static com.metreeca.mesh.queries.Criterion.criterion;
 import static com.metreeca.mesh.queries.Query.query;
 import static com.metreeca.mesh.shapes.Property.property;
 import static com.metreeca.mesh.shapes.Shape.shape;
-import static com.metreeca.mesh.tools.AgentModel.expand;
-import static com.metreeca.mesh.tools.AgentModel.populate;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.Collections.list;
 import static com.metreeca.shim.Locales.ANY;
@@ -72,7 +71,7 @@ final class AgentModelTest {
 
             final Value array=array(
                     string("value"),
-                    object(shape(shape().property(property("p").forward(true).shape(shape().datatype(Object())))))
+                    object(shape(shape().property(property("p").forward(true).shape(shape().datatype(object())))))
             );
 
             assertThat(expand(array)).isEqualTo(array(list(array.values().map(AgentModel::expand))));
@@ -127,8 +126,8 @@ final class AgentModelTest {
 
         @Test void testExpandObjectNestedValues() {
 
-            final Property q=property("q").forward(true).shape(shape().datatype(Object()).maxCount(1));
-            final Property p=property("p").forward(true).shape(shape().datatype(Object()).maxCount(1));
+            final Property q=property("q").forward(true).shape(shape().datatype(object()).maxCount(1));
+            final Property p=property("p").forward(true).shape(shape().datatype(object()).maxCount(1));
 
             assertThat(expand(object(
                     shape(shape().property(p)),
@@ -272,7 +271,7 @@ final class AgentModelTest {
 
             assertThat(expand(object(
                     shape(shape),
-                    field("p", array())
+                    field("p", Array())
             ))).isEqualTo(object(
                     shape(shape),
                     id(uri()),
@@ -291,7 +290,7 @@ final class AgentModelTest {
         }
 
         @Test void testPopulateLiteralFromObject() {
-            assertThat(populate(String(), Object())).isEqualTo(Object());
+            assertThat(populate(String(), object())).isEqualTo(object());
         }
 
         @Test void testPopulateLiteralFromArray() {
@@ -304,7 +303,7 @@ final class AgentModelTest {
 
 
         @Test void testPopulateObjectFromString() {
-            assertThat(populate(Object(), String())).isEqualTo(String());
+            assertThat(populate(object(), String())).isEqualTo(String());
         }
 
         @Test void testPopulateObjectFromObject() {
@@ -370,7 +369,7 @@ final class AgentModelTest {
         }
 
         @Test void testPopulateObjectFromArray() {
-            assertThat(populate(Object(), Array())).isEqualTo(Array());
+            assertThat(populate(object(), Array())).isEqualTo(Array());
         }
 
         @Test void testPopulateObjectFromQuery() {
@@ -412,7 +411,7 @@ final class AgentModelTest {
         }
 
         @Test void testPopulateArrayFromObject() {
-            assertThat(populate(Array(), Object())).isEqualTo(Object());
+            assertThat(populate(Array(), object())).isEqualTo(object());
         }
 
         @Test void testPopulateArrayFromArray() {

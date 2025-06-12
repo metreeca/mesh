@@ -17,11 +17,11 @@
 package com.metreeca.mesh.rdf4j;
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.StoreException;
 import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.queries.Specs;
 import com.metreeca.mesh.shapes.Property;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.StoreException;
 
 import java.net.URI;
 import java.util.List;

@@ -39,4 +39,13 @@
 
     </modules>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.metreeca</groupId>
+            <artifactId>mesh-pipe</artifactId>
+        </dependency>
+
+    </dependencies>
+
 </project>

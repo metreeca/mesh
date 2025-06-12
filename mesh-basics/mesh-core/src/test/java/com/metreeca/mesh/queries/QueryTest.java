@@ -17,8 +17,8 @@
 package com.metreeca.mesh.queries;
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.ValueException;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.CodecException;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -147,8 +147,8 @@ final class QueryTest {
         }
 
         @Test void testReportMalformedOrder() {
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("^x=1.23"));
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("^x=value"));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("^x=1.23"));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("^x=value"));
         }
 
 
@@ -167,8 +167,8 @@ final class QueryTest {
         }
 
         @Test void testReportMalformedOffset() {
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("@="));
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("@=value"));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("@="));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("@=value"));
         }
 
 
@@ -179,8 +179,8 @@ final class QueryTest {
         }
 
         @Test void testReportMalformedLimit() {
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("#=", shape()));
-            assertThatExceptionOfType(CodecException.class).isThrownBy(() -> parse("#=value", shape()));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("#=", shape()));
+            assertThatExceptionOfType(ValueException.class).isThrownBy(() -> parse("#=value", shape()));
         }
 
 

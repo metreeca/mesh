@@ -1,9 +1,10 @@
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;
 
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.shapes.Property;
 import com.metreeca.mesh.shapes.Shape;
+import com.metreeca.shim.Collections;
 import com.metreeca.shim.URIs;
 
 import java.net.URI;
@@ -11,9 +12,6 @@ import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import static com.metreeca.mesh.Value.*;
-import static com.metreeca.shim.Collections.list;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -115,9 +113,9 @@ final class AgentQuery {
 
                     .orElseGet(() -> {
 
-                        final List<Property> collections=list(shape.properties().stream().filter(property ->
+                        final List<Property> collections=Collections.list(shape.properties().stream().filter(property ->
 
-                                property.shape().is(Object())
+                                property.shape().is(Value.Object())
                                 && property.shape().maxCount().orElse(Integer.MAX_VALUE) > 1
 
                         ));
@@ -140,9 +138,9 @@ final class AgentQuery {
 
                     });
 
-            return object(
-                    shape(shape),
-                    field(collection.name(), value(Query.query(query, collection.shape(), base)))
+            return Value.object(
+                    Value.shape(shape),
+                    Value.field(collection.name(), Value.value(Query.query(query, collection.shape(), base)))
             );
 
         } else {

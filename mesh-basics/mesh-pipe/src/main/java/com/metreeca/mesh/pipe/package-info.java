@@ -27,20 +27,20 @@
  *
  * <ul>
  *
- *     <li><strong>{@link com.metreeca.mesh.tools.Store}</strong> - Primary persistence abstraction
+ *     <li><strong>{@link com.metreeca.mesh.pipe.Store}</strong> - Primary persistence abstraction
  *         providing CRUD operations, query execution, and transaction management for semantic data</li>
  *
- *     <li><strong>{@link com.metreeca.mesh.tools.Codec}</strong> - Bidirectional serialization framework
+ *     <li><strong>{@link com.metreeca.mesh.pipe.Codec}</strong> - Bidirectional serialization framework
  *         for converting between Value objects and various data formats</li>
  *
- *     <li><strong>{@link com.metreeca.mesh.tools.Agent}</strong> - REST API agent for handling
+ *     <li><strong>{@link com.metreeca.mesh.pipe.Agent}</strong> - REST API agent for handling
  *         HTTP-style operations with content negotiation and validation</li>
  *
  * </ul>
  *
  * <h2>Storage Abstraction</h2>
  *
- * <p>The {@link com.metreeca.mesh.tools.Store} interface provides a unified abstraction layer
+ * <p>The {@link com.metreeca.mesh.pipe.Store} interface provides a unified abstraction layer
  * over different storage backends, supporting:</p>
  *
  * <ul>
@@ -61,14 +61,14 @@
  *
  * <h2>Data Exchange</h2>
  *
- * <p>The {@link com.metreeca.mesh.tools.Codec} framework enables flexible data serialization
+ * <p>The {@link com.metreeca.mesh.pipe.Codec} framework enables flexible data serialization
  * and deserialization across different formats while preserving semantic meaning and structural
  * integrity. Codecs handle format-specific concerns while maintaining type safety and
  * validation consistency.</p>
  *
  * <h2>REST API Operations</h2>
  *
- * <p>The {@link com.metreeca.mesh.tools.Agent} provides comprehensive REST API functionality for:</p>
+ * <p>The {@link com.metreeca.mesh.pipe.Agent} provides comprehensive REST API functionality for:</p>
  *
  * <ul>
  *
@@ -79,17 +79,17 @@
  *         media types, and language preferences</li>
  *
  *     <li><strong>Request/Response</strong> - Type-safe communication patterns through
- *         {@link com.metreeca.mesh.tools.AgentRequest} and {@link com.metreeca.mesh.tools.AgentResponse}</li>
+ *         {@link com.metreeca.mesh.pipe.AgentRequest} and {@link com.metreeca.mesh.pipe.AgentResponse}</li>
  *
  * </ul>
  *
  * <p>All tools are designed to work seamlessly with the broader Metreeca/Mesh ecosystem,
- * providing consistent error handling through {@link com.metreeca.mesh.tools.StoreException}
- * and {@link com.metreeca.mesh.tools.CodecException}, and supporting the framework's
+ * providing consistent error handling through {@link com.metreeca.mesh.pipe.StoreException}
+ * and {@link com.metreeca.mesh.pipe.CodecException}, and supporting the framework's
  * commitment to semantic web standards and linked data principles.</p>
  *
  * @see com.metreeca.mesh.Value Core value model for data representation
  * @see com.metreeca.mesh.queries Query framework for data retrieval
  * @see com.metreeca.mesh.shapes Shape validation and constraint framework
  */
-package com.metreeca.mesh.tools;
+package com.metreeca.mesh.pipe;

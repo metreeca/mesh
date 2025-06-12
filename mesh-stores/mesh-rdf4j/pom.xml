@@ -34,11 +34,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.metreeca</groupId>
-            <artifactId>mesh-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-repository-api</artifactId>
         </dependency>

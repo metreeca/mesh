@@ -17,8 +17,8 @@
 package com.metreeca.mesh.test.stores;
 
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.pipe.Store;
 import com.metreeca.mesh.shapes.Shape;
-import com.metreeca.mesh.tools.Store;
 import com.metreeca.mesh.toys.EmployeeFrame;
 import com.metreeca.mesh.toys.OfficeFrame;
 import com.metreeca.mesh.toys.Resources;

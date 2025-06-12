@@ -18,7 +18,7 @@ package com.metreeca.mesh.test.stores;
 
 
 import com.metreeca.mesh.Value;
-import com.metreeca.mesh.tools.Store;
+import com.metreeca.mesh.pipe.Store;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -16,7 +16,7 @@
 
 package com.metreeca.mesh.json;
 
-import com.metreeca.mesh.tools.CodecException;
+import com.metreeca.mesh.pipe.CodecException;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
