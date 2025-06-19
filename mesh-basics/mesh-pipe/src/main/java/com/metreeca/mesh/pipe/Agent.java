@@ -461,7 +461,7 @@ public final class Agent {
     }
 
     private void delete(final URI resource, final AgentRequest request, final AgentResponse response) {
-        if ( store.delete(model.merge(object(id(resource)))) > 0 ) {
+        if ( store.delete(object(id(resource), shape(model.shape().orElseGet(Shape::shape)))) > 0 ) {
 
             response.status(NO_CONTENT);
 
