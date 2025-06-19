@@ -1,6 +1,6 @@
 # Metreeca/Mesh
 
-<!--[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh.svg)](https://central.sonatype.com/artifact/com.metreeca/mesh/ -->
+<!--[![Maven Central](https://img.shields.io/maven-central/v/com.metreeca/mesh)](https://central.sonatype.com/artifact/com.metreeca/metreeca-mesh) -->
 
 > [!IMPORTANT]
 >
@@ -41,7 +41,8 @@ compile-time.
 
 |      area | javadocs                                                     | description                                                   |
 |----------:|:-------------------------------------------------------------|:--------------------------------------------------------------|
-| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core JSON-LD data model and processing tools                  |
+| framework | [mesh-core](https://javadoc.io/doc/com.metreeca/mesh-core)   | Core model and abstractions for linked data                   |
+|           | [mesh-pipe](https://javadoc.io/doc/com.metreeca/mesh-pipe)   | Processing and storage services for linked data               |
 |           | [mesh-meta](https://javadoc.io/doc/com.metreeca/mesh-meta)   | JSON-LD and validation annotations for interface-based models |
 |           | [mesh-mint](https://javadoc.io/doc/com.metreeca/mesh-mint)   | Annotation-based code generator                               |
 |    codecs | [mesh-json](https://javadoc.io/doc/com.metreeca/mesh-json)   | JSON-LD serialisation codec                                   |
@@ -134,9 +135,9 @@ public interface Person {
     @Id
     URI identifier();
 
-    default String name() {
-        return "%s %s".formatted(givenName(), familyName());
-    }
+   default String name() {
+      return "%s %s".formatted(givenName(), familyName());
+   }
 
     @Required
     String givenName();
@@ -144,7 +145,7 @@ public interface Person {
     @Required
     String familyName();
 
-    // more properties…
+   // more properties…
 
 }
 ```
@@ -153,7 +154,7 @@ public interface Person {
 
 ```java
 import com.metreeca.mesh.rdf4j.RDF4JStore;
-import com.metreeca.mesh.tools.Store;
+import com.metreeca.mesh.pipe.Store;
 
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
