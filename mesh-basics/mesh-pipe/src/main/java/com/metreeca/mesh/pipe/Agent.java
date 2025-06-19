@@ -61,8 +61,8 @@ import static java.util.regex.Pattern.compile;
  * <p>HTTP methods are mapped to corresponding store operations:</p>
  * <ul>
  *   <li>{@code GET} → {@link Store#retrieve(Valuable, List)} - Retrieves resources with optional filtering and sorting</li>
- *   <li>{@code PUT} → {@link Store#create(Valuable)} - Creates new resources with generated or provided identifiers</li>
- *   <li>{@code UPDATE} → {@link Store#update(Valuable)} - Replaces existing resources completely</li>
+ *   <li>{@code POST} → {@link Store#create(Valuable)} - Creates new resources with generated or provided identifiers</li>
+ *   <li>{@code PUT} → {@link Store#update(Valuable)} - Replaces existing resources completely</li>
  *   <li>{@code PATCH} → {@link Store#mutate(Valuable)} - Partially updates existing resources</li>
  *   <li>{@code DELETE} → {@link Store#delete(Valuable)} - Removes existing resources</li>
  * </ul>
@@ -94,8 +94,8 @@ import static java.util.regex.Pattern.compile;
 public final class Agent {
 
     private static final String GET="GET";
+    private static final String POST="POST";
     private static final String PUT="PUT";
-    private static final String UPDATE="UPDATE";
     private static final String PATCH="PATCH";
     private static final String DELETE="DELETE";
 
@@ -243,8 +243,8 @@ public final class Agent {
             switch ( method ) {
 
                 case GET -> retrieve(resource, request, response);
-                case PUT -> create(resource, request, response);
-                case UPDATE -> update(resource, request, response);
+                case POST -> create(resource, request, response);
+                case PUT -> update(resource, request, response);
                 case PATCH -> mutate(resource, request, response);
                 case DELETE -> delete(resource, request, response);
 
