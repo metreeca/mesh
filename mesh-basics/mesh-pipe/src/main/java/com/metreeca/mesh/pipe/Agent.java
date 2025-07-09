@@ -22,12 +22,15 @@ import com.metreeca.mesh.ValueException;
 import com.metreeca.mesh.queries.Query;
 import com.metreeca.mesh.shapes.Shape;
 import com.metreeca.shim.Locales;
+import com.metreeca.shim.URIs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.text.Normalizer.Form;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -41,10 +44,11 @@ import static com.metreeca.mesh.pipe.AgentModel.populate;
 import static com.metreeca.mesh.pipe.AgentQuery.query;
 import static com.metreeca.shim.Collections.entry;
 import static com.metreeca.shim.URIs.uri;
-import static com.metreeca.shim.URIs.uuid;
 
 import static java.lang.Float.parseFloat;
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.text.Normalizer.normalize;
 import static java.util.Locale.ROOT;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Predicate.not;
@@ -113,6 +117,7 @@ public final class Agent {
     private static final String ACCEPT_LANGUAGE="Accept-Language";
     private static final String CONTENT_TYPE="Content-Type";
     private static final String LOCATION="Location";
+    private static final String SLUG="Slug";
 
     private static final String JSON="application/json";
     private static final String JSONLD="application/ld+json";
@@ -122,7 +127,19 @@ public final class Agent {
     private static final Pattern LANG_PATTERN=compile("([a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*|\\*)"+QUALITY_PATTERN);
     private static final Pattern MIME_PATTERN=compile("((?:[-+\\w]+|\\*)/(?:[-+\\w]+|\\*))"+QUALITY_PATTERN);
 
+    private static final Pattern MARK_PATTERN=compile("\\p{M}");
+    private static final Pattern SPECIAL_PATTERN=compile("[^\\p{L}\\p{N}]");
+    private static final Pattern SPACES_PATTERN=compile("\\s+");
 
+
+    /**
+     * Parses quality-weighted values from HTTP headers.
+     *
+     * @param values  the header value containing quality-weighted entries
+     * @param pattern the regex pattern for parsing entries and quality values
+     *
+     * @return stream of values sorted by quality in descending order
+     */
     private static Stream<String> values(final CharSequence values, final Pattern pattern) {
 
         final List<Entry<String, Float>> entries=new ArrayList<>();
@@ -160,14 +177,38 @@ public final class Agent {
     /**
      * Creates an agent with automatic id generation.
      *
+     * <p>Uses the default ID generation strategy that processes the Slug header from incoming requests.
+     * The ID generation process attempts to use a sanitised version of the Slug header value, falling back
+     * to a generated UUID if no valid slug is provided. The sanitisation follows RFC 5023 section 9.7
+     * guidelines for processing client-suggested URI components.</p>
+     *
+     * <p>The sanitisation process:</p>
+     *
+     * <ul>
+     *   <li>URL decodes the header value</li>
+     *   <li>Removes diacritical marks from Unicode characters</li>
+     *   <li>Replaces non-letter/digit characters with spaces</li>
+     *   <li>Converts space sequences to hyphens</li>
+     * </ul>
+     *
      * @param model the data model for validation and transformation
      * @param codec the codec for serialization and deserialization
      * @param store the persistence store for data operations
      *
      * @throws NullPointerException if any parameter is {@code null}
+     *
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc5023#section-9.7">RFC 5023 The Atom Publishing Protocol - § 9.7 - The Slug Header</a>
      */
     public Agent(final Value model, final Codec codec, final Store store) {
-        this(model, codec, store, request -> uuid());
+        this(model, codec, store, request -> Optional.ofNullable(request.header(SLUG))
+                .map(s -> URLDecoder.decode(s, UTF_8))
+                .map(String::trim)
+                .filter(not(String::isEmpty))
+                .map(s -> MARK_PATTERN.matcher(normalize(s, Form.NFD)).replaceAll(""))
+                .map(s -> SPECIAL_PATTERN.matcher(s).replaceAll(" "))
+                .map(s -> SPACES_PATTERN.matcher(s.trim()).replaceAll("-"))
+                .orElseGet(URIs::uuid)
+        );
     }
 
     /**
