@@ -568,7 +568,7 @@ public final record Shape(
      *
      * <p>Automatically sets the datatype to Object.</p>
      *
-     * @param id the property name for object identifiers
+     * @param id the property name for object identifiers; empty strings result in no constraint
      *
      * @return a new shape instance with the specified ID property
      *
@@ -615,7 +615,7 @@ public final record Shape(
      *
      * <p>Automatically sets the datatype to Object.</p>
      *
-     * @param type the property name for object types
+     * @param type the property name for object types; empty strings result in no constraint
      *
      * @return a new shape instance with the specified type property
      *
@@ -1032,7 +1032,7 @@ public final record Shape(
     /**
      * Configures this shape with a minimum length constraint for text values.
      *
-     * @param limit the minimum length (must be non-negative)
+     * @param limit the minimum length (must be non-negative); values of {@code 0} result in no constraint
      *
      * @return a new shape instance with the specified minimum length constraint
      *
@@ -1077,7 +1077,7 @@ public final record Shape(
     /**
      * Configures this shape with a maximum length constraint for text values.
      *
-     * @param limit the maximum length (must be non-negative)
+     * @param limit the maximum length (must be non-negative); values of {@code 0} result in no constraint
      *
      * @return a new shape instance with the specified maximum length constraint
      *
@@ -1123,7 +1123,7 @@ public final record Shape(
     /**
      * Configures this shape with a regex pattern constraint for text values.
      *
-     * @param pattern the regex pattern that text values must match
+     * @param pattern the regex pattern that text values must match; empty strings result in no constraint
      *
      * @return a new shape instance with the specified pattern constraint
      *
@@ -1186,7 +1186,7 @@ public final record Shape(
     /**
      * Configures this shape with an enumeration constraint.
      *
-     * @param values the collection of allowed values
+     * @param values the collection of allowed values; empty collections result in no constraint
      *
      * @return a new shape instance with the specified enumeration constraint
      *
@@ -1272,7 +1272,7 @@ public final record Shape(
     /**
      * Configures this shape with allowed language tags for text values.
      *
-     * @param locales the collection of allowed locales
+     * @param locales the collection of allowed locales; empty collections result in no constraint
      *
      * @return a new shape instance with the specified language constraints
      *
@@ -1356,7 +1356,7 @@ public final record Shape(
     /**
      * Configures this shape with a minimum cardinality constraint.
      *
-     * @param limit the minimum number of values (must be non-negative)
+     * @param limit the minimum number of values (must be non-negative); values of {@code 0} result in no constraint
      *
      * @return a new shape instance with the specified minimum cardinality constraint
      *
@@ -1400,7 +1400,7 @@ public final record Shape(
     /**
      * Configures this shape with a maximum cardinality constraint.
      *
-     * @param limit the maximum number of values (must be non-negative)
+     * @param limit the maximum number of values (must be non-negative); values of {@code 0} result in no constraint
      *
      * @return a new shape instance with the specified maximum cardinality constraint
      *
@@ -1519,7 +1519,7 @@ public final record Shape(
     /**
      * Configures this shape with required values.
      *
-     * @param values the collection of values that must be present
+     * @param values the collection of values that must be present; empty collections result in no constraint
      *
      * @return a new shape instance with the specified required values
      *
@@ -1571,7 +1571,7 @@ public final record Shape(
     /**
      * Configures this shape with custom validation constraints.
      *
-     * @param constraints the custom validation functions
+     * @param constraints the custom validation functions; empty collections result in no constraint
      *
      * @return a new shape instance with the specified custom constraints
      *
@@ -1590,7 +1590,7 @@ public final record Shape(
     /**
      * Configures this shape with custom validation constraints.
      *
-     * @param constraints the collection of custom validation functions
+     * @param constraints the collection of custom validation functions; empty collections result in no constraint
      *
      * @return a new shape instance with the specified custom constraints
      *
