@@ -16,17 +16,11 @@
 
 package com.metreeca.mesh.mint.tools;
 
-import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
-import com.metreeca.mesh.meta.Values;
 import com.metreeca.mesh.mint.ast.Clazz;
 import com.metreeca.mesh.mint.ast.Method;
-import com.metreeca.mesh.shapes.Property;
-import com.metreeca.mesh.shapes.Shape;
 import com.metreeca.mesh.shapes.Type;
-import com.metreeca.shim.Collections;
 import com.metreeca.shim.Strings;
-import com.metreeca.shim.URIs;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -35,8 +29,6 @@ import java.time.*;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.metreeca.mesh.mint.ast.Method.*;
@@ -68,45 +60,6 @@ import static java.util.stream.Collectors.joining;
  * introspection to analyze model interfaces and generate corresponding implementations.</p>
  */
 public final class Generator {
-
-    private static final Set<Class<?>> IMPORTS=set(
-
-            Value.class,
-            Valuable.class,
-            Shape.class,
-            Property.class,
-            Type.class,
-            Values.class,
-            Collections.class,
-            URIs.class,
-
-            Entry.class,
-            Locale.class,
-            List.class,
-            Map.class,
-            Objects.class,
-            Optional.class,
-            Predicate.class,
-            Set.class,
-            Stream.class,
-
-            URI.class,
-            Temporal.class,
-            Year.class,
-            YearMonth.class,
-            LocalDate.class,
-            LocalTime.class,
-            OffsetTime.class,
-            LocalDateTime.class,
-            OffsetDateTime.class,
-            ZonedDateTime.class,
-            Instant.class,
-            TemporalAmount.class,
-            Period.class,
-            Duration.class
-
-    );
-
 
     private static final Value.Visitor<String> DATATYPE_VISITOR=new Value.Visitor<>() {
 
@@ -156,110 +109,110 @@ public final class Generator {
 
         @Override public String visit(final Value host, final URI datatype, final String string) { return "Data"; }
 
-        @Override public String visit(final Value host, final Map<String, Value> fields) { return "Object"; }
+        @Override public String visit(final com.metreeca.mesh.Value host, final Map<String, com.metreeca.mesh.Value> fields) { return "Object"; }
 
     };
 
     private static final Value.Visitor<String> VALUE_VISITOR=new Value.Visitor<>() {
 
         @Override public String visit(final Value host, final Boolean bit) {
-            return "Value.bit(%s)".formatted(host.encode(uri()));
+            return "com.metreeca.mesh.Value.bit(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Number number) {
             return number instanceof final BigInteger integer ? visit(host, integer)
                     : number instanceof final BigDecimal decimal ? visit(host, decimal)
-                    : "Value.number(%s)".formatted(host.encode(uri()));
+                    : "com.metreeca.mesh.Value.number(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Long integral) {
-            return "Value.integral(%s)".formatted(host.encode(uri()));
+            return "com.metreeca.mesh.Value.integral(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Double floating) {
-            return "Value.floating(%s)".formatted(host.encode(uri()));
+            return "com.metreeca.mesh.Value.floating(%s)".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final BigInteger integer) {
-            return "Value.integer(new BigInteger(%s))".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.integer(new java.math.BigInteger(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final BigDecimal decimal) {
-            return "Value.decimal(new BigDecimal(%s))".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.decimal(new java.math.BigDecimal(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final String string) {
-            return "Value.string(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.string(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final URI uri) {
-            return "Value.uri(URI.create(%s))".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.uri(java.net.URI.create(%s))".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Temporal temporal) {
-            return "Value.Temporal().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Temporal().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Year year) {
-            return "Value.Year().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Year().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final YearMonth yearMonth) {
-            return "Value.YearMonth().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.YearMonth().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalDate localDate) {
-            return "Value.LocalDate().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.LocalDate().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalTime localTime) {
-            return "Value.LocalTime().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.LocalTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final OffsetTime offsetTime) {
-            return "Value.OffsetTime().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.OffsetTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final LocalDateTime localDateTime) {
-            return "Value.LocalDateTime().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.LocalDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final OffsetDateTime offsetDateTime) {
-            return "Value.OffsetDateTime().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.OffsetDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final ZonedDateTime zonedDateTime) {
-            return "Value.ZonedDateTime().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.ZonedDateTime().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Instant instant) {
-            return "Value.Instant().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Instant().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final TemporalAmount amount) {
-            return "Value.TemporalAmount().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.TemporalAmount().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Period period) {
-            return "Value.Integer().decode(\"%s\")".formatted(host.encode(uri()));
+            return "com.metreeca.mesh.Value.Integer().decode(\"%s\")".formatted(host.encode(uri()));
         }
 
         @Override public String visit(final Value host, final Duration duration) {
-            return "Value.Duration().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Duration().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final Locale locale, final String string) {
-            return "Value.Text().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Text().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
         @Override public String visit(final Value host, final URI datatype, final String string) {
-            return "Value.Data().decode(%s)".formatted(quote(host.encode(uri())));
+            return "com.metreeca.mesh.Value.Data().decode(%s)".formatted(quote(host.encode(uri())));
         }
 
-        @Override public String visit(final Value host, final Map<String, Value> fields) {
+        @Override public String visit(final com.metreeca.mesh.Value host, final Map<String, com.metreeca.mesh.Value> fields) {
             return host.id()
-                    .map("Value.object(Value.id(URI.create(\"%s\")))"::formatted)
-                    .orElse("Value.Object()");
+                    .map("com.metreeca.mesh.Value.object(com.metreeca.mesh.Value.id(java.net.URI.create(\"%s\")))"::formatted)
+                    .orElse("com.metreeca.mesh.Value.Object()");
         }
 
     };
@@ -327,9 +280,7 @@ public final class Generator {
         return fill("""
                 package {pkg};
                 
-                {imports}
-                
-                public final class {Frame} implements {Clazz}, Valuable {
+                public final class {Frame} implements {Clazz}, com.metreeca.mesh.Valuable {
                 
                     {BASE}
                 
@@ -344,7 +295,7 @@ public final class Generator {
                 
                 
                     private final boolean $delta;
-                    private final Predicate<String> $touched;
+                    private final java.util.function.Predicate<String> $touched;
                 
                     {fields}
                 
@@ -369,7 +320,6 @@ public final class Generator {
                 }""", map(
 
                 entry("pkg", pkg()),
-                entry("imports", imports()),
 
                 entry("Frame", frame()),
                 entry("Clazz", clazz()),
@@ -401,15 +351,6 @@ public final class Generator {
         return clazz.pkg();
     }
 
-    private String imports() {
-        return IMPORTS.stream()
-                .map(Class::getCanonicalName)
-                .sorted()
-                .map("import %s;"::formatted)
-                .collect(joining("\n"));
-    }
-
-
     private String clazz() {
         return clazz.name();
     }
@@ -420,7 +361,7 @@ public final class Generator {
 
 
     private String base() {
-        return "public static final URI BASE=URI.create(\"%s\");".formatted(clazz.base());
+        return "public static final java.net.URI BASE=java.net.URI.create(\"%s\");".formatted(clazz.base());
     }
 
 
@@ -428,7 +369,7 @@ public final class Generator {
 
     private String shape() {
         return fold(fill("""
-                public static final Shape SHAPE=Shape.shape()‹
+                public static final com.metreeca.mesh.shapes.Shape SHAPE=com.metreeca.mesh.shapes.Shape.shape()‹
                     {virtual}
                     {id}
                     {type}
@@ -463,12 +404,12 @@ public final class Generator {
 
     private String clazz(final Clazz clazz) {
         return explicit(clazz)
-                .map(explicit -> Optional.of(implicit(clazz))
+                .map(explicit -> java.util.Optional.of(implicit(clazz))
                         .filter(not(List::isEmpty))
                         .map(implicits -> clazz(explicit, implicits))
                         .orElseGet(() -> clazz(explicit))
                 )
-                .or(() -> Optional.of(list(clazz.clazzes()))
+                .or(() -> java.util.Optional.of(list(clazz.clazzes()))
                         .filter(not(List::isEmpty))
                         .map(this::clazzes)
                 )
@@ -519,12 +460,12 @@ public final class Generator {
     }
 
     private String type(final Type type) {
-        return "Type.type(\"%s\", URI.create(\"%s\"))".formatted(type.name(), type.uri());
+        return "com.metreeca.mesh.shapes.Type.type(\"%s\", java.net.URI.create(\"%s\"))".formatted(type.name(), type.uri());
     }
 
 
     private String constraints(final Clazz clazz) {
-        return Optional.of(clazz.constraints())
+        return java.util.Optional.of(clazz.constraints())
                 .filter(not(Set::isEmpty))
                 .map(constraints -> fill("""
                         .constraints(
@@ -551,7 +492,7 @@ public final class Generator {
 
     private String property(final Method method) {
         return fill("""
-                .property(Property.property("{name}")
+                .property(com.metreeca.mesh.shapes.Property.property("{name}")
                     {hidden}
                     {foreign}
                     {embedded}
@@ -585,20 +526,20 @@ public final class Generator {
 
     private String forward(final Method method) {
         return method.forward()
-                .map(".forward(URI.create(\"%s\"))"::formatted)
+                .map(".forward(java.net.URI.create(\"%s\"))"::formatted)
                 .orElse(".forward(false)");
     }
 
     private String reverse(final Method method) {
         return method.reverse()
-                .map(".reverse(URI.create(\"%s\"))"::formatted)
+                .map(".reverse(java.net.URI.create(\"%s\"))"::formatted)
                 .orElse(".reverse(false)");
     }
 
 
     private String shape(final Method method, final String type) {
 
-        final boolean object=method.datatype().equals(Value.Object()) && !method.isEnum();
+        final boolean object=method.datatype().equals(com.metreeca.mesh.Value.Object()) && !method.isEnum();
 
         return fill("""
                 .shape(() -> {shape}
@@ -618,7 +559,7 @@ public final class Generator {
                     {hasValue}
                 )""", Map.ofEntries(
 
-                entry("shape", object ? "%s.SHAPE".formatted(frame(type)) : "Shape.shape()"),
+                entry("shape", object ? "%s.SHAPE".formatted(frame(type)) : "com.metreeca.mesh.shapes.Shape.shape()"),
 
                 entry("datatype", object ? "" : datatype(method)),
                 entry("minExclusive", minExclusive(method)),
@@ -641,7 +582,7 @@ public final class Generator {
 
 
     private static String datatype(final Method method) {
-        return ".datatype(Value.%s())".formatted(method.datatype().accept(DATATYPE_VISITOR));
+        return ".datatype(com.metreeca.mesh.Value.%s())".formatted(method.datatype().accept(DATATYPE_VISITOR));
     }
 
     private String minExclusive(final Method method) {
@@ -715,7 +656,7 @@ public final class Generator {
     }
 
 
-    private String value(final Value value) {
+    private String value(final com.metreeca.mesh.Value value) {
         return value.accept(VALUE_VISITOR);
     }
 
@@ -741,7 +682,7 @@ public final class Generator {
 
     private String toValue() {
         return fill("""
-                public static Value toValue(final {Class} object) {
+                public static com.metreeca.mesh.Value toValue(final {Class} object) {
                 
                     if ( object == null ) {
                         throw new NullPointerException("null object");
@@ -757,7 +698,7 @@ public final class Generator {
 
     private String toToken() {
         return fill("""
-                public static Value toToken(final {Class} object) {
+                public static com.metreeca.mesh.Value toToken(final {Class} object) {
                 
                     if ( object == null ) {
                         throw new NullPointerException("null object");
@@ -779,12 +720,12 @@ public final class Generator {
 
     private String toReference(final String id) {
         return fill("""
-                Optional.ofNullable(object.{id}())‹
-                    .map({id} -> Value.object(
-                            Value.shape(SHAPE),
-                            Value.id(URIs.absolute(BASE, {id}))
+                java.util.Optional.ofNullable(object.{id}())‹
+                    .map({id} -> com.metreeca.mesh.Value.object(
+                            com.metreeca.mesh.Value.shape(SHAPE),
+                            com.metreeca.mesh.Value.id(com.metreeca.shim.URIs.absolute(BASE, {id}))
                     ))
-                    .orElseGet(Value::Nil)›""", Map.of(
+                    .orElseGet(com.metreeca.mesh.Value::Nil)›""", Map.of(
 
                 "id", id
         ));
@@ -801,7 +742,7 @@ public final class Generator {
         return clazz.methods()
                 .map(Method::boxed)
                 .map(method -> "private final %s %s;".formatted(
-                        method.generic(),
+                        method.qualified(),
                         method.name()
                 ))
                 .collect(joining("\n"));
@@ -855,7 +796,7 @@ public final class Generator {
 
     private String valueConstructor() {
         return fill("""
-                public {Frame}(final Value value) {
+                public {Frame}(final com.metreeca.mesh.Value value) {
                    this(
                         {values}
                    );
@@ -868,14 +809,14 @@ public final class Generator {
                         Stream.of(
                                 "false",
                                 """
-                                        value.object().map(Map::keySet)‹
-                                            .map($ -> (Predicate<String>)$::contains)
+                                        value.object().map(java.util.Map::keySet)‹
+                                            .map($ -> (java.util.function.Predicate<String>)$::contains)
                                             .orElseGet(() -> $ -> false)›"""
                         ),
 
                         clazz.methods().map(method -> method.isInternal() ? "null"
-                                : method.isId() ? "Values.id(value, BASE)"
-                                : method.isType() ? "Values.type(value)"
+                                : method.isId() ? "com.metreeca.mesh.meta.Values.id(value, BASE)"
+                                : method.isType() ? "com.metreeca.mesh.meta.Values.type(value)"
                                 : method.isContainer() ? toContainer(method)
                                 : toScalar(method)
                         )
@@ -899,12 +840,15 @@ public final class Generator {
 
                         Stream.of(
                                 "final boolean $delta",
-                                "final Predicate<String> $touched"
+                                "final java.util.function.Predicate<String> $touched"
                         ),
 
                         clazz.methods()
                                 .map(Method::boxed)
-                                .map(method -> "final %s %s".formatted(method.generic(), method.name()))
+                                .map(method -> "final %s %s".formatted(
+                                        method.qualified(),
+                                        method.name()
+                                ))
 
                 ).collect(joining(",\n")),
 
@@ -918,7 +862,7 @@ public final class Generator {
                         clazz.methods()
                                 .map(Method::boxed)
                                 .map(method -> fill(method.isContainer() || method.isSpecial()
-                                                ? "this.{field}=Collections.ensureImmutable({field}, \"{field}\");"
+                                                ? "this.{field}=com.metreeca.shim.Collections.ensureImmutable({field}, \"{field}\");"
                                                 : "this.{field}={field};",
                                         Map.of("field", method.name())
                                 ))
@@ -935,47 +879,47 @@ public final class Generator {
 
         if ( method.isEnum() ) {
 
-            return "Values.option(%s, %s.class)".formatted(value, method.type());
+            return "com.metreeca.mesh.meta.Values.option(%s, %s.class)".formatted(value, method.type());
 
         } else {
 
             return switch ( method.boxed().type() ) {
 
-                case "Boolean" -> "Values.bit(%s)".formatted(value);
-                case "Number" -> "Values.number(%s)".formatted(value);
-                case "Byte" -> "Values._byte(%s)".formatted(value);
-                case "Short" -> "Values._short(%s)".formatted(value);
-                case "Integer" -> "Values._int(%s)".formatted(value);
-                case "Long" -> "Values._long(%s)".formatted(value);
-                case "Float" -> "Values._float(%s)".formatted(value);
-                case "Double" -> "Values._double(%s)".formatted(value);
-                case "BigInteger" -> "Values.integer(%s)".formatted(value);
-                case "BigDecimal" -> "Values.decimal(%s)".formatted(value);
-                case "String" -> "Values.string(%s)".formatted(value);
-                case "URI" -> "Values.uri(%s)".formatted(value);
-                case "Temporal" -> "Values.temporal(%s)".formatted(value);
-                case "Year" -> "Values.year(%s)".formatted(value);
-                case "YearMonth" -> "Values.yearMonth(%s)".formatted(value);
-                case "LocalDate" -> "Values.localDate(%s)".formatted(value);
-                case "LocalTime" -> "Values.localTime(%s)".formatted(value);
-                case "OffsetTime" -> "Values.offsetTime(%s)".formatted(value);
-                case "LocalDateTime" -> "Values.localDateTime(%s)".formatted(value);
-                case "OffsetDateTime" -> "Values.offsetDateTime(%s)".formatted(value);
-                case "ZonedDateTime" -> "Values.zonedDateTime(%s)".formatted(value);
-                case "Instant" -> "Values.instant(%s)".formatted(value);
-                case "TemporalAmount" -> "Values.temporalAmount(%s)".formatted(value);
-                case "Period" -> "Values.period(%s)".formatted(value);
-                case "Duration" -> "Values.duration(%s)".formatted(value);
+                case "Boolean" -> "com.metreeca.mesh.meta.Values.bit(%s)".formatted(value);
+                case "Number" -> "com.metreeca.mesh.meta.Values.number(%s)".formatted(value);
+                case "Byte" -> "com.metreeca.mesh.meta.Values._byte(%s)".formatted(value);
+                case "Short" -> "com.metreeca.mesh.meta.Values._short(%s)".formatted(value);
+                case "Integer" -> "com.metreeca.mesh.meta.Values._int(%s)".formatted(value);
+                case "Long" -> "com.metreeca.mesh.meta.Values._long(%s)".formatted(value);
+                case "Float" -> "com.metreeca.mesh.meta.Values._float(%s)".formatted(value);
+                case "Double" -> "com.metreeca.mesh.meta.Values._double(%s)".formatted(value);
+                case "BigInteger" -> "com.metreeca.mesh.meta.Values.integer(%s)".formatted(value);
+                case "BigDecimal" -> "com.metreeca.mesh.meta.Values.decimal(%s)".formatted(value);
+                case "String" -> "com.metreeca.mesh.meta.Values.string(%s)".formatted(value);
+                case "URI" -> "com.metreeca.mesh.meta.Values.uri(%s)".formatted(value);
+                case "Temporal" -> "com.metreeca.mesh.meta.Values.temporal(%s)".formatted(value);
+                case "Year" -> "com.metreeca.mesh.meta.Values.year(%s)".formatted(value);
+                case "YearMonth" -> "com.metreeca.mesh.meta.Values.yearMonth(%s)".formatted(value);
+                case "LocalDate" -> "com.metreeca.mesh.meta.Values.localDate(%s)".formatted(value);
+                case "LocalTime" -> "com.metreeca.mesh.meta.Values.localTime(%s)".formatted(value);
+                case "OffsetTime" -> "com.metreeca.mesh.meta.Values.offsetTime(%s)".formatted(value);
+                case "LocalDateTime" -> "com.metreeca.mesh.meta.Values.localDateTime(%s)".formatted(value);
+                case "OffsetDateTime" -> "com.metreeca.mesh.meta.Values.offsetDateTime(%s)".formatted(value);
+                case "ZonedDateTime" -> "com.metreeca.mesh.meta.Values.zonedDateTime(%s)".formatted(value);
+                case "Instant" -> "com.metreeca.mesh.meta.Values.instant(%s)".formatted(value);
+                case "TemporalAmount" -> "com.metreeca.mesh.meta.Values.temporalAmount(%s)".formatted(value);
+                case "Period" -> "com.metreeca.mesh.meta.Values.period(%s)".formatted(value);
+                case "Duration" -> "com.metreeca.mesh.meta.Values.duration(%s)".formatted(value);
 
-                case TEXT -> "Values.text(%s)".formatted(value);
-                case TEXTS -> "Values.texts(%s)".formatted(value);
-                case TEXTSETS -> "Values.textsets(%s)".formatted(value);
+                case TEXT -> "com.metreeca.mesh.meta.Values.text(%s)".formatted(value);
+                case TEXTS -> "com.metreeca.mesh.meta.Values.texts(%s)".formatted(value);
+                case TEXTSETS -> "com.metreeca.mesh.meta.Values.textsets(%s)".formatted(value);
 
-                case DATA -> "Values.data(%s)".formatted(value);
-                case DATAS -> "Values.datas(%s)".formatted(value);
-                case DATASETS -> "Values.datasets(%s)".formatted(value);
+                case DATA -> "com.metreeca.mesh.meta.Values.data(%s)".formatted(value);
+                case DATAS -> "com.metreeca.mesh.meta.Values.datas(%s)".formatted(value);
+                case DATASETS -> "com.metreeca.mesh.meta.Values.datasets(%s)".formatted(value);
 
-                default -> "Values.<%s>object(value.get(\"%s\"), %sFrame::new)".formatted(
+                default -> "com.metreeca.mesh.meta.Values.<%s>object(value.get(\"%s\"), %sFrame::new)".formatted(
                         method.type(), method.name(), method.type()
                 );
 
@@ -991,41 +935,67 @@ public final class Generator {
 
         if ( method.isEnum() ) {
 
-            return "Values.options(%s, %s.class)".formatted(value, method.item());
+            return "com.metreeca.mesh.meta.Values.options(%s, %s.class)".formatted(value, method.item());
 
         } else {
 
             return switch ( method.item() ) {
 
-                case "Boolean" -> "Collections.%s(Values.bits(%s))".formatted(kind, value);
-                case "Number" -> "Collections.%s(Values.numbers(%s))".formatted(kind, value);
-                case "Byte" -> "Collections.%s(Values.integrals(%s))".formatted(kind, value);
-                case "Short" -> "Collections.%s(Values.integrals(%s))".formatted(kind, value);
-                case "Integer" -> "Collections.%s(Values.integrals(%s))".formatted(kind, value);
-                case "Long" -> "Collections.%s(Values.integrals(%s))".formatted(kind, value);
-                case "Float" -> "Collections.%s(Values.floatings(%s))".formatted(kind, value);
-                case "Double" -> "Collections.%s(Values.floatings(%s))".formatted(kind, value);
-                case "BigInteger" -> "Collections.%s(Values.integers(%s))".formatted(kind, value);
-                case "BigDecimal" -> "Collections.%s(Values.decimals(%s))".formatted(kind, value);
-                case "String" -> "Collections.%s(Values.strings(%s))".formatted(kind, value);
-                case "URI" -> "Collections.%s(Values.uris(%s))".formatted(kind, value);
-                case "Temporal" -> "Collections.%s(Values.temporals(%s))".formatted(kind, value);
-                case "Year" -> "Collections.%s(Values.years(%s))".formatted(kind, value);
-                case "YearMonth" -> "Collections.%s(Values.yearMonths(%s))".formatted(kind, value);
-                case "LocalDate" -> "Collections.%s(Values.localDates(%s))".formatted(kind, value);
-                case "LocalTime" -> "Collections.%s(Values.localTimes(%s))".formatted(kind, value);
-                case "OffsetTime" -> "Collections.%s(Values.offsetTimes(%s))".formatted(kind, value);
-                case "LocalDateTime" -> "Collections.%s(Values.localDateTimes(%s))".formatted(kind, value);
-                case "OffsetDateTime" -> "Collections.%s(Values.offsetDateTimes(%s))".formatted(kind, value);
-                case "ZonedDateTime" -> "Collections.%s(Values.zonedDateTimes(%s))".formatted(kind, value);
-                case "Instant" -> "Collections.%s(Values.instants(%s))".formatted(kind, value);
-                case "TemporalAmount" -> "Collections.%s(Values.temporalAmounts(%s))".formatted(kind, value);
-                case "Period" -> "Collections.%s(Values.periods(%s))".formatted(kind, value);
-                case "Duration" -> "Collections.%s(Values.durations(%s))".formatted(kind, value);
+                case "Boolean" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.bits(%s))".formatted(kind, value);
+                case "Number" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.numbers(%s))".formatted(kind, value);
+                case "Byte" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.integrals(%s))".formatted(kind, value);
+                case "Short" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.integrals(%s))".formatted(kind, value);
+                case "Integer" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.integrals(%s))".formatted(kind, value);
+                case "Long" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.integrals(%s))".formatted(kind, value);
+                case "Float" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.floatings(%s))".formatted(kind, value);
+                case "Double" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.floatings(%s))".formatted(kind, value);
+                case "BigInteger" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.integers(%s))".formatted(kind, value);
+                case "BigDecimal" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.decimals(%s))".formatted(kind, value);
+                case "String" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.strings(%s))".formatted(kind, value);
+                case "URI" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.uris(%s))".formatted(kind, value);
+                case "Temporal" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.temporals(%s))".formatted(kind, value);
+                case "Year" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.years(%s))".formatted(kind, value);
+                case "YearMonth" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.yearMonths(%s))".formatted(kind, value);
+                case "LocalDate" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.localDates(%s))".formatted(kind, value);
+                case "LocalTime" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.localTimes(%s))".formatted(kind, value);
+                case "OffsetTime" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.offsetTimes(%s))".formatted(kind, value);
+                case "LocalDateTime" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.localDateTimes(%s))".formatted(kind, value);
+                case "OffsetDateTime" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.offsetDateTimes(%s))".formatted(kind, value);
+                case "ZonedDateTime" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.zonedDateTimes(%s))".formatted(kind, value);
+                case "Instant" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.instants(%s))".formatted(kind, value);
+                case "TemporalAmount" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.temporalAmounts(%s))".formatted(kind, value);
+                case "Period" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.periods(%s))".formatted(kind, value);
+                case "Duration" ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.durations(%s))".formatted(kind, value);
 
-                default -> "Collections.%s(Values.objects(value.get(\"%s\"), %sFrame::new))".formatted(
-                        kind, method.name(), method.item()
-                );
+                default ->
+                        "com.metreeca.shim.Collections.%s(com.metreeca.mesh.meta.Values.objects(value.get(\"%s\"), %sFrame::new))".formatted(
+                                kind, method.name(), method.item()
+                        );
 
             };
 
@@ -1052,7 +1022,7 @@ public final class Generator {
                         return {Class}.super.{name}();
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "Class", clazz(),
                     "name", method.name()
 
@@ -1066,7 +1036,7 @@ public final class Generator {
                         return $touched.test("{name}") ? {name} != null ? {name} : {initial} : {value};
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "name", method.name(),
                     "initial", toInitial(method),
                     "value", toImmutabale(method, "%s.super.%s()".formatted(clazz(), method.name()))
@@ -1081,7 +1051,7 @@ public final class Generator {
                         return $touched.test("{name}") ? {name} : {value};
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "name", method.name(),
                     "value", toImmutabale(method, "%s.super.%s()".formatted(clazz(), method.name()))
 
@@ -1095,7 +1065,7 @@ public final class Generator {
                         return {name} != null ? {name} : {initial};
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "name", method.name(),
 
                     "initial", toInitial(method)
@@ -1110,12 +1080,12 @@ public final class Generator {
                         return {name} != null ? {name} : {empty};
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "name", method.name(),
 
-                    "empty", method.isMap() ? "Collections.map()"
-                            : method.isSet() ? "Collections.set()"
-                            : "Collections.list()"
+                    "empty", method.isMap() ? "com.metreeca.shim.Collections.map()"
+                            : method.isSet() ? "com.metreeca.shim.Collections.set()"
+                            : "com.metreeca.shim.Collections.list()"
             ));
 
         } else {
@@ -1126,7 +1096,7 @@ public final class Generator {
                         return {name};
                     }""", Map.of(
 
-                    "type", method.generic(),
+                    "type", method.qualified(),
                     "name", method.name()
 
             ));
@@ -1144,7 +1114,7 @@ public final class Generator {
 
                 "Frame", frame(),
                 "name", method.name(),
-                "type", method.isContainer() ? toParam(method) : method.boxed().generic(),
+                "type", method.isContainer() ? toParam(method) : method.boxed().qualified(),
 
                 "fields", Stream.concat(
                         Stream.of("$delta", "$touched.or(\"%s\"::equals)%s".formatted(method.name(),
@@ -1162,7 +1132,7 @@ public final class Generator {
 
     private String toParam(final Method method) { // !!! refactor/review
 
-        final String value=method.boxed().generic();
+        final String value=method.boxed().qualified();
 
         if ( method.isEnum() ) {
 
@@ -1206,7 +1176,8 @@ public final class Generator {
                 case DATAS -> value;
                 case DATASETS -> value;
 
-                default -> method.isContainer() ? "%s<? extends %s>".formatted(method.type(), method.boxed().item())
+                default ->
+                        method.isContainer() ? "%s<? extends %s>".formatted(qualify(method.type()), qualify(method.boxed().item()))
                         : value;
 
             };
@@ -1269,9 +1240,10 @@ public final class Generator {
                 case DATAS -> value;
                 case DATASETS -> value;
 
-                default -> method.isSet() ? "Values.%s(%s)".formatted(method.isWild() ? "set_" : "set", value)
-                        : method.isContainer() ? "Values.%s(%s)".formatted(method.isWild() ? "list_" : "list", value)
-                        : value;
+                default ->
+                        method.isSet() ? "com.metreeca.mesh.meta.Values.%s(%s)".formatted(method.isWild() ? "set_" : "set", value)
+                                : method.isContainer() ? "com.metreeca.mesh.meta.Values.%s(%s)".formatted(method.isWild() ? "list_" : "list", value)
+                                : value;
 
             };
 
@@ -1282,20 +1254,20 @@ public final class Generator {
     private String converter() {
         return fill("""
                 @Override
-                public Value toValue() {
-                    return Value.object(Stream.concat(
+                public com.metreeca.mesh.Value toValue() {
+                    return com.metreeca.mesh.Value.object(java.util.stream.Stream.concat(
                 
-                        Stream.of(Value.shape(SHAPE)),
+                        java.util.stream.Stream.of(com.metreeca.mesh.Value.shape(SHAPE)),
                 
                         $delta
                 
-                            ? Stream.<Entry<String, Value>>of(
+                            ? java.util.stream.Stream.<java.util.Map.Entry<String, com.metreeca.mesh.Value>>of(
                                     {delta}
-                            ).filter(e -> e.getKey().equals(Value.ID) || $touched.test(e.getKey()))
+                            ).filter(e -> e.getKey().equals(com.metreeca.mesh.Value.ID) || $touched.test(e.getKey()))
                 
-                            : Stream.<Entry<String, Value>>of(
+                            : java.util.stream.Stream.<java.util.Map.Entry<String, com.metreeca.mesh.Value>>of(
                                     {plain}
-                            ).filter(Objects::nonNull)
+                            ).filter(java.util.Objects::nonNull)
                 
                     ).toList());
                 }
@@ -1330,14 +1302,14 @@ public final class Generator {
 
     private String toPlain(final Method method) {
         return fill("""
-                Optional.ofNullable({value})‹
+                java.util.Optional.ofNullable({value})‹
                     .map(v -> {field})
-                    .orElseGet(() -> $touched.test("{method}") ? Value.field({property}, Value.Nil()) : null)›""", Map.of(
+                    .orElseGet(() -> $touched.test("{method}") ? com.metreeca.mesh.Value.field({property}, com.metreeca.mesh.Value.Nil()) : null)›""", Map.of(
 
                 "method", method.name(),
 
-                "property", method.isId() ? "Value.ID"
-                        : method.isType() ? "Value.TYPE"
+                "property", method.isId() ? "com.metreeca.mesh.Value.ID"
+                        : method.isType() ? "com.metreeca.mesh.Value.TYPE"
                         : "\"%s\"".formatted(method.name()),
 
                 "value", method.isDefault()
@@ -1358,19 +1330,19 @@ public final class Generator {
 
 
     private String toId(final String value) {
-        return "Value.field(Value.ID, Values.id(%s, BASE))".formatted(
+        return "com.metreeca.mesh.Value.field(com.metreeca.mesh.Value.ID, com.metreeca.mesh.meta.Values.id(%s, BASE))".formatted(
                 value
         );
     }
 
     private String toType(final String value) {
-        return "Value.field(Value.TYPE, Values.type(%s))".formatted(
+        return "com.metreeca.mesh.Value.field(com.metreeca.mesh.Value.TYPE, com.metreeca.mesh.meta.Values.type(%s))".formatted(
                 value
         );
     }
 
     private String toField(final Method method, final String value) {
-        return "Value.field(\"%s\", %s)".formatted(
+        return "com.metreeca.mesh.Value.field(\"%s\", %s)".formatted(
                 method.name(),
                 method.isContainer() ? toValues(method, value) : toValue(method, value)
         );
@@ -1380,47 +1352,47 @@ public final class Generator {
     private String toValue(final Method method, final String value) {
         if ( method.isEnum() ) {
 
-            return "Values.option(%s)".formatted(value);
+            return "com.metreeca.mesh.meta.Values.option(%s)".formatted(value);
 
         } else {
 
             return switch ( method.boxed().type() ) {
 
-                case "Boolean" -> "Values.bit(%s)".formatted(value);
-                case "Number" -> "Values.number(%s)".formatted(value);
-                case "Byte" -> "Values.integral(%s)".formatted(value);
-                case "Short" -> "Values.integral(%s)".formatted(value);
-                case "Integer" -> "Values.integral(%s)".formatted(value);
-                case "Long" -> "Values.integral(%s)".formatted(value);
-                case "Float" -> "Values.floating(%s)".formatted(value);
-                case "Double" -> "Values.floating(%s)".formatted(value);
-                case "BigInteger" -> "Values.integer(%s)".formatted(value);
-                case "BigDecimal" -> "Values.decimal(%s)".formatted(value);
-                case "String" -> "Values.string(%s)".formatted(value);
-                case "URI" -> "Values.uri(%s)".formatted(value);
-                case "Temporal" -> "Values.temporal(%s)".formatted(value);
-                case "Year" -> "Values.year(%s)".formatted(value);
-                case "YearMonth" -> "Values.yearMonth(%s)".formatted(value);
-                case "LocalDate" -> "Values.localDate(%s)".formatted(value);
-                case "LocalTime" -> "Values.localTime(%s)".formatted(value);
-                case "OffsetTime" -> "Values.offsetTime(%s)".formatted(value);
-                case "LocalDateTime" -> "Values.localDateTime(%s)".formatted(value);
-                case "OffsetDateTime" -> "Values.offsetDateTime(%s)".formatted(value);
-                case "ZonedDateTime" -> "Values.zonedDateTime(%s)".formatted(value);
-                case "Instant" -> "Values.instant(%s)".formatted(value);
-                case "TemporalAmount" -> "Values.temporalAmount(%s)".formatted(value);
-                case "Period" -> "Values.period(%s)".formatted(value);
-                case "Duration" -> "Values.duration(%s)".formatted(value);
+                case "Boolean" -> "com.metreeca.mesh.meta.Values.bit(%s)".formatted(value);
+                case "Number" -> "com.metreeca.mesh.meta.Values.number(%s)".formatted(value);
+                case "Byte" -> "com.metreeca.mesh.meta.Values.integral(%s)".formatted(value);
+                case "Short" -> "com.metreeca.mesh.meta.Values.integral(%s)".formatted(value);
+                case "Integer" -> "com.metreeca.mesh.meta.Values.integral(%s)".formatted(value);
+                case "Long" -> "com.metreeca.mesh.meta.Values.integral(%s)".formatted(value);
+                case "Float" -> "com.metreeca.mesh.meta.Values.floating(%s)".formatted(value);
+                case "Double" -> "com.metreeca.mesh.meta.Values.floating(%s)".formatted(value);
+                case "BigInteger" -> "com.metreeca.mesh.meta.Values.integer(%s)".formatted(value);
+                case "BigDecimal" -> "com.metreeca.mesh.meta.Values.decimal(%s)".formatted(value);
+                case "String" -> "com.metreeca.mesh.meta.Values.string(%s)".formatted(value);
+                case "URI" -> "com.metreeca.mesh.meta.Values.uri(%s)".formatted(value);
+                case "Temporal" -> "com.metreeca.mesh.meta.Values.temporal(%s)".formatted(value);
+                case "Year" -> "com.metreeca.mesh.meta.Values.year(%s)".formatted(value);
+                case "YearMonth" -> "com.metreeca.mesh.meta.Values.yearMonth(%s)".formatted(value);
+                case "LocalDate" -> "com.metreeca.mesh.meta.Values.localDate(%s)".formatted(value);
+                case "LocalTime" -> "com.metreeca.mesh.meta.Values.localTime(%s)".formatted(value);
+                case "OffsetTime" -> "com.metreeca.mesh.meta.Values.offsetTime(%s)".formatted(value);
+                case "LocalDateTime" -> "com.metreeca.mesh.meta.Values.localDateTime(%s)".formatted(value);
+                case "OffsetDateTime" -> "com.metreeca.mesh.meta.Values.offsetDateTime(%s)".formatted(value);
+                case "ZonedDateTime" -> "com.metreeca.mesh.meta.Values.zonedDateTime(%s)".formatted(value);
+                case "Instant" -> "com.metreeca.mesh.meta.Values.instant(%s)".formatted(value);
+                case "TemporalAmount" -> "com.metreeca.mesh.meta.Values.temporalAmount(%s)".formatted(value);
+                case "Period" -> "com.metreeca.mesh.meta.Values.period(%s)".formatted(value);
+                case "Duration" -> "com.metreeca.mesh.meta.Values.duration(%s)".formatted(value);
 
-                case TEXT -> "Values.text(%s)".formatted(value);
-                case TEXTS -> "Values.texts(%s)".formatted(value);
-                case TEXTSETS -> "Values.textsets(%s)".formatted(value);
+                case TEXT -> "com.metreeca.mesh.meta.Values.text(%s)".formatted(value);
+                case TEXTS -> "com.metreeca.mesh.meta.Values.texts(%s)".formatted(value);
+                case TEXTSETS -> "com.metreeca.mesh.meta.Values.textsets(%s)".formatted(value);
 
-                case DATA -> "Values.data(%s)".formatted(value);
-                case DATAS -> "Values.datas(%s)".formatted(value);
-                case DATASETS -> "Values.datasets(%s)".formatted(value);
+                case DATA -> "com.metreeca.mesh.meta.Values.data(%s)".formatted(value);
+                case DATAS -> "com.metreeca.mesh.meta.Values.datas(%s)".formatted(value);
+                case DATASETS -> "com.metreeca.mesh.meta.Values.datasets(%s)".formatted(value);
 
-                default -> "Values.object(%s, %sFrame::%s)".formatted(
+                default -> "com.metreeca.mesh.meta.Values.object(%s, %sFrame::%s)".formatted(
                         value, method.type(), method.embedded() ? "toValue" : "toToken"
                 );
 
@@ -1432,39 +1404,39 @@ public final class Generator {
     private String toValues(final Method method, final String value) {
         if ( method.isEnum() ) {
 
-            return "Values.options(%s)".formatted(value);
+            return "com.metreeca.mesh.meta.Values.options(%s)".formatted(value);
 
         } else {
 
             return switch ( method.item() ) {
 
-                case "Boolean" -> "Values.bits(%s)".formatted(value);
-                case "Number" -> "Values.numbers(%s)".formatted(value);
-                case "Byte" -> "Values.integrals(%s)".formatted(value);
-                case "Short" -> "Values.integrals(%s)".formatted(value);
-                case "Integer" -> "Values.integrals(%s)".formatted(value);
-                case "Long" -> "Values.integrals(%s)".formatted(value);
-                case "Float" -> "Values.floatings(%s)".formatted(value);
-                case "Double" -> "Values.floatings(%s)".formatted(value);
-                case "BigInteger" -> "Values.integers(%s)".formatted(value);
-                case "BigDecimal" -> "Values.decimals(%s)".formatted(value);
-                case "String" -> "Values.strings(%s)".formatted(value);
-                case "URI" -> "Values.uris(%s)".formatted(value);
-                case "Temporal" -> "Values.temporals(%s)".formatted(value);
-                case "Year" -> "Values.years(%s)".formatted(value);
-                case "YearMonth" -> "Values.yearMonths(%s)".formatted(value);
-                case "LocalDate" -> "Values.localDates(%s)".formatted(value);
-                case "LocalTime" -> "Values.localTimes(%s)".formatted(value);
-                case "OffsetTime" -> "Values.offsetTimes(%s)".formatted(value);
-                case "LocalDateTime" -> "Values.localDateTimes(%s)".formatted(value);
-                case "OffsetDateTime" -> "Values.offsetDateTimes(%s)".formatted(value);
-                case "ZonedDateTime" -> "Values.zonedDateTimes(%s)".formatted(value);
-                case "Instant" -> "Values.instants(%s)".formatted(value);
-                case "TemporalAmount" -> "Values.temporalAmounts(%s)".formatted(value);
-                case "Period" -> "Values.periods(%s)".formatted(value);
-                case "Duration" -> "Values.durations(%s)".formatted(value);
+                case "Boolean" -> "com.metreeca.mesh.meta.Values.bits(%s)".formatted(value);
+                case "Number" -> "com.metreeca.mesh.meta.Values.numbers(%s)".formatted(value);
+                case "Byte" -> "com.metreeca.mesh.meta.Values.integrals(%s)".formatted(value);
+                case "Short" -> "com.metreeca.mesh.meta.Values.integrals(%s)".formatted(value);
+                case "Integer" -> "com.metreeca.mesh.meta.Values.integrals(%s)".formatted(value);
+                case "Long" -> "com.metreeca.mesh.meta.Values.integrals(%s)".formatted(value);
+                case "Float" -> "com.metreeca.mesh.meta.Values.floatings(%s)".formatted(value);
+                case "Double" -> "com.metreeca.mesh.meta.Values.floatings(%s)".formatted(value);
+                case "BigInteger" -> "com.metreeca.mesh.meta.Values.integers(%s)".formatted(value);
+                case "BigDecimal" -> "com.metreeca.mesh.meta.Values.decimals(%s)".formatted(value);
+                case "String" -> "com.metreeca.mesh.meta.Values.strings(%s)".formatted(value);
+                case "URI" -> "com.metreeca.mesh.meta.Values.uris(%s)".formatted(value);
+                case "Temporal" -> "com.metreeca.mesh.meta.Values.temporals(%s)".formatted(value);
+                case "Year" -> "com.metreeca.mesh.meta.Values.years(%s)".formatted(value);
+                case "YearMonth" -> "com.metreeca.mesh.meta.Values.yearMonths(%s)".formatted(value);
+                case "LocalDate" -> "com.metreeca.mesh.meta.Values.localDates(%s)".formatted(value);
+                case "LocalTime" -> "com.metreeca.mesh.meta.Values.localTimes(%s)".formatted(value);
+                case "OffsetTime" -> "com.metreeca.mesh.meta.Values.offsetTimes(%s)".formatted(value);
+                case "LocalDateTime" -> "com.metreeca.mesh.meta.Values.localDateTimes(%s)".formatted(value);
+                case "OffsetDateTime" -> "com.metreeca.mesh.meta.Values.offsetDateTimes(%s)".formatted(value);
+                case "ZonedDateTime" -> "com.metreeca.mesh.meta.Values.zonedDateTimes(%s)".formatted(value);
+                case "Instant" -> "com.metreeca.mesh.meta.Values.instants(%s)".formatted(value);
+                case "TemporalAmount" -> "com.metreeca.mesh.meta.Values.temporalAmounts(%s)".formatted(value);
+                case "Period" -> "com.metreeca.mesh.meta.Values.periods(%s)".formatted(value);
+                case "Duration" -> "com.metreeca.mesh.meta.Values.durations(%s)".formatted(value);
 
-                default -> "Values.objects(%s, %sFrame::%s)".formatted(
+                default -> "com.metreeca.mesh.meta.Values.objects(%s, %sFrame::%s)".formatted(
                         value, method.item(), method.embedded() ? "toValue" : "toToken"
                 );
 
