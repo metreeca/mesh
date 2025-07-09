@@ -472,6 +472,12 @@ final class SPARQLSelector extends _StoreLoader.Worker {
     private Coder order(final Map<Expression, Criterion> criteria) {
         return items(criteria.entrySet().stream()
                 .filter(e -> e.getValue().order().isPresent())
+                .sorted(Comparator
+                        .<Entry<Expression, Criterion>, Integer>comparing(
+                                entry -> Math.abs(entry.getValue().order().get())
+                        )
+                        .reversed()
+                )
                 .map(entry -> {
 
                     final Expression expression=entry.getKey();

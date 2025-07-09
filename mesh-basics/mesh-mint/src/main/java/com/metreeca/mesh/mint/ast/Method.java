@@ -61,6 +61,54 @@ import static java.util.function.Predicate.not;
 @SuppressWarnings("FieldNotUsedInToString")
 public final class Method {
 
+    public static String qualify(final String type) { // !!! ;( remove
+        return switch ( type ) {
+
+            case "Boolean" -> "java.lang.Boolean";
+            case "Number" -> "java.lang.Number";
+            case "Byte" -> "java.lang.Byte";
+            case "Short" -> "java.lang.Short";
+            case "Integer" -> "java.lang.Integer";
+            case "Long" -> "java.lang.Long";
+            case "Float" -> "java.lang.Float";
+            case "Double" -> "java.lang.Double";
+            case "BigInteger" -> "java.math.BigInteger";
+            case "BigDecimal" -> "java.math.BigDecimal";
+            case "String" -> "java.lang.String";
+            case "URI" -> "java.net.URI";
+            case "Temporal" -> "java.time.temporal.Temporal";
+            case "Year" -> "java.time.Year";
+            case "YearMonth" -> "java.time.YearMonth";
+            case "LocalDate" -> "java.time.LocalDate";
+            case "LocalTime" -> "java.time.LocalTime";
+            case "OffsetTime" -> "java.time.OffsetTime";
+            case "LocalDateTime" -> "java.time.LocalDateTime";
+            case "OffsetDateTime" -> "java.time.OffsetDateTime";
+            case "ZonedDateTime" -> "java.time.ZonedDateTime";
+            case "Instant" -> "java.time.Instant";
+            case "TemporalAmount" -> "java.time.temporal.TemporalAmount";
+            case "Period" -> "java.time.Period";
+            case "Duration" -> "java.time.Duration";
+
+            case TEXT -> "java.util.Map.Entry<java.util.Locale, java.lang.String>";
+            case TEXTS -> "java.util.Map<java.util.Locale, java.lang.String>";
+            case TEXTSETS -> "java.util.Map<java.util.Locale, java.util.Set<java.lang.String>>";
+
+            case DATA -> "java.util.Map.Entry<java.net.URI, java.lang.String>";
+            case DATAS -> "java.util.Map<java.net.URI, java.lang.String>";
+            case DATASETS -> "java.util.Map<java.net.URI, java.util.Set<java.lang.String>>";
+
+            case "Set" -> "java.util.Set";
+            case "List" -> "java.util.List";
+
+            default -> type;
+
+        };
+    }
+
+
+    //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static final String TEXT="Entry<Locale, String>";
     public static final String TEXTS="Map<Locale, String>";
     public static final String TEXTSETS="Map<Locale, Set<String>>";
@@ -388,6 +436,11 @@ public final class Method {
                 : "%s<%s>".formatted(type, item);
     }
 
+    public String qualified() { // !!! ;( remove
+        return item.isEmpty() ? qualify(type)
+                : isWild ? "%s<? extends %s>".formatted(qualify(type), qualify(item))
+                : "%s<%s>".formatted(qualify(type), qualify(item));
+    }
 
     public String name() {
         return name;

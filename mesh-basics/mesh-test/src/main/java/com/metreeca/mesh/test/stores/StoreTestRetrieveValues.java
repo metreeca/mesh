@@ -719,21 +719,21 @@ public abstract class StoreTestRetrieveValues {
                                     id(base())
                             ))
 
-                            .where(seniority, criterion().order(-2))
-                            .where(label, criterion().order(1))
+                            .where(seniority, criterion().order(-1))
+                            .where(label, criterion().order(2))
                     ))
 
             ))).satisfies(employees -> assertThat(members(employees))
                     .map(Value::id)
                     .containsExactlyElementsOf(Employees.stream()
-                            .sorted(Comparator.<Value, Long>comparing(employee -> employee
-                                            .get(seniority).integral()
-                                            .orElseThrow()
-                                    ).reversed()
-                                    .thenComparing(comparing(employee -> employee
+                            .sorted(Comparator.<Value, String>comparing(employee -> employee
                                             .get(label).string()
                                             .orElseThrow()
-                                    )))
+                                    )
+                                    .thenComparing(Comparator.<Value, Long>comparing(employee -> employee
+                                            .get(seniority).integral()
+                                            .orElseThrow()
+                                    ).reversed()))
                             .map(Value::id)
                             .toList()
                     )
