@@ -201,12 +201,12 @@ public final class Agent {
      */
     public Agent(final Value model, final Codec codec, final Store store) {
         this(model, codec, store, request -> Optional.ofNullable(request.header(SLUG))
-                .map(slug1 -> URLDecoder.decode(slug1, UTF_8))
+                .map(s -> URLDecoder.decode(s, UTF_8))
                 .map(String::trim)
                 .filter(not(String::isEmpty))
-                .map(slug1 -> MARK_PATTERN.matcher(normalize(slug1, Form.NFD)).replaceAll(""))
-                .map(slug1 -> SPECIAL_PATTERN.matcher(slug1).replaceAll(" "))
-                .map(slug1 -> SPACES_PATTERN.matcher(slug1.trim()).replaceAll("-"))
+                .map(s -> MARK_PATTERN.matcher(normalize(s, Form.NFD)).replaceAll(""))
+                .map(s -> SPECIAL_PATTERN.matcher(s).replaceAll(" "))
+                .map(s -> SPACES_PATTERN.matcher(s.trim()).replaceAll("-"))
                 .orElseGet(URIs::uuid)
         );
     }

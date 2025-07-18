@@ -383,14 +383,14 @@ public final record Shape(
         }
 
 
-        if ( !minLength.flatMap(xv -> maxLength.map(yv -> xv <= yv)).orElse(true) ) {
+        if ( !minLength.filter(v -> v > 0).flatMap(xv -> maxLength.filter(v -> v > 0).map(yv -> xv <= yv)).orElse(true) ) {
             throw new IllegalArgumentException(format(
                     "conflicting minLength(<%s>) / maxLength(<%s>) limits",
                     minLength.get(), maxLength.get()
             ));
         }
 
-        if ( !minCount.flatMap(xv -> maxCount.map(yv -> xv <= yv)).orElse(true) ) {
+        if ( !minCount.filter(v -> v > 0).flatMap(xv -> maxCount.filter(v -> v > 0).map(yv -> xv <= yv)).orElse(true) ) {
             throw new IllegalArgumentException(format(
                     "conflicting minCount(<%s>) / maxCount(<%s>) limits",
                     minCount.get(), maxCount.get()
