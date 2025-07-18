@@ -382,7 +382,7 @@ public final class Agent {
                         if ( store.create(value.merge(object(id(id)))) > 0 ) {
 
                             response.status(CREATED);
-                            response.header(LOCATION, id.toString());
+                            response.header(LOCATION, id.getPath());
 
                         } else {
 
