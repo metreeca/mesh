@@ -24,7 +24,6 @@ import com.metreeca.mesh.pipe.Store;
 import org.eclipse.rdf4j.common.exception.ValidationException;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.RepositoryException;
 
 import java.net.URI;
 import java.util.List;
@@ -290,7 +289,7 @@ public final class RDF4JStore implements Store {
 
                     return value;
 
-                } catch ( final RepositoryException e ) {
+                } catch ( final RuntimeException e ) {
 
                     if ( e.getCause() instanceof final ValidationException cause ) {
 

@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.util.function.Consumer;
 
 /**
- * HTTP-style response abstraction for Agent processing.
+ * HTTP response abstraction for Agent processing.
  *
  * <p>Provides methods to configure response metadata and content for
  * REST API operations.</p>

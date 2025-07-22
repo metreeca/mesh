@@ -16,27 +16,59 @@
 
 
 /**
- * Data persistence and REST API infrastructure.
+ * REST/JSON-LD API publishing, data serialization, and persistence infrastructure.
  *
- * <p>This package provides the essential infrastructure components for handling data
- * persistence, serialization, and REST API operations within the Metreeca/Mesh framework.
- * The tools enable seamless integration between semantic data models and various storage
- * backends while supporting web service capabilities.</p>
+ * <p>This package provides the essential infrastructure components for handling
+ * REST/JSON-LD API publishing, data serialization, and persistence.</p>
  *
  * <h2>Core Components</h2>
  *
  * <ul>
  *
- *     <li><strong>{@link com.metreeca.mesh.pipe.Store}</strong> - Primary persistence abstraction
- *         providing CRUD operations, query execution, and transaction management for semantic data</li>
+ *     <li><strong>{@link com.metreeca.mesh.pipe.Agent}</strong> - REST/JSON-LD API agent for handling
+ *         HTTP-based CRUD operations with content negotiation and validation</li>
+ *
+ *     <li><strong>{@link com.metreeca.mesh.pipe.AgentProcessor}</strong> - Customization interface
+ *         for transforming request and response data during HTTP processing</li>
  *
  *     <li><strong>{@link com.metreeca.mesh.pipe.Codec}</strong> - Bidirectional serialization framework
  *         for converting between Value objects and various data formats</li>
  *
- *     <li><strong>{@link com.metreeca.mesh.pipe.Agent}</strong> - REST API agent for handling
- *         HTTP-style operations with content negotiation and validation</li>
+ *     <li><strong>{@link com.metreeca.mesh.pipe.Store}</strong> - Primary persistence abstraction
+ *         providing CRUD operations, query execution, and transaction management for semantic data</li>
  *
  * </ul>
+ *
+ *
+ * <h2>REST/JSON-LD API Operations</h2>
+ *
+ * <p>The {@link com.metreeca.mesh.pipe.Agent} orchestrates HTTP processing, codec, and store operations
+ * to provide comprehensive REST/JSON-LD API functionality for:</p>
+ *
+ * <ul>
+ *
+ *     <li><strong>HTTP Operations</strong> - Complete REST/JSON-LD API implementation mapping HTTP
+ *         methods to store operations with proper status codes</li>
+ *
+ *     <li><strong>Content Negotiation</strong> - Automatic handling of Accept headers,
+ *         media types, and language preferences</li>
+ *
+ *     <li><strong>Request/Response</strong> - Type-safe communication patterns through
+ *         {@link com.metreeca.mesh.pipe.AgentRequest} and {@link com.metreeca.mesh.pipe.AgentResponse}</li>
+ *
+ *     <li><strong>Customization</strong> - Extensible processing through
+ *         {@link com.metreeca.mesh.pipe.AgentProcessor} for validation, transformation, and access control</li>
+ *
+ * </ul>
+ *
+ *
+ * <h2>Data Exchange</h2>
+ *
+ * <p>The {@link com.metreeca.mesh.pipe.Codec} framework enables flexible data serialization
+ * and deserialization across different formats while preserving semantic meaning and structural
+ * integrity. Codecs handle format-specific concerns while maintaining type safety and
+ * validation consistency.</p>
+ *
  *
  * <h2>Storage Abstraction</h2>
  *
@@ -58,35 +90,6 @@
  *         data retrieval and processing</li>
  *
  * </ul>
- *
- * <h2>Data Exchange</h2>
- *
- * <p>The {@link com.metreeca.mesh.pipe.Codec} framework enables flexible data serialization
- * and deserialization across different formats while preserving semantic meaning and structural
- * integrity. Codecs handle format-specific concerns while maintaining type safety and
- * validation consistency.</p>
- *
- * <h2>REST API Operations</h2>
- *
- * <p>The {@link com.metreeca.mesh.pipe.Agent} provides comprehensive REST API functionality for:</p>
- *
- * <ul>
- *
- *     <li><strong>HTTP Operations</strong> - Complete REST API implementation mapping HTTP
- *         methods to store operations with proper status codes</li>
- *
- *     <li><strong>Content Negotiation</strong> - Automatic handling of Accept headers,
- *         media types, and language preferences</li>
- *
- *     <li><strong>Request/Response</strong> - Type-safe communication patterns through
- *         {@link com.metreeca.mesh.pipe.AgentRequest} and {@link com.metreeca.mesh.pipe.AgentResponse}</li>
- *
- * </ul>
- *
- * <p>All tools are designed to work seamlessly with the broader Metreeca/Mesh ecosystem,
- * providing consistent error handling through {@link com.metreeca.mesh.pipe.StoreException}
- * and {@link com.metreeca.mesh.pipe.CodecException}, and supporting the framework's
- * commitment to semantic web standards and linked data principles.</p>
  *
  * @see com.metreeca.mesh.Value Core value model for data representation
  * @see com.metreeca.mesh.queries Query framework for data retrieval

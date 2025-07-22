@@ -200,7 +200,13 @@ public interface Store extends AutoCloseable {
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Executes a task within the store's transaction context.
+     * Executes a task within a store transaction.
+     *
+     * <p>The transaction is committed upon successful task completion. Any exception thrown by
+     * the task causes the transaction to be rolled back, and the exception is rethrown.</p>
+     *
+     * <p>Calls may be reentrant. If the underlying storage layer doesn't support nested
+     * transactions, commit/rollback is handled by the outermost call.</p>
      *
      * @param task the task to execute
      *
@@ -223,7 +229,13 @@ public interface Store extends AutoCloseable {
     }
 
     /**
-     * Executes a function within the store's transaction context.
+     * Executes a function within a store transaction.
+     *
+     * <p>The transaction is committed upon successful function completion. Any exception thrown by
+     * the function causes the transaction to be rolled back, and the exception is rethrown.</p>
+     *
+     * <p>Calls may be reentrant. If the underlying storage layer doesn't support nested
+     * transactions, commit/rollback is handled by the outermost call.</p>
      *
      * @param task the function to execute
      * @param <V>  the return type
