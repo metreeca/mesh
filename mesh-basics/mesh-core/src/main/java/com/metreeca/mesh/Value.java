@@ -1162,7 +1162,7 @@ public abstract class Value implements Valuable {
     }
 
 
-    public abstract <R, E extends Exception> R accept(final ThrowingVisitor<R, E> visitor) throws E;
+    public abstract <R> R accept(final Visitor<R> visitor);
 
 
     @Override
@@ -1173,118 +1173,116 @@ public abstract class Value implements Valuable {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public abstract static class Visitor<R> extends ThrowingVisitor<R, RuntimeException> { }
+    public abstract static class Visitor<R> {
 
-    public abstract static class ThrowingVisitor<R, E extends Exception> {
-
-        public R visit(final Value host, final Object object) throws E {
+        public R visit(final Value host, final Object object) {
             return null;
         }
 
 
-        public R visit(final Value host, final Void nil) throws E {
+        public R visit(final Value host, final Void nil) {
             return visit(host, (Object)nil);
         }
 
-        public R visit(final Value host, final Boolean bit) throws E {
+        public R visit(final Value host, final Boolean bit) {
             return visit(host, (Object)bit);
         }
 
-        public R visit(final Value host, final Number number) throws E {
+        public R visit(final Value host, final Number number) {
             return visit(host, (Object)number);
         }
 
-        public R visit(final Value host, final Long integral) throws E {
+        public R visit(final Value host, final Long integral) {
             return visit(host, (Number)integral);
         }
 
-        public R visit(final Value host, final Double floating) throws E {
+        public R visit(final Value host, final Double floating) {
             return visit(host, (Number)floating);
         }
 
-        public R visit(final Value host, final BigInteger integer) throws E {
+        public R visit(final Value host, final BigInteger integer) {
             return visit(host, (Number)integer);
         }
 
-        public R visit(final Value host, final BigDecimal decimal) throws E {
+        public R visit(final Value host, final BigDecimal decimal) {
             return visit(host, (Number)decimal);
         }
 
-        public R visit(final Value host, final String string) throws E {
+        public R visit(final Value host, final String string) {
             return visit(host, (Object)string);
         }
 
 
-        public R visit(final Value host, final URI uri) throws E {
+        public R visit(final Value host, final URI uri) {
             return visit(host, (Object)uri);
         }
 
-        public R visit(final Value host, final Temporal temporal) throws E {
+        public R visit(final Value host, final Temporal temporal) {
             return visit(host, (Object)temporal);
         }
 
-        public R visit(final Value host, final Year year) throws E {
+        public R visit(final Value host, final Year year) {
             return visit(host, (Temporal)year);
         }
 
-        public R visit(final Value host, final YearMonth yearMonth) throws E {
+        public R visit(final Value host, final YearMonth yearMonth) {
             return visit(host, (Temporal)yearMonth);
         }
 
-        public R visit(final Value host, final LocalDate localDate) throws E {
+        public R visit(final Value host, final LocalDate localDate) {
             return visit(host, (Temporal)localDate);
         }
 
-        public R visit(final Value host, final LocalTime localTime) throws E {
+        public R visit(final Value host, final LocalTime localTime) {
             return visit(host, (Temporal)localTime);
         }
 
-        public R visit(final Value host, final OffsetTime offsetTime) throws E {
+        public R visit(final Value host, final OffsetTime offsetTime) {
             return visit(host, (Temporal)offsetTime);
         }
 
-        public R visit(final Value host, final LocalDateTime localDateTime) throws E {
+        public R visit(final Value host, final LocalDateTime localDateTime) {
             return visit(host, (Temporal)localDateTime);
         }
 
-        public R visit(final Value host, final OffsetDateTime offsetDateTime) throws E {
+        public R visit(final Value host, final OffsetDateTime offsetDateTime) {
             return visit(host, (Temporal)offsetDateTime);
         }
 
-        public R visit(final Value host, final ZonedDateTime zonedDateTime) throws E {
+        public R visit(final Value host, final ZonedDateTime zonedDateTime) {
             return visit(host, (Temporal)zonedDateTime);
         }
 
-        public R visit(final Value host, final Instant instant) throws E {
+        public R visit(final Value host, final Instant instant) {
             return visit(host, (Temporal)instant);
         }
 
-        public R visit(final Value host, final TemporalAmount amount) throws E {
+        public R visit(final Value host, final TemporalAmount amount) {
             return visit(host, (Object)amount);
         }
 
-        public R visit(final Value host, final Period period) throws E {
+        public R visit(final Value host, final Period period) {
             return visit(host, (TemporalAmount)period);
         }
 
-        public R visit(final Value host, final Duration duration) throws E {
+        public R visit(final Value host, final Duration duration) {
             return visit(host, (TemporalAmount)duration);
         }
 
 
-        public R visit(final Value host, final Locale locale, final String string) throws E {
+        public R visit(final Value host, final Locale locale, final String string) {
             return visit(host, entry(string, locale));
         }
 
-        public R visit(final Value host, final URI datatype, final String string) throws E {
+        public R visit(final Value host, final URI datatype, final String string) {
             return visit(host, entry(string, datatype));
         }
 
-        public R visit(final Value host, final Map<String, Value> fields) throws E {
+        public R visit(final Value host, final Map<String, Value> fields) {
             return visit(host, (Object)fields);
         }
 
-        public R visit(final Value host, final List<Value> values) throws E {
+        public R visit(final Value host, final List<Value> values) {
             return visit(host, (Object)values);
         }
 
@@ -1305,7 +1303,7 @@ public abstract class Value implements Valuable {
             return value.equals("null") ? Optional.of(MODEL) : Optional.empty();
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, (Void)null);
         }
 
@@ -1349,7 +1347,7 @@ public abstract class Value implements Valuable {
                     : Optional.empty();
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, bit);
         }
 
@@ -1387,7 +1385,7 @@ public abstract class Value implements Valuable {
                     : IntegerValue.MODEL.decode(value, base);
         }
 
-        @Override public <R, E extends Exception> R accept(final ThrowingVisitor<R, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, 0);
         }
 
@@ -1427,7 +1425,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, integral);
         }
 
@@ -1490,7 +1488,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, floating);
         }
 
@@ -1547,7 +1545,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, integer);
         }
 
@@ -1604,7 +1602,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, decimal);
         }
 
@@ -1695,7 +1693,7 @@ public abstract class Value implements Valuable {
             return Optional.of(string(value));
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, string);
         }
 
@@ -1759,7 +1757,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value, base)).map(Value::uri);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, uri);
         }
 
@@ -1835,7 +1833,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(TemporalValue::create);
         }
 
-        @Override public <R, E extends Exception> R accept(final ThrowingVisitor<R, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, EPOCH);
         }
 
@@ -1931,7 +1929,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::year);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, year);
         }
 
@@ -1994,7 +1992,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::yearMonth);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, yearMonth);
         }
 
@@ -2057,7 +2055,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::localDate);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, localDate);
         }
 
@@ -2120,7 +2118,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::localTime);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, localTime);
         }
 
@@ -2183,7 +2181,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::offsetTime);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, offsetTime);
         }
 
@@ -2246,7 +2244,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::localDateTime);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, localDateTime);
         }
 
@@ -2309,7 +2307,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::offsetDateTime);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, offsetDateTime);
         }
 
@@ -2372,7 +2370,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::zonedDateTime);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, zonedDateTime);
         }
 
@@ -2435,7 +2433,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::instant);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, instant);
         }
 
@@ -2486,7 +2484,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(TemporalAmountValue::create);
         }
 
-        @Override public <R, E extends Exception> R accept(final ThrowingVisitor<R, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, Duration.ZERO);
         }
 
@@ -2557,7 +2555,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::period);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, period);
         }
 
@@ -2620,7 +2618,7 @@ public abstract class Value implements Valuable {
             return Optional.ofNullable(value(value)).map(Value::duration);
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, duration);
         }
 
@@ -2683,7 +2681,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, locale, string);
         }
 
@@ -2746,7 +2744,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, datatype, string);
         }
 
@@ -2796,7 +2794,7 @@ public abstract class Value implements Valuable {
             }
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, fields);
         }
 
@@ -2839,7 +2837,7 @@ public abstract class Value implements Valuable {
             this.values=values;
         }
 
-        @Override public <V, E extends Exception> V accept(final ThrowingVisitor<V, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, values);
         }
 
@@ -2876,7 +2874,7 @@ public abstract class Value implements Valuable {
 
         private GenericValue(final Object object) { this.object=object; }
 
-        @Override public <R, E extends Exception> R accept(final ThrowingVisitor<R, E> visitor) throws E {
+        @Override public <V> V accept(final Visitor<V> visitor) {
             return visitor.visit(this, object);
         }
 
