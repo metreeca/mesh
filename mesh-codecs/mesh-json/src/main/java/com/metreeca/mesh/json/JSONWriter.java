@@ -18,8 +18,6 @@ package com.metreeca.mesh.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import static com.metreeca.shim.Collections.list;
@@ -39,32 +37,12 @@ final class JSONWriter {
 
     private final Appendable target;
 
-    private final Collection<Object> visited=new HashSet<>();
     private final List<Boolean> stack=new ArrayList<>(list(true));
 
 
     JSONWriter(final JSONCodec codec, final Appendable target) {
         this.indent=codec.indent();
         this.target=target;
-    }
-
-
-    /**
-     * Checks if the given object has been visited to detect cycles.
-     *
-     * @param value the object to check
-     *
-     * @return {@code true} if this is the first visit to the object
-     *
-     * @throws NullPointerException if {@code value} is {@code null}
-     */
-    boolean visit(final Object value) {
-
-        if ( value == null ) {
-            throw new NullPointerException("null value");
-        }
-
-        return visited.add(value);
     }
 
 
