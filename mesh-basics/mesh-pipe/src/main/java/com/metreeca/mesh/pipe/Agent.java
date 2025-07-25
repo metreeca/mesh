@@ -36,6 +36,7 @@ import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -174,7 +175,7 @@ public final class Agent {
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc5023#section-9.7">RFC 5023 The Atom Publishing
      *         Protocol - § 9.7 - The Slug Header</a>
      */
-    public static Optional<String> slug(final String slug) {
+    private static Optional<String> slug(final String slug) {
 
         if ( slug == null ) {
             throw new NullPointerException("null slug");
@@ -199,7 +200,7 @@ public final class Agent {
      *
      * @return stream of values sorted by quality in descending order
      */
-    private static Stream<String> values(final CharSequence values, final Pattern pattern) {
+    private Stream<String> values(final CharSequence values, final Pattern pattern) {
 
         final List<Entry<String, Float>> entries=new ArrayList<>();
 
@@ -901,6 +902,24 @@ public final class Agent {
 
     //̸/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private Value decode(
+            final AgentProcessor processor, final URI resource, final Function<Shape, Value> decoder
+    ) {
+        return Optional.ofNullable(processor.decode(resource, decoder))
+                .orElseGet(() -> object(id(resource)))
+                .toValue();
+    }
+
+    private Optional<Value> review(
+            final AgentProcessor processor, final Value value, final Supplier<? extends Valuable> fallback
+    ) {
+        return Optional.ofNullable(processor.review(value))
+                .orElseGet(fallback)
+                .toValue()
+                .value();
+    }
+
+
     private Value decode(final AgentRequest request, final Shape shape) {
         return request.input(input -> {
 
@@ -978,7 +997,7 @@ public final class Agent {
                         .flatMap(accept -> values(accept, MIME_PATTERN))
                         .anyMatch(mime -> mime.equals(JSONLD));
 
-                final Value model=processor.decode(resource, shape -> object(shape(shape))).toValue();
+                final Value model=decode(processor, resource, shape -> object(shape(shape)));
 
                 final Value specs=Optional.of(request.query())
                         .filter(not(String::isEmpty))
@@ -1004,7 +1023,7 @@ public final class Agent {
 
                         .ifPresentOrElse( // !!! validate value
 
-                                value -> processor.review(value).toValue().value().ifPresentOrElse(
+                                value -> review(processor, value, () -> value).ifPresentOrElse(
 
                                         payload -> {
 
@@ -1051,7 +1070,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
+                final Value payload=decode(processor, resource, shape -> decode(request, shape));
 
                 final Value value=payload.merge(object(id(payload.id().orElseGet(() -> resource.resolve(Optional
                         .ofNullable(request.header(SLUG))
@@ -1067,7 +1086,7 @@ public final class Agent {
 
                             if ( store.create(value) > 0 ) {
 
-                                processor.review(value).toValue().value().ifPresentOrElse(
+                                review(processor, value, Value::Nil).ifPresentOrElse(
 
                                         trace -> {
 
@@ -1121,7 +1140,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
+                final Value payload=decode(processor, resource, shape -> decode(request, shape));
                 final Value value=payload.merge(object(id(resource)));
 
                 value.validate().ifPresentOrElse(
@@ -1132,7 +1151,7 @@ public final class Agent {
 
                             if ( store.update(value) > 0 ) {
 
-                                processor.review(value).toValue().value().ifPresentOrElse(
+                                review(processor, value, Value::Nil).ifPresentOrElse(
 
                                         trace -> { throw new ValidationException(UNPROCESSABLE_ENTITY, trace); },
 
@@ -1177,7 +1196,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
+                final Value payload=decode(processor, resource, shape -> decode(request, shape));
                 final Value value=payload.merge(object(id(resource)));
 
                 value.validate().ifPresentOrElse( // !!! accept partial objects
@@ -1188,7 +1207,7 @@ public final class Agent {
 
                             if ( store.mutate(value) > 0 ) {
 
-                                processor.review(value).toValue().value().ifPresentOrElse(
+                                review(processor, value, Value::Nil).ifPresentOrElse(
 
                                         trace -> { throw new ValidationException(UNPROCESSABLE_ENTITY, trace); },
 
@@ -1232,14 +1251,14 @@ public final class Agent {
 
             final URI resource=request.resource();
 
-            final Value payload=processor.decode(resource, shape -> object(shape(shape))).toValue();
+            final Value payload=decode(processor, resource, shape -> object(shape(shape)));
             final Value value=payload.merge(object(id(resource)));
 
             execute(response, store -> {
 
                 if ( store.delete(value) > 0 ) {
 
-                    processor.review(value).toValue().value().ifPresentOrElse(
+                    review(processor, value, Value::Nil).ifPresentOrElse(
 
                             trace -> { throw new ValidationException(CONFLICT, trace); },
 

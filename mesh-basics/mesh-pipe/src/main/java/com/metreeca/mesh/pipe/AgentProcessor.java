@@ -25,9 +25,8 @@ import static com.metreeca.mesh.shapes.Shape.shape;
  *
  * <p>Method-specific behavior and integration details are documented in {@linkplain Agent}.</p>
  *
- * <p>Default implementations provide pass-through behaviour suitable for basic operations.
- * Override methods to implement custom processing patterns such as validation, enrichment,
- * access control, or format conversion.</p>
+ * <p>Default implementations provide behaviour suitable for basic operations. Override methods to implement
+ * custom processing patterns such as validation, enrichment, access control, or format conversion.</p>
  */
 public interface AgentProcessor {
 
@@ -55,7 +54,7 @@ public interface AgentProcessor {
      * @throws NullPointerException if {@code value} is {@code null}
      */
     default Valuable review(final Value value) {
-        return value;
+        return null;
     }
 
 }
