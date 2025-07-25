@@ -978,7 +978,7 @@ public final class Agent {
                         .flatMap(accept -> values(accept, MIME_PATTERN))
                         .anyMatch(mime -> mime.equals(JSONLD));
 
-                final Value model=processor.decode(resource, shape -> object(shape(shape)));
+                final Value model=processor.decode(resource, shape -> object(shape(shape))).toValue();
 
                 final Value specs=Optional.of(request.query())
                         .filter(not(String::isEmpty))
@@ -1004,7 +1004,7 @@ public final class Agent {
 
                         .ifPresentOrElse( // !!! validate value
 
-                                value -> processor.review(value).value().ifPresentOrElse(
+                                value -> processor.review(value).toValue().value().ifPresentOrElse(
 
                                         payload -> {
 
@@ -1051,7 +1051,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape));
+                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
 
                 final Value value=payload.merge(object(id(payload.id().orElseGet(() -> resource.resolve(Optional
                         .ofNullable(request.header(SLUG))
@@ -1067,7 +1067,7 @@ public final class Agent {
 
                             if ( store.create(value) > 0 ) {
 
-                                processor.review(value).value().ifPresentOrElse(
+                                processor.review(value).toValue().value().ifPresentOrElse(
 
                                         trace -> {
 
@@ -1121,7 +1121,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape));
+                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
                 final Value value=payload.merge(object(id(resource)));
 
                 value.validate().ifPresentOrElse(
@@ -1132,7 +1132,7 @@ public final class Agent {
 
                             if ( store.update(value) > 0 ) {
 
-                                processor.review(value).value().ifPresentOrElse(
+                                processor.review(value).toValue().value().ifPresentOrElse(
 
                                         trace -> { throw new ValidationException(UNPROCESSABLE_ENTITY, trace); },
 
@@ -1177,7 +1177,7 @@ public final class Agent {
 
                 final URI resource=request.resource();
 
-                final Value payload=processor.decode(resource, shape -> decode(request, shape));
+                final Value payload=processor.decode(resource, shape -> decode(request, shape)).toValue();
                 final Value value=payload.merge(object(id(resource)));
 
                 value.validate().ifPresentOrElse( // !!! accept partial objects
@@ -1188,7 +1188,7 @@ public final class Agent {
 
                             if ( store.mutate(value) > 0 ) {
 
-                                processor.review(value).value().ifPresentOrElse(
+                                processor.review(value).toValue().value().ifPresentOrElse(
 
                                         trace -> { throw new ValidationException(UNPROCESSABLE_ENTITY, trace); },
 
@@ -1232,14 +1232,14 @@ public final class Agent {
 
             final URI resource=request.resource();
 
-            final Value payload=processor.decode(resource, shape -> object(shape(shape)));
+            final Value payload=processor.decode(resource, shape -> object(shape(shape))).toValue();
             final Value value=payload.merge(object(id(resource)));
 
-            execute(response, s -> {
+            execute(response, store -> {
 
                 if ( store.delete(value) > 0 ) {
 
-                    processor.review(value).value().ifPresentOrElse(
+                    processor.review(value).toValue().value().ifPresentOrElse(
 
                             trace -> { throw new ValidationException(CONFLICT, trace); },
 

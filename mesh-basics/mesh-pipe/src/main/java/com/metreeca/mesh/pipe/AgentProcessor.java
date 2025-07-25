@@ -1,5 +1,6 @@
 package com.metreeca.mesh.pipe;
 
+import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.shapes.Shape;
 
@@ -40,7 +41,7 @@ public interface AgentProcessor {
      *
      * @throws NullPointerException if either {@code id} or {@code decoder} is {@code null}
      */
-    default Value decode(final URI id, final Function<Shape, Value> decoder) {
+    default Valuable decode(final URI id, final Function<Shape, Value> decoder) {
         return decoder.apply(shape());
     }
 
@@ -53,7 +54,7 @@ public interface AgentProcessor {
      *
      * @throws NullPointerException if {@code value} is {@code null}
      */
-    default Value review(final Value value) {
+    default Valuable review(final Value value) {
         return value;
     }
 
