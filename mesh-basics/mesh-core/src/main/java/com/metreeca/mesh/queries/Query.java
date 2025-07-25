@@ -18,6 +18,7 @@ package com.metreeca.mesh.queries;
 
 import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
+import com.metreeca.mesh.ValueException;
 import com.metreeca.mesh.shapes.Shape;
 
 import java.net.URI;
@@ -153,7 +154,8 @@ public final record Query(
      *
      * @throws NullPointerException     if any parameter is {@code null}
      * @throws IllegalArgumentException if {@code base} is not an absolute URI
-     * @throws CodecException           if the query string is malformed
+     * @throws NoSuchElementException   if an expression cannot be resolved in the provided shape context
+     * @throws ValueException           if the query string is malformed
      */
     public static Query query(final String query, final Shape shape, final URI base) {
 

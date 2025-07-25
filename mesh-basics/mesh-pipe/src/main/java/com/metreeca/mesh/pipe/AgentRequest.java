@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.function.Function;
 
 /**
- * HTTP-style request abstraction for Agent processing.
+ * HTTP request abstraction for Agent processing.
  *
  * <p>Provides access to request metadata and content in a format suitable
  * for REST API processing.</p>
