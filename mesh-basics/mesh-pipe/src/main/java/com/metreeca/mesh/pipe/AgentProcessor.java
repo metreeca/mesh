@@ -1,5 +1,6 @@
 package com.metreeca.mesh.pipe;
 
+import com.metreeca.mesh.Valuable;
 import com.metreeca.mesh.Value;
 import com.metreeca.mesh.shapes.Shape;
 
@@ -24,9 +25,8 @@ import static com.metreeca.mesh.shapes.Shape.shape;
  *
  * <p>Method-specific behavior and integration details are documented in {@linkplain Agent}.</p>
  *
- * <p>Default implementations provide pass-through behaviour suitable for basic operations.
- * Override methods to implement custom processing patterns such as validation, enrichment,
- * access control, or format conversion.</p>
+ * <p>Default implementations provide behaviour suitable for basic operations. Override methods to implement
+ * custom processing patterns such as validation, enrichment, access control, or format conversion.</p>
  */
 public interface AgentProcessor {
 
@@ -40,7 +40,7 @@ public interface AgentProcessor {
      *
      * @throws NullPointerException if either {@code id} or {@code decoder} is {@code null}
      */
-    default Value decode(final URI id, final Function<Shape, Value> decoder) {
+    default Valuable decode(final URI id, final Function<Shape, Value> decoder) {
         return decoder.apply(shape());
     }
 
@@ -53,8 +53,8 @@ public interface AgentProcessor {
      *
      * @throws NullPointerException if {@code value} is {@code null}
      */
-    default Value review(final Value value) {
-        return value;
+    default Valuable review(final Value value) {
+        return null;
     }
 
 }
