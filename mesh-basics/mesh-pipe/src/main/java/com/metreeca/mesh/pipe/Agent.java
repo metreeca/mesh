@@ -152,6 +152,46 @@ public final class Agent {
 
 
     /**
+     * Creates a URL-friendly slug from the given text.
+     *
+     * <p>Normalises the input text by:</p>
+     *
+     * <ul>
+     *   <li>URL decoding the input text</li>
+     *   <li>Removing diacritical marks from Unicode characters</li>
+     *   <li>Replacing non-letter/digit characters with spaces</li>
+     *   <li>Converting space sequences to hyphens</li>
+     *   <li>Converting to lowercase</li>
+     * </ul>
+     *
+     * <p>Processing follows RFC 5023 section 9.7 guidelines for handling client-suggested URI components.</p>
+     *
+     * @param slug the text to convert to a slug
+     *
+     * @return an optional containing the generated slug, or empty if the input becomes empty after processing
+     *
+     * @throws NullPointerException if {@code slug} is {@code null}
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc5023#section-9.7">RFC 5023 The Atom Publishing
+     *         Protocol - § 9.7 - The Slug Header</a>
+     */
+    public static Optional<String> slug(final String slug) {
+
+        if ( slug == null ) {
+            throw new NullPointerException("null slug");
+        }
+
+        return Optional.of(slug)
+                .map(s -> URLDecoder.decode(s, UTF_8))
+                .map(String::trim)
+                .filter(not(String::isEmpty))
+                .map(s -> MARK_PATTERN.matcher(normalize(s, Form.NFD)).replaceAll(""))
+                .map(s -> SPECIAL_PATTERN.matcher(s).replaceAll(" "))
+                .map(s -> SPACES_PATTERN.matcher(s.trim()).replaceAll("-"))
+                .map(s -> s.toLowerCase(ROOT));
+    }
+
+
+    /**
      * Parses quality-weighted values from HTTP headers.
      *
      * @param values  the header value containing quality-weighted entries
@@ -357,12 +397,12 @@ public final class Agent {
      * Enables the {@code POST} HTTP method.
      *
      * <p>This convenience method creates a default processor that: (1) uses the model's shape to decode and
-     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing
-     * the model to provide default field values for the creation operation. For advanced customization,
-     * see {@linkplain #create(AgentProcessor)}.</p>
+     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing the model
+     * to provide default field values for the creation operation. For advanced customization, see
+     * {@linkplain #create(AgentProcessor)}.</p>
      *
-     * @param model the data model providing the shape for payload decoding and validation, and default values
-     *              for resource creation
+     * @param model the data model providing the shape for payload decoding and validation, and default values for
+     *              resource creation
      *
      * @return a new agent instance with {@code POST} support enabled
      *
@@ -423,21 +463,10 @@ public final class Agent {
      *
      * </ul>
      *
-     * <p>The default id generation strategy processes the {@code Slug} header from incoming requests, attempting to
-     * use a sanitized version of the Slug header value, falling back to a generated UUID if no valid slug is
-     * provided.</p>
-     *
-     * <p>Sanitization follows RFC 5023 section 9.7 guidelines for processing client-suggested URI components:</p>
-     *
-     * <ul>
-     *   <li>URL decodes the header value</li>
-     *   <li>Removes diacritical marks from Unicode characters</li>
-     *   <li>Replaces non-letter/digit characters with spaces</li>
-     *   <li>Converts space sequences to hyphens</li>
-     * </ul>
-     *
-     * <p>Auto-generated IDs may be overridden by custom preprocessors using the
-     * {@linkplain Value#merge(Value)} method.</p>
+     * <p>Custom processors may provide an id by including it in the value returned by {@code decode()}. If the
+     * returned value doesn't contain a custom id, the default id generation strategy processes the {@code Slug}
+     * header from incoming requests, falling back to a generated UUID if no valid slug is provided. Client-provided
+     * slug values are sanitized using the {@linkplain #slug(String)} method.</p>
      *
      * <p>Method handling includes automatic payload validation and response generation:</p>
      *
@@ -454,8 +483,6 @@ public final class Agent {
      * @return a new agent instance with {@code POST} support enabled
      *
      * @throws NullPointerException if {@code processor} is {@code null}
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc5023#section-9.7">RFC 5023 The Atom Publishing
-     *         Protocol - § 9.7 - The Slug Header</a>
      */
     public Agent create(final AgentProcessor processor) {
 
@@ -479,12 +506,12 @@ public final class Agent {
      * Enables the {@code PUT} HTTP method.
      *
      * <p>This convenience method creates a default processor that: (1) uses the model's shape to decode and
-     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing
-     * the model to provide default field values for the update operation. For advanced customization,
-     * see {@linkplain #update(AgentProcessor)}.</p>
+     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing the model
+     * to provide default field values for the update operation. For advanced customization, see
+     * {@linkplain #update(AgentProcessor)}.</p>
      *
-     * @param model the data model providing the shape for payload decoding and validation, and default values
-     *              for resource updating
+     * @param model the data model providing the shape for payload decoding and validation, and default values for
+     *              resource updating
      *
      * @return a new agent instance with {@code PUT} support enabled
      *
@@ -582,12 +609,12 @@ public final class Agent {
      * Enables the {@code PATCH} HTTP method.
      *
      * <p>This convenience method creates a default processor that: (1) uses the model's shape to decode and
-     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing
-     * the model to provide default field values for the mutation operation. For advanced customization,
-     * see {@linkplain #mutate(AgentProcessor)}.</p>
+     * validate the client-provided JSON payload, (2) merges the decoded client data into the model, allowing the model
+     * to provide default field values for the mutation operation. For advanced customization, see
+     * {@linkplain #mutate(AgentProcessor)}.</p>
      *
-     * @param model the data model providing the shape for payload decoding and validation, and default values
-     *              for resource mutation
+     * @param model the data model providing the shape for payload decoding and validation, and default values for
+     *              resource mutation
      *
      * @return a new agent instance with {@code PATCH} support enabled
      *
@@ -685,11 +712,10 @@ public final class Agent {
      * Enables the {@code DELETE} HTTP method.
      *
      * <p>This convenience method creates a default processor that: (1) uses the model's shape to generate
-     * a dummy object, (2) merges it into the model, allowing the model to provide default field values
-     * for the deletion operation. For advanced customization, see {@linkplain #delete(AgentProcessor)}.</p>
+     * a dummy object, (2) merges it into the model, allowing the model to provide default field values for the deletion
+     * operation. For advanced customization, see {@linkplain #delete(AgentProcessor)}.</p>
      *
-     * @param model the data model providing the shape for object generation and default values
-     *              for deletion criteria
+     * @param model the data model providing the shape for object generation and default values for deletion criteria
      *
      * @return a new agent instance with {@code DELETE} support enabled
      *
@@ -1029,12 +1055,7 @@ public final class Agent {
 
                 final Value value=payload.merge(object(id(payload.id().orElseGet(() -> resource.resolve(Optional
                         .ofNullable(request.header(SLUG))
-                        .map(s -> URLDecoder.decode(s, UTF_8))
-                        .map(String::trim)
-                        .filter(not(String::isEmpty))
-                        .map(s -> MARK_PATTERN.matcher(normalize(s, Form.NFD)).replaceAll(""))
-                        .map(s -> SPECIAL_PATTERN.matcher(s).replaceAll(" "))
-                        .map(s -> SPACES_PATTERN.matcher(s.trim()).replaceAll("-"))
+                        .flatMap(Agent::slug)
                         .orElseGet(URIs::uuid)
                 )))));
 
