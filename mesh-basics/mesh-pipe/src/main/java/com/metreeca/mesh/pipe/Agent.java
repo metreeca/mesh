@@ -175,7 +175,7 @@ public final class Agent {
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc5023#section-9.7">RFC 5023 The Atom Publishing
      *         Protocol - § 9.7 - The Slug Header</a>
      */
-    private static Optional<String> slug(final String slug) {
+    public static Optional<String> slug(final String slug) {
 
         if ( slug == null ) {
             throw new NullPointerException("null slug");
