@@ -1199,7 +1199,7 @@ public final class Agent {
                 final Value payload=decode(processor, resource, shape -> decode(request, shape));
                 final Value value=payload.merge(object(id(resource)));
 
-                value.validate().ifPresentOrElse( // !!! accept partial objects
+                value.validate(true).ifPresentOrElse( // !!! accept partial objects
 
                         trace -> report(response, trace),
 
