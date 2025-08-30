@@ -32,7 +32,7 @@
     <packaging>pom</packaging>
 
     <name>Metreeca/Mesh</name>
-    <description>Linked data processing framework.</description>
+    <description>A Java framework for rapid development of model-driven REST/JSON-LD APIs.</description>
     <url>https://github.com/metreeca/mesh</url>
     <inceptionYear>2023</inceptionYear>
 
