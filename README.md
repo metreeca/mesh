@@ -5,11 +5,14 @@
 > [!IMPORTANT]
 >
 > The edge development version is `4.0-SNAPSHOT`. We are actively working toward the first stable release: watch this
-> repo or follow us
-> on [LinkedIn](https://linkedin.com/company/metreeca) to keep up to date.
->
+> repo or follow us on [LinkedIn](https://linkedin.com/company/metreeca) to keep up to date.
 
-Metreeca/Mesh is a lightweight Java framework for rapid development of
+> [!WARNING]
+>
+> Work in progress… links in the docs may be broken or lead to placeholder content.
+
+
+Metreeca/Mesh is a Java framework for rapid development of
 [linked data](https://www.w3.org/2013/data/) services.
 
 **Model-Driven** / Programmatically defined data models drive the automatic generation of complete read/write REST/JSON
@@ -33,9 +36,13 @@ nested relationships to include, providing GraphQL-like efficiency while maintai
 **Standards Compliance** / Built on established [JSON-LD](https://www.w3.org/TR/json-ld11/)
 and [SHACL](https://www.w3.org/TR/shacl/) W3C standards for easy data interoperability.
 
-**Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
+**Backend Developer Experience**  / A high-level abstraction layer allows defining JSON-LD models using annotated Java
 interfaces, making the process quick, type-safe, and IDE-friendly, with all boilerplate code automatically generated at
 compile-time.
+
+**Frontend Developer Experience** / Extended REST/JSON-LD APIs provide intuitive endpoints for frontend developers,
+shielding them from linked data technicalities whilst offering seamless integration with familiar HTTP methods and JSON
+responses.
 
 # Modules
 
