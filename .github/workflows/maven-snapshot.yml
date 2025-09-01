@@ -34,7 +34,7 @@ jobs:
           CENTRAL_USR: ${{ secrets.CENTRAL_USR }}
           CENTRAL_PWD: ${{ secrets.CENTRAL_PWD }}
           MAVEN_PWD: ${{ secrets.MAVEN_PWD }}
-        run: mvn --batch-mode
+        run: mvn --batch-mode --update-snapshots
           --activate-profiles publish
           -Drevision="$(echo ${{ github.ref_name }} | sed -r 's:^release/(.*)$:\1-SNAPSHOT:')"
           deploy
