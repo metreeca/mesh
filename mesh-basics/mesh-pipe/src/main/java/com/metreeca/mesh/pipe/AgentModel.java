@@ -71,7 +71,7 @@ final class AgentModel {
             }
 
             @Override public Value visit(final Value host, final Map<String, Value> fields) {
-                return Value.object(Collections.list(Stream.concat(
+                return Value.object(list(Stream.concat(
 
                         // default shape and id
 
@@ -376,7 +376,9 @@ final class AgentModel {
     private static Value populate(final Query x, final Query y) {
         return Value.value(new Query(
 
-                populate(x.model(), y.model()),
+                // if the query doesn't specify a model, use the default expanded one
+
+                populate(x.model(), x.model().isEmpty() ? expand(y.model()) : y.model()),
 
                 Stream.of(x.criteria().entrySet(), y.criteria().entrySet())
                         .flatMap(Collection::stream)
