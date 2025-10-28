@@ -563,7 +563,7 @@ final class AgentModelTest {
             );
 
             assertThat(populate(x, y)).isEqualTo(value(query()
-                    .model(y)
+                    .model(expand(y))
                     .where("x", criterion)
             ));
         }
