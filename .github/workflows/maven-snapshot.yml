@@ -29,13 +29,6 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_KEY }}
           gpg-passphrase: MAVEN_PWD
 
-      - name: Inspect GPG keyring
-        run: |
-          echo "--- secret keys ---"
-          gpg --list-secret-keys --keyid-format=long || echo "no secret keys"
-          echo "--- public keys ---"
-          gpg --list-keys --keyid-format=long || echo "no public keys"
-
       - name: Publish snapshot to Central Portal
         env:
           CENTRAL_USR: ${{ secrets.CENTRAL_USR }}
